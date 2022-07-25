@@ -55,21 +55,60 @@ class _MyHomePageState extends State<MyHomePage> {
             width: screenWidth,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
+              children: [
                 const _Brand(),
-                Expanded(child: Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0)),
-                      color: Colors.white
-                    ),
-                    child: ListView(
-                      children: [],
-                    ),
+                Expanded(
+                    child: Container(
+                  margin: const EdgeInsets.only(top: 12.0),
+                  padding:
+                      const EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.0),
+                          topRight: Radius.circular(16.0)),
+                      color: Colors.white),
+                  child: ListView(
+                    children: [
+                      const Padding(
+                          padding: EdgeInsets.only(top: 32.0),
+                          child: _Header()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24.0),
+                        child: IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  children: const [
+                                    _ProblemTypeButton(
+                                        backgroundColor: Color(0xFF4FC3F7),
+                                        assetName: "assets/images/pipeline.svg",
+                                        buttonText: "Water Problem"),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    _ProblemTypeButton(
+                                        backgroundColor: Color(0xFF654A69),
+                                        assetName: "assets/images/others.svg",
+                                        buttonText: "Others")
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 8.0,),
+                              const Expanded(
+                                child: _ProblemTypeButton(
+                                    backgroundColor: Color(0xFF6C6461),
+                                    assetName: "assets/images/electrician.svg",
+                                    buttonText: "Electricity Problem"),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ))
-                ],
+              ],
             )),
       ),
     ));
@@ -82,7 +121,7 @@ class _Brand extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left:16.0, top: 20.0),
+      padding: const EdgeInsets.only(left: 16.0, top: 20.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -90,20 +129,20 @@ class _Brand extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SvgPicture.asset("assets/images/contact-us.svg"),
+                SvgPicture.asset("assets/images/contact-us.svg", height: 72.0, width: 80.0,),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("call",
-                          style: GoogleFonts.mochiyPopOne(
+                          style: GoogleFonts.mochiyPopPOne(
                               fontSize: 16.0, color: const Color(0xFFDA7B23))),
                       const SizedBox(
                         height: 4,
                       ),
                       Text("AWAY",
-                          style: GoogleFonts.mochiyPopOne(
+                          style: GoogleFonts.mochiyPopPOne(
                               fontSize: 20.0, color: const Color(0xFF373430)))
                     ],
                   ),
@@ -143,8 +182,8 @@ class __NotificationIconState extends State<_NotificationIcon> {
       style: ButtonStyle(
         shape: MaterialStateProperty.all(const CircleBorder()),
         // padding: MaterialStateProperty.all(const EdgeInsets.all(2.0)),
-        backgroundColor:
-            MaterialStateProperty.all(const Color(0xFF000000).withOpacity(0.23)), // <-- Button color
+        backgroundColor: MaterialStateProperty.all(
+            const Color(0xFF000000).withOpacity(0.23)), // <-- Button color
         // overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
         //   if (states.contains(MaterialState.pressed))
         //     return Colors.red; // <-- Splash color
@@ -152,5 +191,102 @@ class __NotificationIconState extends State<_NotificationIcon> {
       ),
       child: SvgPicture.asset('assets/images/def_notif.svg'),
     );
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          color: Color(0xFFD7CCC8)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SvgPicture.asset('assets/images/header.svg', height: 102.0, width: 102.0,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "What problem type",
+                  style: TextStyle(
+                      fontFamily: "MochiyPopPOne",
+                      fontSize: 16.0,
+                      color: Color(0xFF693F3F),
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "would you like to",
+                  style: GoogleFonts.mochiyPopPOne(
+                      fontSize: 16.0,
+                      color: const Color(0xFF693F3F),
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "report",
+                  style: GoogleFonts.mochiyPopPOne(
+                      fontSize: 16.0,
+                      color: const Color(0xFF693F3F),
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProblemTypeButton extends StatelessWidget {
+  const _ProblemTypeButton(
+      {Key? key,
+      required this.backgroundColor,
+      required this.assetName,
+      required this.buttonText})
+      : super(key: key);
+
+  final Color backgroundColor;
+  final String assetName;
+  final String buttonText;
+
+  @override
+  Widget build(BuildContext context) {
+
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            elevation: 3.0,
+            primary: backgroundColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            )),
+        onPressed: () {},
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                buttonText,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontFamily: "MochiyPopPone",
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+              const SizedBox(
+                height: 16.0,
+              ),
+              SvgPicture.asset(assetName, height: 96.0, width: 96.0,)
+            ],
+          ),
+        ));
   }
 }

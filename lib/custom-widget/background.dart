@@ -12,7 +12,7 @@ class BackgroundPainter extends CustomPainter {
       ..moveTo(size.width * 0.5, 0)
       ..lineTo(size.width, size.height * 0.3)
       ..lineTo(size.width, 0)
-      ..lineTo(size.width * 0.5, 0);
+      ..close();
 
     canvas.drawRect(backgroundRect, backgroundPaint);
     canvas.drawPath(rightAnglePath, rightAnglePaint);

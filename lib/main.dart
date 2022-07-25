@@ -94,7 +94,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ],
                                 ),
                               ),
-                              const SizedBox(width: 8.0,),
+                              const SizedBox(
+                                width: 8.0,
+                              ),
                               const Expanded(
                                 child: _ProblemTypeButton(
                                     backgroundColor: Color(0xFF6C6461),
@@ -124,12 +126,17 @@ class _Brand extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16.0, top: 20.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SvgPicture.asset("assets/images/contact-us.svg", height: 72.0, width: 80.0,),
+                SvgPicture.asset(
+                  "assets/images/contact-us.svg",
+                  height: 72.0,
+                  width: 80.0,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Column(
@@ -150,21 +157,33 @@ class _Brand extends StatelessWidget {
               ],
             ),
           ),
-          const _NotificationIcon()
+          Stack(
+            children: const [
+              Padding(
+                padding: EdgeInsets.only(left: 40.0),
+                child: _IconButton(
+                  assetName: 'assets/images/def_notif.svg',
+                ),
+              ),
+              _IconButton(assetName: 'assets/images/profile.svg'),
+              
+            ],
+          )
         ],
       ),
     );
   }
 }
 
-class _NotificationIcon extends StatefulWidget {
-  const _NotificationIcon({Key? key}) : super(key: key);
+class _IconButton extends StatefulWidget {
+  const _IconButton({Key? key, required this.assetName}) : super(key: key);
+  final String assetName;
 
   @override
-  State<_NotificationIcon> createState() => __NotificationIconState();
+  State<_IconButton> createState() => __IconButtonState();
 }
 
-class __NotificationIconState extends State<_NotificationIcon> {
+class __IconButtonState extends State<_IconButton> {
   @override
   Widget build(BuildContext context) {
     // return CircleAvatar(
@@ -179,17 +198,20 @@ class __NotificationIconState extends State<_NotificationIcon> {
     // );
     return ElevatedButton(
       onPressed: () {},
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all(const CircleBorder()),
+      style: ElevatedButton.styleFrom(
+        primary: const Color(0xFF000000).withOpacity(0.23),
+        shape: const CircleBorder(),
+        // shape: MaterialStateProperty.all(const CircleBorder()),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         // padding: MaterialStateProperty.all(const EdgeInsets.all(2.0)),
-        backgroundColor: MaterialStateProperty.all(
-            const Color(0xFF000000).withOpacity(0.23)), // <-- Button color
+        // backgroundColor: MaterialStateProperty.all(
+        //     const Color(0xFF000000).withOpacity(0.23)), // <-- Button color
         // overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
         //   if (states.contains(MaterialState.pressed))
         //     return Colors.red; // <-- Splash color
         // }),
       ),
-      child: SvgPicture.asset('assets/images/def_notif.svg'),
+      child: SvgPicture.asset(widget.assetName),
     );
   }
 }
@@ -208,7 +230,11 @@ class _Header extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SvgPicture.asset('assets/images/header.svg', height: 102.0, width: 102.0,),
+            SvgPicture.asset(
+              'assets/images/header.svg',
+              height: 102.0,
+              width: 102.0,
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -258,7 +284,6 @@ class _ProblemTypeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
             elevation: 3.0,
@@ -284,7 +309,11 @@ class _ProblemTypeButton extends StatelessWidget {
               const SizedBox(
                 height: 16.0,
               ),
-              SvgPicture.asset(assetName, height: 96.0, width: 96.0,)
+              SvgPicture.asset(
+                assetName,
+                height: 96.0,
+                width: 96.0,
+              )
             ],
           ),
         ));

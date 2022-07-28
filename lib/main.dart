@@ -1,4 +1,7 @@
 import 'package:call_away/custom-widget/background.dart';
+import 'package:call_away/custom-widget/custom_layout.dart';
+import 'package:call_away/problem_type.dart';
+import 'package:call_away/screens/problems_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,76 +47,161 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    var screenHeight = MediaQuery.of(context).size.height;
-    var screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-        body: SafeArea(
-      child: CustomPaint(
-        painter: BackgroundPainter(),
-        child: SizedBox(
-            height: screenHeight,
-            width: screenWidth,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return CustomLayout(
+      topLeftSvg: "assets/images/contact-us.svg",
+      children: [
+        const Padding(padding: EdgeInsets.only(top: 32.0), child: _Header()),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24.0),
+          child: IntrinsicHeight(
+            child: Row(
               children: [
-                const _Brand(),
                 Expanded(
-                    child: Container(
-                  margin: const EdgeInsets.only(top: 12.0),
-                  padding:
-                      const EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16.0),
-                          topRight: Radius.circular(16.0)),
-                      color: Colors.white),
-                  child: ListView(
+                  child: Column(
                     children: [
-                      const Padding(
-                          padding: EdgeInsets.only(top: 32.0),
-                          child: _Header()),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 24.0),
-                        child: IntrinsicHeight(
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  children: const [
-                                    _ProblemTypeButton(
-                                        backgroundColor: Color(0xFF4FC3F7),
-                                        assetName: "assets/images/pipeline.svg",
-                                        buttonText: "Water Problem"),
-                                    SizedBox(
-                                      height: 20.0,
-                                    ),
-                                    _ProblemTypeButton(
-                                        backgroundColor: Color(0xFF654A69),
-                                        assetName: "assets/images/others.svg",
-                                        buttonText: "Others")
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 8.0,
-                              ),
-                              const Expanded(
-                                child: _ProblemTypeButton(
-                                    backgroundColor: Color(0xFF6C6461),
-                                    assetName: "assets/images/electrician.svg",
-                                    buttonText: "Electricity Problem"),
-                              )
-                            ],
-                          ),
-                        ),
+                      _ProblemTypeButton(
+                        backgroundColor: const Color(0xFF4FC3F7),
+                        assetName: "assets/images/pipeline.svg",
+                        buttonText: "Water Problem",
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  ProblemsScreen(
+                                  topLeftSvg: "assets/images/pipeline.svg",
+                                  problemType: ProblemType.WaterProblem,
+                                  themeData: ThemeData(
+                                    primaryColor: const Color(0xFF039BE5),
+                                    primaryColorLight: Color(0xFF6EBCE4)
+                                )),
+                          ));
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      _ProblemTypeButton(
+                        backgroundColor: const Color(0xFF654A69),
+                        assetName: "assets/images/others.svg",
+                        buttonText: "Others",
+                        onPressed: () {
+                           Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  ProblemsScreen(
+                                  problemType: ProblemType.Others,
+                                  pageHeading: "Others",
+                                  topLeftSvg: "assets/images/others.svg",
+                                  themeData: ThemeData(
+                                    primaryColor: const Color(0xFF654A69),
+                                    primaryColorLight: const Color(0xFF654A69).withOpacity(0.45)
+                                )),
+                          ));
+                        },
                       )
                     ],
                   ),
-                ))
+                ),
+                const SizedBox(
+                  width: 8.0,
+                ),
+                Expanded(
+                  child: _ProblemTypeButton(
+                    backgroundColor: const Color(0xFF6C6461),
+                    assetName: "assets/images/electrician.svg",
+                    buttonText: "Electricity Problem",
+                    onPressed: () {
+                      Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  ProblemsScreen(
+                                  problemType: ProblemType.ElectricityProblem,
+                                  pageHeading: "Electricity Problem",
+                                  topLeftSvg: "assets/images/electrician.svg",
+                                  themeData: ThemeData(
+                                    primaryColor: const Color(0xFF26A69A),
+                                    primaryColorLight: const Color(0xFF26A69A).withOpacity(0.45)
+                                )),
+                          ));
+                    },
+                  ),
+                )
               ],
-            )),
-      ),
-    ));
+            ),
+          ),
+        )
+      ],
+    );
+    // var screenHeight = MediaQuery.of(context).size.height;
+    // var screenWidth = MediaQuery.of(context).size.width;
+    // return Scaffold(
+    //     body: SafeArea(
+    //   child: CustomPaint(
+    //     painter: BackgroundPainter(),
+    //     child: SizedBox(
+    //         height: screenHeight,
+    //         width: screenWidth,
+    //         child: Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             const _Brand(),
+    //             Expanded(
+    //                 child: Container(
+    //               margin: const EdgeInsets.only(top: 12.0),
+    //               padding:
+    //                   const EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
+    //               decoration: const BoxDecoration(
+    //                   borderRadius: BorderRadius.only(
+    //                       topLeft: Radius.circular(16.0),
+    //                       topRight: Radius.circular(16.0)),
+    //                   color: Colors.white),
+    //               child: ListView(
+    //                 children: [
+    //                   const Padding(
+    //                       padding: EdgeInsets.only(top: 32.0),
+    //                       child: _Header()),
+    //                   Padding(
+    //                     padding: const EdgeInsets.symmetric(vertical: 24.0),
+    //                     child: IntrinsicHeight(
+    //                       child: Row(
+    //                         children: [
+    //                           Expanded(
+    //                             child: Column(
+    //                               children: const [
+    //                                 _ProblemTypeButton(
+    //                                     backgroundColor: Color(0xFF4FC3F7),
+    //                                     assetName: "assets/images/pipeline.svg",
+    //                                     buttonText: "Water Problem"),
+    //                                 SizedBox(
+    //                                   height: 20.0,
+    //                                 ),
+    //                                 _ProblemTypeButton(
+    //                                     backgroundColor: Color(0xFF654A69),
+    //                                     assetName: "assets/images/others.svg",
+    //                                     buttonText: "Others")
+    //                               ],
+    //                             ),
+    //                           ),
+    //                           const SizedBox(
+    //                             width: 8.0,
+    //                           ),
+    //                           const Expanded(
+    //                             child: _ProblemTypeButton(
+    //                                 backgroundColor: Color(0xFF6C6461),
+    //                                 assetName: "assets/images/electrician.svg",
+    //                                 buttonText: "Electricity Problem"),
+    //                           )
+    //                         ],
+    //                       ),
+    //                     ),
+    //                   )
+    //                 ],
+    //               ),
+    //             ))
+    //           ],
+    //         )),
+    //   ),
+    // ));
   }
 }
 
@@ -166,7 +254,6 @@ class _Brand extends StatelessWidget {
                 ),
               ),
               _IconButton(assetName: 'assets/images/profile.svg'),
-              
             ],
           )
         ],
@@ -275,12 +362,15 @@ class _ProblemTypeButton extends StatelessWidget {
       {Key? key,
       required this.backgroundColor,
       required this.assetName,
+      required this.onPressed,
       required this.buttonText})
       : super(key: key);
 
   final Color backgroundColor;
   final String assetName;
   final String buttonText;
+
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +381,7 @@ class _ProblemTypeButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             )),
-        onPressed: () {},
+        onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Column(

@@ -4,35 +4,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProblemsScreen extends StatelessWidget {
-  const ProblemsScreen(
+class ReportFormScreen extends StatelessWidget {
+  const ReportFormScreen(
       {Key? key,
       this.problemType = ProblemType.WaterProblem,
-      this.pageHeading = "Water Problem",
-      required this.themeData,
       this.topLeftSvg = "assets/images/contact-us.svg"})
       : super(key: key);
 
   final ProblemType problemType;
-  final String pageHeading;
+
   final String topLeftSvg;
-  final ThemeData themeData;
+
+  ThemeData _getTheme() {
+    if (problemType == ProblemType.ElectricityProblem) {
+      return ThemeData(
+          primaryColor: const Color(0xFF6C6461),
+          primaryColorLight: const Color(0xFF6C6461).withOpacity(0.45));
+    } else if (problemType == ProblemType.Others) {
+      return ThemeData(
+          primaryColor: const Color(0xFF654A69),
+          primaryColorLight: const Color(0xFF654A69).withOpacity(0.45));
+    }
+    return ThemeData(
+        primaryColor: const Color(0xFF039BE5),
+        primaryColorLight: const Color(0xFF039BE5).withOpacity(0.45));
+  }
+
+  String _getHeading() {
+    if (problemType == ProblemType.ElectricityProblem) {
+      return "Electricity Problem";
+    } else if (problemType == ProblemType.Others) {
+      return "Others";
+    }
+    return "Water Problem";
+  }
 
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: themeData,
+      data: _getTheme(),
       child: CustomLayout(
-          lightShadeBgColor: themeData.primaryColorLight,
-          darkShadeBgColor: themeData.primaryColor,
+          lightShadeBgColor: _getTheme().primaryColorLight,
+          darkShadeBgColor: _getTheme().primaryColor,
           topLeftSvg: topLeftSvg,
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: Text(
-                pageHeading,
+                _getHeading(),
                 style: GoogleFonts.prompt(
-                    color: themeData.primaryColor,
+                    color: _getTheme().primaryColor,
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold),
               ),
@@ -66,7 +87,6 @@ class ProblemsScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 88.0),
                           child: Text(
                             "Take a clear picture of the problem at hand",
-                            textAlign: TextAlign.justify,
                             style: GoogleFonts.prompt(
                               color: const Color(0xFF000000).withOpacity(0.55),
                               fontWeight: FontWeight.normal,
@@ -97,7 +117,7 @@ class ProblemsScreen extends StatelessWidget {
                         color: const Color(0xFF010101)),
                   ),
                   const SizedBox(
-                    height: 4.0,
+                    height: 8.0,
                   ),
                   Container(
                     padding: const EdgeInsets.all(8.0),
@@ -118,14 +138,14 @@ class ProblemsScreen extends StatelessWidget {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 108.0),
+                            padding: const EdgeInsets.only(right: 56.0),
                             child: Text(
                                 "location of the problem will be generated automatically after adding picture.",
-                                textAlign: TextAlign.justify,
                                 style: GoogleFonts.prompt(
                                   color:
                                       const Color(0xFF7C7C7C).withOpacity(0.45),
                                   fontWeight: FontWeight.normal,
+                                  wordSpacing: 0.1,
                                   fontSize: 14.0,
                                 )),
                           ),
@@ -157,6 +177,11 @@ class ProblemsScreen extends StatelessWidget {
                   TextField(
                     maxLines: 4,
                     decoration: InputDecoration(
+                      focusColor: _getTheme().primaryColor,
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1.5,
+                              color: _getTheme().primaryColor)),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
                               width: 1.5,
@@ -180,7 +205,7 @@ class ProblemsScreen extends StatelessWidget {
                     height: 48.0,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: themeData.primaryColor,
+                            primary: _getTheme().primaryColor,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8.0)))),

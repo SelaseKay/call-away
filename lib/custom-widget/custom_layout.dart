@@ -17,7 +17,10 @@ class CustomLayout extends StatelessWidget {
   final Color darkShadeBgColor;
 
   final List<Widget> children;
+  
   final String topLeftSvg;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +42,7 @@ class CustomLayout extends StatelessWidget {
               children: [
                 _TopSection(
                   topLeftSvg: topLeftSvg,
+                 
                 ),
                 Expanded(
                     child: Container(
@@ -135,67 +139,14 @@ class _IconButton extends StatefulWidget {
 class __IconButtonState extends State<_IconButton> {
   @override
   Widget build(BuildContext context) {
-    // return CircleAvatar(
-    //   backgroundColor: const Color(0xFF000000).withOpacity(0.23),
-    //   child: IconButton(
-    //       color: Colors.black,
-    //       iconSize: 24,
-    //       icon: SvgPicture.asset('assets/images/def_notif.svg'),
-    //       onPressed: () {
-    //         // do something
-    //       }),
-    // );
     return ElevatedButton(
       onPressed: () {},
       style: ElevatedButton.styleFrom(
         primary: const Color(0xFF000000).withOpacity(0.23),
         shape: const CircleBorder(),
-        // shape: MaterialStateProperty.all(const CircleBorder()),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        // padding: MaterialStateProperty.all(const EdgeInsets.all(2.0)),
-        // backgroundColor: MaterialStateProperty.all(
-        //     const Color(0xFF000000).withOpacity(0.23)), // <-- Button color
-        // overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
-        //   if (states.contains(MaterialState.pressed))
-        //     return Colors.red; // <-- Splash color
-        // }),
       ),
       child: SvgPicture.asset(widget.assetName),
     );
   }
 }
-
-// class _SubmitButton extends StatelessWidget {
-//   const _SubmitButton({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return    Container(
-//       color: Colors.white,
-//       child: Row(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Padding(
-//               padding: const EdgeInsets.only(top: 32.0, bottom: 24.0),
-//               child: SizedBox(
-//                 height: 48.0,
-//                 child: ElevatedButton(
-//                   style: ElevatedButton.styleFrom(
-//                     primary: const Color(0xFF039BE5),
-//                     shape: const RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.all(Radius.circular(8.0))
-//                     )
-//                   ),
-//                   onPressed: (){}, 
-//                   child: Text("Submit Report", style: GoogleFonts.prompt(
-//                     color: Colors.white,
-//                     fontSize: 16.0,
-//                     fontWeight: FontWeight.w800
-//                   ),)),
-//               ),
-//             ),
-//           ],
-//         ),
-//     );
-//   }
-// }

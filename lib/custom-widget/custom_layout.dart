@@ -1,4 +1,5 @@
 import 'package:call_away/custom-widget/background.dart';
+import 'package:call_away/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,15 +13,12 @@ class CustomLayout extends StatelessWidget {
       required this.topLeftSvg})
       : super(key: key);
 
-  
   final Color lightShadeBgColor;
   final Color darkShadeBgColor;
 
   final List<Widget> children;
-  
+
   final String topLeftSvg;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +29,7 @@ class CustomLayout extends StatelessWidget {
         body: SafeArea(
       child: CustomPaint(
         painter: BackgroundPainter(
-          lightShade: lightShadeBgColor,
-          darkShade: darkShadeBgColor
-        ),
+            lightShade: lightShadeBgColor, darkShade: darkShadeBgColor),
         child: SizedBox(
             height: screenHeight,
             width: screenWidth,
@@ -42,7 +38,6 @@ class CustomLayout extends StatelessWidget {
               children: [
                 _TopSection(
                   topLeftSvg: topLeftSvg,
-                 
                 ),
                 Expanded(
                     child: Container(
@@ -112,14 +107,27 @@ class _TopSection extends StatelessWidget {
             ),
           ),
           Stack(
-            children: const [
+            children: [
               Padding(
                 padding: EdgeInsets.only(left: 40.0),
                 child: _IconButton(
                   assetName: 'assets/images/def_notif.svg',
+                  onPressed: () {},
                 ),
               ),
-              _IconButton(assetName: 'assets/images/profile.svg'),
+              _IconButton(
+                assetName: 'assets/images/profile.svg',
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        // transitionDuration:
+                        //     const Duration(milliseconds: 550),
+                        pageBuilder: (context, animation, secondaryAnimatio) =>
+                            const ProfileScreen(),
+                      ));
+                },
+              ),
             ],
           )
         ],
@@ -129,8 +137,11 @@ class _TopSection extends StatelessWidget {
 }
 
 class _IconButton extends StatefulWidget {
-  const _IconButton({Key? key, required this.assetName}) : super(key: key);
+  const _IconButton(
+      {Key? key, required this.assetName, required this.onPressed})
+      : super(key: key);
   final String assetName;
+  final VoidCallback onPressed;
 
   @override
   State<_IconButton> createState() => __IconButtonState();
@@ -140,7 +151,7 @@ class __IconButtonState extends State<_IconButton> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: widget.onPressed,
       style: ElevatedButton.styleFrom(
         primary: const Color(0xFF000000).withOpacity(0.23),
         shape: const CircleBorder(),

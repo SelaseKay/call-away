@@ -62,17 +62,19 @@ class ProfileScreen extends StatelessWidget {
                       itemText: "Report History",
                       isArrowVisible: true,
                       isClickable: true,
+                       onPressed: (){},
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     const SizedBox(
                       height: 8.0,
                     ),
-                    const _ProfileItem(
+                     _ProfileItem(
                       asset: "assets/images/log_out.svg",
                       itemText: "Log out",
                       isClickable: true,
+                      onPressed: (){},
                       style:
-                          TextStyle(fontSize: 16.0, color: Color(0xFFEF5350)),
+                          const TextStyle(fontSize: 16.0, color: Color(0xFFEF5350)),
                     ),
                   ],
                 ),

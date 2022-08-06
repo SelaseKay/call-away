@@ -35,7 +35,10 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             children: [
               const Padding(
-                  padding: EdgeInsets.only(top: 8.0), child: AppBarSection(title: "Profile",)),
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: AppBarSection(
+                    title: "Profile",
+                  )),
               Expanded(
                   child: Padding(
                 padding: const EdgeInsets.only(top: 40.0),

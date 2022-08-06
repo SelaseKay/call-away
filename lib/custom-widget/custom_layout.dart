@@ -1,4 +1,5 @@
 import 'package:call_away/custom-widget/background.dart';
+import 'package:call_away/screens/notifications_screen.dart';
 import 'package:call_away/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -109,10 +110,19 @@ class _TopSection extends StatelessWidget {
           Stack(
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 40.0),
+                padding: const EdgeInsets.only(left: 40.0),
                 child: _IconButton(
                   assetName: 'assets/images/def_notif.svg',
-                  onPressed: () {},
+                  onPressed: () {
+                     Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        // transitionDuration:
+                        //     const Duration(milliseconds: 550),
+                        pageBuilder: (context, animation, secondaryAnimatio) =>
+                            const NotificationsScreen(),
+                      ));
+                  },
                 ),
               ),
               _IconButton(

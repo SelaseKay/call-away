@@ -83,37 +83,38 @@ class _NoticationsItem extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
-          mainAxisSize: MainAxisSize.min,
           children: [
             Visibility(
               visible: isUnreadNotification,
-              child: CircleAvatar(
-                radius: 4.0,
-                backgroundColor: Theme.of(context).colorScheme.secondary,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: CircleAvatar(
+                  radius: 4.0,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                ),
               ),
             ),
             const SizedBox(
               width: 16.0,
             ),
-            Text(
-              title,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.prompt(
-                  color: const Color(0xFF000000).withOpacity(0.71),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16.0),
+            Expanded(
+              child: Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.prompt(
+                    color: const Color(0xFF000000).withOpacity(0.71),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16.0),
+              ),
             ),
             const SizedBox(
               height: 4.0,
             ),
-            SizedBox(
-              height: 16.0,
-              child: Text(time,
-                  style: GoogleFonts.prompt(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 14.0)),
-            )
+            Text(time,
+                style: GoogleFonts.prompt(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14.0))
           ],
         ),
         const SizedBox(height: 4.0,),

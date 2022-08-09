@@ -1,4 +1,5 @@
 import 'package:call_away/components/app_bar.dart';
+import 'package:call_away/screens/my_reports_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -72,10 +73,16 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     _ProfileItem(
                       asset: "assets/images/report_history.svg",
-                      itemText: "Report History",
+                      itemText: "My Reports",
                       isArrowVisible: true,
                       isClickable: true,
-                      onPressed: () {},
+                      onPressed: () => Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimatio) =>
+                                    const MyReportsScreen(),
+                          )),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     const SizedBox(

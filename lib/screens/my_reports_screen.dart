@@ -17,7 +17,6 @@ class MyReportsScreen extends StatelessWidget {
             thickness: 1.5,
             color: Color(0xFFDDD3D0),
           ),
-
           primaryColor: const Color(0xFFA1887F),
           textTheme: const TextTheme(
             headline6: TextStyle(color: Color(0xFFA1887F)),

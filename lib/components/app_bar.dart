@@ -1,34 +1,50 @@
+import 'package:call_away/components/icon_button.dart';
 import 'package:flutter/material.dart';
 
 class AppBarSection extends StatelessWidget {
-  const AppBarSection({Key? key, required this.title, this.isRightWidgetVisible = true}) : super(key: key);
+  const AppBarSection(
+      {Key? key,
+      required this.title,
+      this.onRPositionIconPressed,
+      this.isRightWidgetVisible = true,
+      this.rPositionIcon})
+      : super(key: key);
 
   final String title;
   final bool isRightWidgetVisible;
 
+  final IconData? rPositionIcon;
+
+  final VoidCallback? onRPositionIconPressed;
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _IconButton(
-          icon: Icons.arrow_back_ios_rounded,
-          iconColor: Theme.of(context).primaryColor,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        Visibility(
-          visible: isRightWidgetVisible,
-          child: _IconButton(
-            icon: Icons.edit,
+    return Theme(
+      data: Theme.of(context).copyWith(
+        primaryColor: const Color(0xFFA1887F),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          MyIconButton(
+            icon: Icons.arrow_back_ios_rounded,
             iconColor: Theme.of(context).primaryColor,
-            onPressed: () {},
+            onPressed: () => Navigator.of(context).pop(),
           ),
-        )
-      ],
+          Text(
+            title,
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          rPositionIcon == null
+              ? const SizedBox(
+                  height: 40.0,
+                  width: 40.0,
+                )
+              : MyIconButton(
+                  icon: rPositionIcon!,
+                  iconColor: Theme.of(context).primaryColor, onPressed: onRPositionIconPressed,)
+        ],
+      ),
     );
   }
 }

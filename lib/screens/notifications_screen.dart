@@ -34,7 +34,6 @@ class NotificationsScreen extends StatelessWidget {
               padding: EdgeInsets.only(top: 8.0),
               child: AppBarSection(
                 title: "Notifications",
-                isRightWidgetVisible: false,
               ),
             ),
             Expanded(

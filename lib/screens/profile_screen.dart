@@ -1,4 +1,5 @@
 import 'package:call_away/components/app_bar.dart';
+import 'package:call_away/screens/change_password_screen.dart';
 import 'package:call_away/screens/my_reports_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,10 +36,14 @@ class ProfileScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
-              const Padding(
-                  padding: EdgeInsets.only(top: 8.0),
+              Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
                   child: AppBarSection(
                     title: "Profile",
+                    rPositionIcon: Icons.edit,
+                    onRPositionIconPressed: () {
+                      //On Right Position Icon Pressed
+                    },
                   )),
               Expanded(
                   child: Padding(
@@ -86,6 +91,23 @@ class ProfileScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     const SizedBox(
+                      height: 16.0,
+                    ),
+                    _ProfileItem(
+                      asset: "assets/images/change_password.svg",
+                      itemText: "Change Password",
+                      isArrowVisible: true,
+                      isClickable: true,
+                      onPressed: () => Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimatio) =>
+                                    const ChangePasswordScreen(),
+                          )),
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    const SizedBox(
                       height: 8.0,
                     ),
                     Padding(
@@ -102,67 +124,6 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
-
-// class _AppBarSection extends StatelessWidget {
-//   const _AppBarSection({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//       children: [
-//         _IconButton(
-//           icon: Icons.arrow_back_ios_rounded,
-//           iconColor: Theme.of(context).primaryColor,
-//           onPressed: () => Navigator.of(context).pop(),
-//         ),
-//         Text(
-//           "Profile",
-//           style: Theme.of(context).textTheme.headline6,
-//         ),
-//         _IconButton(
-//           icon: Icons.edit,
-//           iconColor: Theme.of(context).primaryColor,
-//           onPressed: () {},
-//         )
-//       ],
-//     );
-//   }
-// }
-
-// class _IconButton extends StatelessWidget {
-//   const _IconButton({
-//     Key? key,
-//     required this.icon,
-//     required this.iconColor,
-//     this.onPressed,
-//   }) : super(key: key);
-//   final IconData icon;
-//   final VoidCallback? onPressed;
-
-//   final Color iconColor;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       height: 40.0,
-//       width: 40.0,
-//       child: Material(
-//         color: const Color(0xFFEFEFEF),
-//         borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-//         child: InkWell(
-//           borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-//           onTap: onPressed,
-//           child: Center(
-//               child: Icon(
-//             icon,
-//             color: iconColor,
-//           )),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class _ProfileHeader extends StatelessWidget {
   const _ProfileHeader({Key? key, this.userName = "Kwashie Jude"})

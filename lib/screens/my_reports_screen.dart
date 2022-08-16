@@ -1,8 +1,6 @@
 import 'package:call_away/components/app_bar.dart';
 import 'package:call_away/report_tag_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 

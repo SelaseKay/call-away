@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:call_away/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
+import 'package:call_away/viewmodel/report/report_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ReportFormScreen extends StatelessWidget {
   const ReportFormScreen(
@@ -180,8 +185,7 @@ class ReportFormScreen extends StatelessWidget {
                       focusColor: _getTheme().primaryColor,
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                              width: 1.5,
-                              color: _getTheme().primaryColor)),
+                              width: 1.5, color: _getTheme().primaryColor)),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
                               width: 1.5,
@@ -226,34 +230,65 @@ class ReportFormScreen extends StatelessWidget {
   }
 }
 
-class _AddPhotoButton extends StatefulWidget {
+class _AddPhotoButton extends ConsumerWidget {
   const _AddPhotoButton({Key? key}) : super(key: key);
 
-  @override
-  State<_AddPhotoButton> createState() => __AddPhotoButtonState();
-}
+  // Future<void> getLostData() async {
+  //   final LostDataResponse response = await picker.retrieveLostData();
+  //   if (response.isEmpty) {
+  //     return;
+  //   }
+  //   if (response.files != null) {
+  //     for (final XFile file in response.files) {
+  //       _handleFile(file);
+  //     }
+  //   } else {
+  //     _handleError(response.exception);
+  //   }
+  // }
 
-class __AddPhotoButtonState extends State<_AddPhotoButton> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final XFile? reportImage = ref.watch(reportFieldImageProvider);
+
     return Row(
       children: [
-        SizedBox(
+        Container(
           height: 120.0,
           width: 104.0,
-          child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                  side: const BorderSide(
-                    color: Color(0xFF9B9B9B),
-                    width: 1.5,
-                  ),
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)))),
-              onPressed: () {},
+          decoration: BoxDecoration(
+              image: reportImage != null
+                  ? DecorationImage(
+                      fit: BoxFit.fill,
+                      image: FileImage(File(reportImage.path)))
+                  : null,
+              border: Border.all(
+                color: const Color(0xFF9B9B9B),
+                width: 1.5,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(16.0),
+              )),
+          child: InkWell(
+              onTap: () async {
+                final ImagePicker picker = ImagePicker();
+                try {
+                  XFile? image =
+                      await picker.pickImage(source: ImageSource.camera);
+                  ref.read(reportFieldImageProvider.notifier).state = image;
+                } catch (e) {
+                  debugPrint(e.toString());
+                }
+              },
               child: Center(
                 child: SvgPicture.asset('assets/images/add_photo.svg'),
               )),
-        )
+        ),
+        // child: reportImage == null
+        //     ? Center(
+        //         child: SvgPicture.asset('assets/images/add_photo.svg'),
+        //       )
+        //     : Image.file(File(reportImage.path), fit: BoxFit.fill)),
       ],
     );
   }

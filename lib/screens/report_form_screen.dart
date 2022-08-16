@@ -2,14 +2,17 @@ import 'dart:io';
 
 import 'package:call_away/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
-import 'package:call_away/viewmodel/report/report_provider.dart';
+import 'package:call_away/provider/report_form_field_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:location/location.dart';
 
-class ReportFormScreen extends StatelessWidget {
+class ReportFormScreen extends ConsumerWidget {
   const ReportFormScreen(
       {Key? key,
       this.problemType = ProblemType.WaterProblem,
@@ -45,7 +48,11 @@ class ReportFormScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var locationFieldWatch = ref.watch(locatoinFieldProvider);
+
+    var locationField = ref.watch(locatoinFieldProvider.notifier);
+
     return Theme(
       data: _getTheme(),
       child: CustomLayout(
@@ -136,7 +143,10 @@ class ReportFormScreen extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 4.0),
-                          child: SvgPicture.asset('assets/images/location.svg'),
+                          child: locationFieldWatch.isEmpty
+                              ? SvgPicture.asset('assets/images/location.svg')
+                              : SvgPicture.asset(
+                                  'assets/images/location_active.svg'),
                         ),
                         const SizedBox(
                           width: 8.0,
@@ -144,15 +154,23 @@ class ReportFormScreen extends StatelessWidget {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(right: 56.0),
-                            child: Text(
-                                "location of the problem will be generated automatically after adding picture.",
-                                style: GoogleFonts.prompt(
-                                  color:
-                                      const Color(0xFF7C7C7C).withOpacity(0.45),
-                                  fontWeight: FontWeight.normal,
-                                  wordSpacing: 0.1,
-                                  fontSize: 14.0,
-                                )),
+                            child: locationFieldWatch.isEmpty
+                                ? Text(
+                                    "location of the problem will be generated automatically after adding picture.",
+                                    style: GoogleFonts.prompt(
+                                      color: const Color(0xFF7C7C7C)
+                                          .withOpacity(0.45),
+                                      fontWeight: FontWeight.normal,
+                                      wordSpacing: 0.1,
+                                      fontSize: 14.0,
+                                    ))
+                                : Text(locationFieldWatch,
+                                    style: GoogleFonts.prompt(
+                                      color: const Color(0xFF407BFF),
+                                      fontWeight: FontWeight.w400,
+                                      wordSpacing: 0.1,
+                                      fontSize: 14.0,
+                                    )),
                           ),
                         )
                       ],
@@ -247,9 +265,75 @@ class _AddPhotoButton extends ConsumerWidget {
   //   }
   // }
 
+  Future<void> _getImage(WidgetRef ref) async {
+    var imageField = ref.watch(imageFieldProvider.notifier);
+    final ImagePicker picker = ImagePicker();
+    try {
+      XFile? image = await picker.pickImage(source: ImageSource.camera);
+      imageField.state = image;
+    } catch (e) {
+      debugPrint("Image picker exception: ${e.toString()}");
+    }
+  }
+
+  Future<LocationData> _determinePosition(WidgetRef ref) async {
+    var imageField = ref.watch(imageFieldProvider.notifier);
+    var locationField = ref.watch(locatoinFieldProvider.notifier);
+
+    if (imageField.state == null) {
+      debugPrint("Picture not added");
+      return Future.error("Picture not added");
+    }
+    Location location = Location();
+
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+
+    LocationData? locationData;
+
+    try {
+      serviceEnabled = await location.serviceEnabled();
+      if (!serviceEnabled) {
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
+          // Fluttertoast.showToast(msg: "Locatoin service must be enabled");
+
+          imageField.state = null;
+          locationField.state = "";
+          return Future.error("Service is not enabled");
+        }
+      }
+
+      permissionGranted = await location.hasPermission();
+      if (permissionGranted == PermissionStatus.denied) {
+        permissionGranted = await location.requestPermission();
+        if (permissionGranted != PermissionStatus.granted) {
+          //if user denies access permission
+          // Fluttertoast.showToast(msg: "Locatoin permission must be accepted");
+
+          imageField.state = null;
+          locationField.state = "";
+          return Future.error("Permission is not granted");
+        }
+      }
+
+      // if no picture is added
+      if (imageField.state == null) {
+        return Future.error("No picture was added");
+      }
+      locationData = await location.getLocation();
+
+      locationField.state =
+          "${locationData.latitude}, ${locationData.longitude}";
+    } catch (e) {
+      debugPrint("determinePositionException: ${e.toString()}");
+    }
+    return locationData!;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final XFile? reportImage = ref.watch(reportFieldImageProvider);
+    final XFile? reportImage = ref.watch(imageFieldProvider);
 
     return Row(
       children: [
@@ -271,14 +355,10 @@ class _AddPhotoButton extends ConsumerWidget {
               )),
           child: InkWell(
               onTap: () async {
-                final ImagePicker picker = ImagePicker();
-                try {
-                  XFile? image =
-                      await picker.pickImage(source: ImageSource.camera);
-                  ref.read(reportFieldImageProvider.notifier).state = image;
-                } catch (e) {
-                  debugPrint(e.toString());
-                }
+                await _getImage(ref);
+                var location = await _determinePosition(ref);
+                debugPrint("locatoin: $location");
+                // _extractImageMetaData(ref);
               },
               child: Center(
                 child: SvgPicture.asset('assets/images/add_photo.svg'),

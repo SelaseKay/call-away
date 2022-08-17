@@ -12,8 +12,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 
-class ReportFormScreen extends ConsumerWidget {
-  const ReportFormScreen(
+class ReportFormScreen extends StatefulWidget {
+  ReportFormScreen(
       {Key? key,
       this.problemType = ProblemType.WaterProblem,
       this.topLeftSvg = "assets/images/contact-us.svg"})
@@ -23,12 +23,25 @@ class ReportFormScreen extends ConsumerWidget {
 
   final String topLeftSvg;
 
+  @override
+  State<ReportFormScreen> createState() => _ReportFormScreenState();
+}
+
+class _ReportFormScreenState extends State<ReportFormScreen> {
+  XFile? _imageField;
+
+  String _locatoinField = "";
+
+  String _descriptionField = "";
+
+  final TextEditingController _editingController = TextEditingController();
+
   ThemeData _getTheme() {
-    if (problemType == ProblemType.ElectricityProblem) {
+    if (widget.problemType == ProblemType.ElectricityProblem) {
       return ThemeData(
           primaryColor: const Color(0xFF6C6461),
           primaryColorLight: const Color(0xFF6C6461).withOpacity(0.45));
-    } else if (problemType == ProblemType.Others) {
+    } else if (widget.problemType == ProblemType.Others) {
       return ThemeData(
           primaryColor: const Color(0xFF654A69),
           primaryColorLight: const Color(0xFF654A69).withOpacity(0.45));
@@ -39,26 +52,94 @@ class ReportFormScreen extends ConsumerWidget {
   }
 
   String _getHeading() {
-    if (problemType == ProblemType.ElectricityProblem) {
+    if (widget.problemType == ProblemType.ElectricityProblem) {
       return "Electricity Problem";
-    } else if (problemType == ProblemType.Others) {
+    } else if (widget.problemType == ProblemType.Others) {
       return "Others";
     }
     return "Water Problem";
   }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var locationFieldWatch = ref.watch(locatoinFieldProvider);
+  Future<void> _getImageFromCamera() async {
+    final ImagePicker picker = ImagePicker();
+    try {
+      XFile? image = await picker.pickImage(source: ImageSource.camera);
+      setState(() {
+        _imageField = image;
+      });
+    } catch (e) {
+      debugPrint("Image picker exception: ${e.toString()}");
+    }
+  }
 
-    var locationField = ref.watch(locatoinFieldProvider.notifier);
+  Future<LocationData> _getDeviceCurrentLocation() async {
+
+    if (_imageField == null) {
+      debugPrint("Picture not added");
+      _locatoinField = "";
+      return Future.error("Picture not added");
+    }
+
+    Location location = Location();
+
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+
+    LocationData? locationData;
+
+    try {
+      serviceEnabled = await location.serviceEnabled();
+      if (!serviceEnabled) {
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
+          // Fluttertoast.showToast(msg: "Locatoin service must be enabled");
+
+          setState(() {
+            _imageField = null;
+            _locatoinField = "";
+          });
+          return Future.error("Service is not enabled");
+        }
+      }
+
+      permissionGranted = await location.hasPermission();
+      if (permissionGranted == PermissionStatus.denied) {
+        permissionGranted = await location.requestPermission();
+        if (permissionGranted != PermissionStatus.granted) {
+          //if user denies access permission
+          // Fluttertoast.showToast(msg: "Locatoin permission must be accepted");
+          setState(() {
+            _imageField = null;
+            _locatoinField = "";
+          });
+
+          return Future.error("Permission is not granted");
+        }
+      }
+
+      locationData = await location.getLocation();
+
+      debugPrint(
+          "Location: ${locationData.latitude}, ${locationData.longitude}");
+
+      setState(() {
+        _locatoinField = "${locationData!.latitude}, ${locationData.longitude}";
+      });
+    } catch (e) {
+      debugPrint("determinePositionException: ${e.toString()}");
+    }
+    return locationData!;
+  }
+
+  @override
+  Widget build(BuildContext context) {
 
     return Theme(
       data: _getTheme(),
       child: CustomLayout(
           lightShadeBgColor: _getTheme().primaryColorLight,
           darkShadeBgColor: _getTheme().primaryColor,
-          topLeftSvg: topLeftSvg,
+          topLeftSvg: widget.topLeftSvg,
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
@@ -76,7 +157,14 @@ class ReportFormScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // add photo section
-                  const _AddPhotoButton(),
+                  _AddPhotoButton(
+                    image: _imageField,
+                    onPressed: () async {
+                      await _getImageFromCamera();
+                      var location = await _getDeviceCurrentLocation();
+                      debugPrint("location: $location");
+                    },
+                  ),
                   const SizedBox(
                     width: 12.0,
                   ),
@@ -143,7 +231,7 @@ class ReportFormScreen extends ConsumerWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 4.0),
-                          child: locationFieldWatch.isEmpty
+                          child: _locatoinField.isEmpty
                               ? SvgPicture.asset('assets/images/location.svg')
                               : SvgPicture.asset(
                                   'assets/images/location_active.svg'),
@@ -154,7 +242,7 @@ class ReportFormScreen extends ConsumerWidget {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(right: 56.0),
-                            child: locationFieldWatch.isEmpty
+                            child: _locatoinField.isEmpty
                                 ? Text(
                                     "location of the problem will be generated automatically after adding picture.",
                                     style: GoogleFonts.prompt(
@@ -164,7 +252,7 @@ class ReportFormScreen extends ConsumerWidget {
                                       wordSpacing: 0.1,
                                       fontSize: 14.0,
                                     ))
-                                : Text(locationFieldWatch,
+                                : Text(_locatoinField,
                                     style: GoogleFonts.prompt(
                                       color: const Color(0xFF407BFF),
                                       fontWeight: FontWeight.w400,
@@ -199,6 +287,7 @@ class ReportFormScreen extends ConsumerWidget {
                   ),
                   TextField(
                     maxLines: 4,
+                    controller: _editingController,
                     decoration: InputDecoration(
                       focusColor: _getTheme().primaryColor,
                       focusedBorder: OutlineInputBorder(
@@ -248,8 +337,15 @@ class ReportFormScreen extends ConsumerWidget {
   }
 }
 
-class _AddPhotoButton extends ConsumerWidget {
-  const _AddPhotoButton({Key? key}) : super(key: key);
+class _AddPhotoButton extends StatelessWidget {
+  _AddPhotoButton({Key? key, required this.onPressed, this.image})
+      : super(key: key);
+
+  bool isImageLoading = false;
+
+  final VoidCallback onPressed;
+
+  final XFile? image;
 
   // Future<void> getLostData() async {
   //   final LostDataResponse response = await picker.retrieveLostData();
@@ -265,75 +361,75 @@ class _AddPhotoButton extends ConsumerWidget {
   //   }
   // }
 
-  Future<void> _getImage(WidgetRef ref) async {
-    var imageField = ref.watch(imageFieldProvider.notifier);
-    final ImagePicker picker = ImagePicker();
-    try {
-      XFile? image = await picker.pickImage(source: ImageSource.camera);
-      imageField.state = image;
-    } catch (e) {
-      debugPrint("Image picker exception: ${e.toString()}");
-    }
-  }
+  // Future<void> _getImageFromCamera(WidgetRef ref) async {
+  //   var imageField = ref.watch(imageFieldProvider.notifier);
+  //   final ImagePicker picker = ImagePicker();
+  //   try {
+  //     XFile? image = await picker.pickImage(source: ImageSource.camera);
+  //     imageField.state = image;
+  //   } catch (e) {
+  //     debugPrint("Image picker exception: ${e.toString()}");
+  //   }
+  // }
 
-  Future<LocationData> _determinePosition(WidgetRef ref) async {
-    var imageField = ref.watch(imageFieldProvider.notifier);
-    var locationField = ref.watch(locatoinFieldProvider.notifier);
+  // Future<LocationData> _getDeviceCurrentLocation(WidgetRef ref) async {
+  //   var imageField = ref.watch(imageFieldProvider.notifier);
+  //   var locationField = ref.watch(locatoinFieldProvider.notifier);
 
-    if (imageField.state == null) {
-      debugPrint("Picture not added");
-      return Future.error("Picture not added");
-    }
-    Location location = Location();
+  //   if (imageField.state == null) {
+  //     debugPrint("Picture not added");
+  //     locationField.state = "";
+  //     return Future.error("Picture not added");
+  //   }
 
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
+  //   Location location = Location();
 
-    LocationData? locationData;
+  //   bool serviceEnabled;
+  //   PermissionStatus permissionGranted;
 
-    try {
-      serviceEnabled = await location.serviceEnabled();
-      if (!serviceEnabled) {
-        serviceEnabled = await location.requestService();
-        if (!serviceEnabled) {
-          // Fluttertoast.showToast(msg: "Locatoin service must be enabled");
+  //   LocationData? locationData;
 
-          imageField.state = null;
-          locationField.state = "";
-          return Future.error("Service is not enabled");
-        }
-      }
+  //   try {
+  //     serviceEnabled = await location.serviceEnabled();
+  //     if (!serviceEnabled) {
+  //       serviceEnabled = await location.requestService();
+  //       if (!serviceEnabled) {
+  //         // Fluttertoast.showToast(msg: "Locatoin service must be enabled");
 
-      permissionGranted = await location.hasPermission();
-      if (permissionGranted == PermissionStatus.denied) {
-        permissionGranted = await location.requestPermission();
-        if (permissionGranted != PermissionStatus.granted) {
-          //if user denies access permission
-          // Fluttertoast.showToast(msg: "Locatoin permission must be accepted");
+  //         imageField.state = null;
+  //         locationField.state = "";
+  //         return Future.error("Service is not enabled");
+  //       }
+  //     }
 
-          imageField.state = null;
-          locationField.state = "";
-          return Future.error("Permission is not granted");
-        }
-      }
+  //     permissionGranted = await location.hasPermission();
+  //     if (permissionGranted == PermissionStatus.denied) {
+  //       permissionGranted = await location.requestPermission();
+  //       if (permissionGranted != PermissionStatus.granted) {
+  //         //if user denies access permission
+  //         // Fluttertoast.showToast(msg: "Locatoin permission must be accepted");
 
-      // if no picture is added
-      if (imageField.state == null) {
-        return Future.error("No picture was added");
-      }
-      locationData = await location.getLocation();
+  //         imageField.state = null;
+  //         locationField.state = "";
+  //         return Future.error("Permission is not granted");
+  //       }
+  //     }
 
-      locationField.state =
-          "${locationData.latitude}, ${locationData.longitude}";
-    } catch (e) {
-      debugPrint("determinePositionException: ${e.toString()}");
-    }
-    return locationData!;
-  }
+  //     locationData = await location.getLocation();
+
+  //     debugPrint(
+  //         "Location: ${locationData.latitude}, ${locationData.longitude}");
+
+  //     locationField.state =
+  //         "${locationData.latitude}, ${locationData.longitude}";
+  //   } catch (e) {
+  //     debugPrint("determinePositionException: ${e.toString()}");
+  //   }
+  //   return locationData!;
+  // }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final XFile? reportImage = ref.watch(imageFieldProvider);
+  Widget build(BuildContext context) {
 
     return Row(
       children: [
@@ -341,10 +437,9 @@ class _AddPhotoButton extends ConsumerWidget {
           height: 120.0,
           width: 104.0,
           decoration: BoxDecoration(
-              image: reportImage != null
+              image: image != null
                   ? DecorationImage(
-                      fit: BoxFit.fill,
-                      image: FileImage(File(reportImage.path)))
+                      fit: BoxFit.fill, image: FileImage(File(image!.path)))
                   : null,
               border: Border.all(
                 color: const Color(0xFF9B9B9B),
@@ -354,14 +449,16 @@ class _AddPhotoButton extends ConsumerWidget {
                 Radius.circular(16.0),
               )),
           child: InkWell(
-              onTap: () async {
-                await _getImage(ref);
-                var location = await _determinePosition(ref);
-                debugPrint("locatoin: $location");
-                // _extractImageMetaData(ref);
-              },
+              onTap: onPressed
+              // await _getImageFromCamera(ref);
+              // var location = await _getDeviceCurrentLocation(ref);
+              // debugPrint("location: $location");
+              // _extractImageMetaData(ref);
+              ,
               child: Center(
-                child: SvgPicture.asset('assets/images/add_photo.svg'),
+                child: isImageLoading
+                    ? const CircularProgressIndicator()
+                    : SvgPicture.asset('assets/images/add_photo.svg'),
               )),
         ),
         // child: reportImage == null

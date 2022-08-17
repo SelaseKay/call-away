@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 //     const Duration(milliseconds: 550),
                                 pageBuilder:
                                     (context, animation, secondaryAnimatio) =>
-                                        const ReportFormScreen(
+                                         ReportFormScreen(
                                   topLeftSvg: "assets/images/pipeline.svg",
                                   problemType: ProblemType.WaterProblem,
                                 ),
@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 //     const Duration(milliseconds: 550),
                                 pageBuilder:
                                     (context, animation, secondaryAnimatio) =>
-                                        const ReportFormScreen(
+                                         ReportFormScreen(
                                   problemType: ProblemType.Others,
                                   // pageHeading: "Others",
                                   topLeftSvg: "assets/images/others.svg",
@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             //     const Duration(milliseconds: 550),
                             pageBuilder:
                                 (context, animation, secondaryAnimatio) =>
-                                    const ReportFormScreen(
+                                     ReportFormScreen(
                               problemType: ProblemType.ElectricityProblem,
                               // pageHeading: "Electricity Problem",
                               topLeftSvg: "assets/images/electrician.svg",

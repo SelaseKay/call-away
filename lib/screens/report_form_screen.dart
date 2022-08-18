@@ -36,6 +36,8 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
 
   final TextEditingController _editingController = TextEditingController();
 
+  bool _isLoading = false;
+
   ThemeData _getTheme() {
     if (widget.problemType == ProblemType.ElectricityProblem) {
       return ThemeData(
@@ -73,11 +75,13 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
   }
 
   Future<LocationData> _getDeviceCurrentLocation() async {
-
     if (_imageField == null) {
-      debugPrint("Picture not added");
-      _locatoinField = "";
-      return Future.error("Picture not added");
+      debugPrint("Picture not added(Image is null)");
+      setState(() {
+        _isLoading = false;
+        _locatoinField = "";
+      });
+      return Future.error("Picture not added(Image is null)");
     }
 
     Location location = Location();
@@ -133,206 +137,226 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Theme(
       data: _getTheme(),
-      child: CustomLayout(
-          lightShadeBgColor: _getTheme().primaryColorLight,
-          darkShadeBgColor: _getTheme().primaryColor,
-          topLeftSvg: widget.topLeftSvg,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Text(
-                _getHeading(),
-                style: GoogleFonts.prompt(
-                    color: _getTheme().primaryColor,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // add photo section
-                  _AddPhotoButton(
-                    image: _imageField,
-                    onPressed: () async {
-                      await _getImageFromCamera();
-                      var location = await _getDeviceCurrentLocation();
-                      debugPrint("location: $location");
-                    },
-                  ),
-                  const SizedBox(
-                    width: 12.0,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Add Photo",
-                          style: GoogleFonts.prompt(
-                            color: const Color(0xFF010101),
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 4.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 88.0),
-                          child: Text(
-                            "Take a clear picture of the problem at hand",
-                            style: GoogleFonts.prompt(
-                              color: const Color(0xFF000000).withOpacity(0.55),
-                              fontWeight: FontWeight.normal,
-                              fontSize: 14.0,
-                              height: 1.14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-
-            //location section
-
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Location",
-                    style: GoogleFonts.prompt(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF010101)),
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(4.0)),
-                        border: Border.all(
-                            width: 1.5,
-                            color: const Color(0xFF000000).withOpacity(0.32))),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 4.0),
-                          child: _locatoinField.isEmpty
-                              ? SvgPicture.asset('assets/images/location.svg')
-                              : SvgPicture.asset(
-                                  'assets/images/location_active.svg'),
-                        ),
-                        const SizedBox(
-                          width: 8.0,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 56.0),
-                            child: _locatoinField.isEmpty
-                                ? Text(
-                                    "location of the problem will be generated automatically after adding picture.",
-                                    style: GoogleFonts.prompt(
-                                      color: const Color(0xFF7C7C7C)
-                                          .withOpacity(0.45),
-                                      fontWeight: FontWeight.normal,
-                                      wordSpacing: 0.1,
-                                      fontSize: 14.0,
-                                    ))
-                                : Text(_locatoinField,
-                                    style: GoogleFonts.prompt(
-                                      color: const Color(0xFF407BFF),
-                                      fontWeight: FontWeight.w400,
-                                      wordSpacing: 0.1,
-                                      fontSize: 14.0,
-                                    )),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-
-            // description Sectoin
-
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Description",
-                    style: GoogleFonts.prompt(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF010101)),
-                  ),
-                  const SizedBox(
-                    height: 4.0,
-                  ),
-                  TextField(
-                    maxLines: 4,
-                    controller: _editingController,
-                    decoration: InputDecoration(
-                      focusColor: _getTheme().primaryColor,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1.5, color: _getTheme().primaryColor)),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1.5,
-                              color:
-                                  const Color(0xFF000000).withOpacity(0.32))),
-                      hintText: 'Type a brief description of the problem...',
-                    ),
-                  )
-                ],
-              ),
-            ),
-
-            // Submit Button
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      child: Stack(
+        children: [
+          CustomLayout(
+              lightShadeBgColor: _getTheme().primaryColorLight,
+              darkShadeBgColor: _getTheme().primaryColor,
+              topLeftSvg: widget.topLeftSvg,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 40.0, bottom: 40.0),
-                  child: SizedBox(
-                    height: 48.0,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: _getTheme().primaryColor,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8.0)))),
-                        onPressed: () {},
-                        child: Text(
-                          "Submit Report",
-                          style: GoogleFonts.prompt(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w800),
-                        )),
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: Text(
+                    _getHeading(),
+                    style: GoogleFonts.prompt(
+                        color: _getTheme().primaryColor,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-              ],
-            )
-          ]),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // add photo section
+                      _AddPhotoButton(
+                        image: _imageField,
+                        onPressed: () async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+
+                          await _getImageFromCamera();
+                          var location = await _getDeviceCurrentLocation();
+                          _isLoading = false;
+                          debugPrint("location: $location");
+                        },
+                      ),
+                      const SizedBox(
+                        width: 12.0,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Add Photo",
+                              style: GoogleFonts.prompt(
+                                color: const Color(0xFF010101),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 4.0,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 88.0),
+                              child: Text(
+                                "Take a clear picture of the problem at hand",
+                                style: GoogleFonts.prompt(
+                                  color:
+                                      const Color(0xFF000000).withOpacity(0.55),
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14.0,
+                                  height: 1.14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
+                //location section
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Location",
+                        style: GoogleFonts.prompt(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF010101)),
+                      ),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(4.0)),
+                            border: Border.all(
+                                width: 1.5,
+                                color:
+                                    const Color(0xFF000000).withOpacity(0.32))),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 4.0),
+                              child: _locatoinField.isEmpty
+                                  ? SvgPicture.asset(
+                                      'assets/images/location.svg')
+                                  : SvgPicture.asset(
+                                      'assets/images/location_active.svg'),
+                            ),
+                            const SizedBox(
+                              width: 8.0,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 56.0),
+                                child: _locatoinField.isEmpty
+                                    ? Text(
+                                        "location of the problem will be generated automatically after adding picture.",
+                                        style: GoogleFonts.prompt(
+                                          color: const Color(0xFF7C7C7C)
+                                              .withOpacity(0.45),
+                                          fontWeight: FontWeight.normal,
+                                          wordSpacing: 0.1,
+                                          fontSize: 14.0,
+                                        ))
+                                    : Text(_locatoinField,
+                                        style: GoogleFonts.prompt(
+                                          color: const Color(0xFF407BFF),
+                                          fontWeight: FontWeight.w400,
+                                          wordSpacing: 0.1,
+                                          fontSize: 14.0,
+                                        )),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
+                // description Sectoin
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Description",
+                        style: GoogleFonts.prompt(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF010101)),
+                      ),
+                      const SizedBox(
+                        height: 4.0,
+                      ),
+                      TextField(
+                        maxLines: 4,
+                        controller: _editingController,
+                        decoration: InputDecoration(
+                          focusColor: _getTheme().primaryColor,
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1.5, color: _getTheme().primaryColor)),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1.5,
+                                  color: const Color(0xFF000000)
+                                      .withOpacity(0.32))),
+                          hintText:
+                              'Type a brief description of the problem...',
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
+                // Submit Button
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 40.0, bottom: 40.0),
+                      child: SizedBox(
+                        height: 48.0,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: _getTheme().primaryColor,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(8.0)))),
+                            onPressed: () {},
+                            child: Text(
+                              "Submit Report",
+                              style: GoogleFonts.prompt(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w800),
+                            )),
+                      ),
+                    ),
+                  ],
+                )
+              ]),
+          _isLoading
+              ? Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : const SizedBox.shrink()
+        ],
+      ),
     );
   }
 }
@@ -430,7 +454,6 @@ class _AddPhotoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Row(
       children: [
         Container(

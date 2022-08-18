@@ -2,12 +2,9 @@ import 'dart:io';
 
 import 'package:call_away/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
-import 'package:call_away/provider/report_form_field_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
@@ -37,6 +34,8 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
   final TextEditingController _editingController = TextEditingController();
 
   bool _isLoading = false;
+
+  final snackBar = (String text) => SnackBar(content: Text(text));
 
   ThemeData _getTheme() {
     if (widget.problemType == ProblemType.ElectricityProblem) {
@@ -97,8 +96,10 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
         serviceEnabled = await location.requestService();
         if (!serviceEnabled) {
           // Fluttertoast.showToast(msg: "Locatoin service must be enabled");
-
+           // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(snackBar("Location service must be enabled."));
           setState(() {
+            _isLoading = false;
             _imageField = null;
             _locatoinField = "";
           });
@@ -111,8 +112,10 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
         permissionGranted = await location.requestPermission();
         if (permissionGranted != PermissionStatus.granted) {
           //if user denies access permission
-          // Fluttertoast.showToast(msg: "Locatoin permission must be accepted");
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(snackBar("Location permission must be accepted."));
           setState(() {
+            _isLoading = false;
             _imageField = null;
             _locatoinField = "";
           });
@@ -168,10 +171,11 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                           setState(() {
                             _isLoading = true;
                           });
-
                           await _getImageFromCamera();
                           var location = await _getDeviceCurrentLocation();
-                          _isLoading = false;
+                          setState(() {
+                            _isLoading = false;
+                          });
                           debugPrint("location: $location");
                         },
                       ),
@@ -371,87 +375,6 @@ class _AddPhotoButton extends StatelessWidget {
 
   final XFile? image;
 
-  // Future<void> getLostData() async {
-  //   final LostDataResponse response = await picker.retrieveLostData();
-  //   if (response.isEmpty) {
-  //     return;
-  //   }
-  //   if (response.files != null) {
-  //     for (final XFile file in response.files) {
-  //       _handleFile(file);
-  //     }
-  //   } else {
-  //     _handleError(response.exception);
-  //   }
-  // }
-
-  // Future<void> _getImageFromCamera(WidgetRef ref) async {
-  //   var imageField = ref.watch(imageFieldProvider.notifier);
-  //   final ImagePicker picker = ImagePicker();
-  //   try {
-  //     XFile? image = await picker.pickImage(source: ImageSource.camera);
-  //     imageField.state = image;
-  //   } catch (e) {
-  //     debugPrint("Image picker exception: ${e.toString()}");
-  //   }
-  // }
-
-  // Future<LocationData> _getDeviceCurrentLocation(WidgetRef ref) async {
-  //   var imageField = ref.watch(imageFieldProvider.notifier);
-  //   var locationField = ref.watch(locatoinFieldProvider.notifier);
-
-  //   if (imageField.state == null) {
-  //     debugPrint("Picture not added");
-  //     locationField.state = "";
-  //     return Future.error("Picture not added");
-  //   }
-
-  //   Location location = Location();
-
-  //   bool serviceEnabled;
-  //   PermissionStatus permissionGranted;
-
-  //   LocationData? locationData;
-
-  //   try {
-  //     serviceEnabled = await location.serviceEnabled();
-  //     if (!serviceEnabled) {
-  //       serviceEnabled = await location.requestService();
-  //       if (!serviceEnabled) {
-  //         // Fluttertoast.showToast(msg: "Locatoin service must be enabled");
-
-  //         imageField.state = null;
-  //         locationField.state = "";
-  //         return Future.error("Service is not enabled");
-  //       }
-  //     }
-
-  //     permissionGranted = await location.hasPermission();
-  //     if (permissionGranted == PermissionStatus.denied) {
-  //       permissionGranted = await location.requestPermission();
-  //       if (permissionGranted != PermissionStatus.granted) {
-  //         //if user denies access permission
-  //         // Fluttertoast.showToast(msg: "Locatoin permission must be accepted");
-
-  //         imageField.state = null;
-  //         locationField.state = "";
-  //         return Future.error("Permission is not granted");
-  //       }
-  //     }
-
-  //     locationData = await location.getLocation();
-
-  //     debugPrint(
-  //         "Location: ${locationData.latitude}, ${locationData.longitude}");
-
-  //     locationField.state =
-  //         "${locationData.latitude}, ${locationData.longitude}";
-  //   } catch (e) {
-  //     debugPrint("determinePositionException: ${e.toString()}");
-  //   }
-  //   return locationData!;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -472,24 +395,25 @@ class _AddPhotoButton extends StatelessWidget {
                 Radius.circular(16.0),
               )),
           child: InkWell(
-              onTap: onPressed
-              // await _getImageFromCamera(ref);
-              // var location = await _getDeviceCurrentLocation(ref);
-              // debugPrint("location: $location");
-              // _extractImageMetaData(ref);
-              ,
+              onTap: onPressed,
               child: Center(
                 child: isImageLoading
                     ? const CircularProgressIndicator()
                     : SvgPicture.asset('assets/images/add_photo.svg'),
               )),
         ),
-        // child: reportImage == null
-        //     ? Center(
-        //         child: SvgPicture.asset('assets/images/add_photo.svg'),
-        //       )
-        //     : Image.file(File(reportImage.path), fit: BoxFit.fill)),
       ],
     );
+  }
+}
+
+class _MySnackBar extends StatelessWidget {
+  const _MySnackBar({Key? key, required this.text}) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return SnackBar(content: Text(text));
   }
 }

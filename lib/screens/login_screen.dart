@@ -1,6 +1,7 @@
 import 'package:call_away/components/brand_logo.dart';
 import 'package:call_away/components/labeled_textfield.dart';
 import 'package:call_away/components/signing_button.dart';
+import 'package:call_away/components/text_span.dart';
 import 'package:call_away/screens/sign_up_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class LoginScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 48.0),
                   child: Text(
-                    "Sign In",
+                    "Login",
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
@@ -54,39 +55,24 @@ class LoginScreen extends StatelessWidget {
 
                   Padding(
                     padding: const EdgeInsets.only(top: 24.0),
-                    child: SignButton(text: "Sign Up", onPressed: (){
+                    child: SignButton(text: "Login", onPressed: (){
                       
                     }),
                   ),
 
                    Padding(
                     padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
-                    child: RichText(text: TextSpan(children: [
-                      TextSpan(text: "Don't have an account? ", style: GoogleFonts.prompt(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.black
-                      )),
-                      TextSpan(text: "Sign Up", style: GoogleFonts.prompt(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w800,
-                        color: const Color(0xFFCE7A63)
-                      ),
-                      recognizer: TapGestureRecognizer()..onTap = (() {
-                         Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    // transitionDuration:
-                                    //     const Duration(milliseconds: 550),
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimatio) =>
-                                        SignUpScreen(),
-                                  ));
-                      })
-                      ),
-                    ]),
-                    textAlign: TextAlign.center,
-                    ),
+                    child: 
+                    CustomTextSpan(onTapText: (){
+                       Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      // transitionDuration:
+                      //     const Duration(milliseconds: 550),
+                      pageBuilder: (context, animation, secondaryAnimatio) =>
+                          SignUpScreen(),
+                    ));
+                    }, unclickableText: "Don't have an account? ", clickableText: "Sign Up")
                   ),
               ],
             )

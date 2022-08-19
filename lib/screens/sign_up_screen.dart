@@ -1,6 +1,8 @@
 import 'package:call_away/components/brand_logo.dart';
 import 'package:call_away/components/labeled_textfield.dart';
 import 'package:call_away/components/signing_button.dart';
+import 'package:call_away/components/text_span.dart';
+import 'package:call_away/screens/add_phone_number_screen.dart';
 import 'package:call_away/screens/login_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -59,65 +61,46 @@ class SignUpScreen extends StatelessWidget {
                       controller: _passwordController,
                     )),
                 Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                          text: "By continuing, you agree to our ",
-                          style: GoogleFonts.prompt(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black)),
-                      TextSpan(
-                          text: "\nTerms and Conditions",
-                          style: GoogleFonts.prompt(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w800,
-                              color: const Color(0xFFCE7A63)),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = (() {
-                              //navigate to terms and conditions page
-                            })),
-                    ]),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: CustomTextSpan(
+                      onTapText: () {
+                        //navigate to terms and coditions page
+                      },
+                      unclickableText: "By continuing, you agree to our",
+                      clickableText: "\nTerms and Conditions",
+                    )),
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: SignButton(text: "Sign Up", onPressed: () {}),
+                  child: SignButton(
+                      text: "Sign Up",
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              // transitionDuration:
+                              //     const Duration(milliseconds: 550),
+                              pageBuilder:
+                                  (context, animation, secondaryAnimatio) =>
+                                      const AddPhoneNumberScreen(),
+                            ));
+                      }),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
-                  child: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                          text: "Already have an account? ",
-                          style: GoogleFonts.prompt(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black)),
-                      TextSpan(
-                          text: "Login",
-                          style: GoogleFonts.prompt(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w800,
-                              color: const Color(0xFFCE7A63)),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = (() {
-                              Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    // transitionDuration:
-                                    //     const Duration(milliseconds: 550),
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimatio) =>
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                    child: CustomTextSpan(
+                        onTapText: () {
+                          Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                // transitionDuration:
+                                //     const Duration(milliseconds: 550),
+                                pageBuilder:
+                                    (context, animation, secondaryAnimatio) =>
                                         LoginScreen(),
-                                  ));
-                            })),
-                    ]),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                              ));
+                        },
+                        clickableText: "Login",
+                        unclickableText: "Already have an account? ")),
               ],
             )
           ],

@@ -6,6 +6,8 @@ class LabeledTextField extends StatefulWidget {
       {Key? key,
       required this.label,
       this.isPasswordField = false,
+      this.keyboardType,
+      this.hintText = "",
       this.controller})
       : super(key: key);
 
@@ -14,6 +16,10 @@ class LabeledTextField extends StatefulWidget {
   final bool isPasswordField;
 
   final TextEditingController? controller;
+
+  final TextInputType? keyboardType;
+
+  final String hintText;
 
   @override
   State<LabeledTextField> createState() => _LabeledTextFieldState();
@@ -29,14 +35,14 @@ class _LabeledTextFieldState extends State<LabeledTextField> {
       children: [
         Text(widget.label,
             style: GoogleFonts.prompt(
-                fontSize: 14.0, color: const Color(0xFF8A8A8A))),
+                fontSize: 14.0, color: const Color(0xFF3F3F3F))),
         const SizedBox(
           height: 4.0,
         ),
         widget.isPasswordField
             ? SizedBox(
-              height: 40.0,
-              child: TextFormField(
+                height: 40.0,
+                child: TextFormField(
                   controller: widget.controller,
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
@@ -64,11 +70,13 @@ class _LabeledTextFieldState extends State<LabeledTextField> {
                   autocorrect: false,
                   style: const TextStyle(color: Colors.black),
                 ),
-            )
+              )
             : SizedBox(
-              height: 40.0,
-              child: TextFormField(
+                height: 40.0,
+                child: TextFormField(
+                  textAlignVertical: TextAlignVertical.bottom,
                   controller: widget.controller,
+                  keyboardType: widget.keyboardType,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -78,15 +86,12 @@ class _LabeledTextFieldState extends State<LabeledTextField> {
                       borderSide:
                           BorderSide(color: Color(0xFF8A8A8A), width: 1.0),
                     ),
-
-                    // hintText: 'Mobile Number',
+                    hintText: widget.hintText,
                   ),
                   style: const TextStyle(color: Colors.black),
                 ),
-            )
+              )
       ],
     );
   }
 }
-
-

@@ -1,11 +1,17 @@
 import 'package:call_away/components/brand_logo.dart';
+import 'package:call_away/components/labeled_textfield.dart';
+import 'package:call_away/components/signing_button.dart';
+import 'package:call_away/screens/login_screen.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  SignUpScreen({Key? key}) : super(key: key);
+
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,76 +39,90 @@ class SignUpScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
-                const Padding(
-                    padding: EdgeInsets.only(top: 48.0),
-                    child: _LabeledTextField(label: "Username")),
-                const Padding(
-                    padding: EdgeInsets.only(top: 16.0),
-                    child: _LabeledTextField(label: "Email")),
-                const Padding(
-                    padding: EdgeInsets.only(top: 16.0),
-                    child: _LabeledTextField(
+                Padding(
+                    padding: const EdgeInsets.only(top: 48.0),
+                    child: LabeledTextField(
+                      label: "Username",
+                      controller: _userNameController,
+                    )),
+                Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: LabeledTextField(
+                      label: "Email",
+                      controller: _emailController,
+                    )),
+                Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: LabeledTextField(
                       label: "Password",
-                      autocorrect: false,
-                      enableSuggestions: false,
-                      obscureText: true,
-                    ))
+                      isPasswordField: true,
+                      controller: _passwordController,
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: "By continuing, you agree to our ",
+                          style: GoogleFonts.prompt(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.black)),
+                      TextSpan(
+                          text: "\nTerms and Conditions",
+                          style: GoogleFonts.prompt(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w800,
+                              color: const Color(0xFFCE7A63)),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = (() {
+                              //navigate to terms and conditions page
+                            })),
+                    ]),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: SignButton(text: "Sign Up", onPressed: () {}),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                  child: RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: "Already have an account? ",
+                          style: GoogleFonts.prompt(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.black)),
+                      TextSpan(
+                          text: "Login",
+                          style: GoogleFonts.prompt(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w800,
+                              color: const Color(0xFFCE7A63)),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = (() {
+                              Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    // transitionDuration:
+                                    //     const Duration(milliseconds: 550),
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimatio) =>
+                                        LoginScreen(),
+                                  ));
+                            })),
+                    ]),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             )
           ],
         )),
       ),
-    );
-  }
-}
-
-class _LabeledTextField extends StatelessWidget {
-  const _LabeledTextField(
-      {Key? key,
-      required this.label,
-      this.obscureText = false,
-      this.enableSuggestions = true,
-      this.autocorrect = true})
-      : super(key: key);
-
-  final String label;
-  final bool obscureText;
-  final bool enableSuggestions;
-  final bool autocorrect;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label,
-            style: GoogleFonts.prompt(
-                fontSize: 14.0, color: const Color(0xFF8A8A8A))),
-        const SizedBox(
-          height: 4.0,
-        ),
-        TextFormField(
-          decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Theme.of(context).primaryColor, width: 1.0),
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFF8A8A8A), width: 1.0),
-            ),
-
-            // hintText: 'Mobile Number',
-          ),
-          obscureText: obscureText,
-          enableSuggestions: enableSuggestions,
-          autocorrect: autocorrect,
-
-          style: const TextStyle(
-            color: Colors.black
-          ),
-          
-        )
-      ],
     );
   }
 }

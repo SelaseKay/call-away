@@ -20,12 +20,12 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // primaryColor: const Color(0xFFCE7A63),
-        //   textTheme:
-        //       const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))
+        primaryColor: const Color(0xFFCE7A63),
+          textTheme:
+              const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))
       ),
-      // home: const SignUpScreen(),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: SignUpScreen(),
+      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }

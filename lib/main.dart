@@ -1,6 +1,7 @@
 import 'package:call_away/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
 import 'package:call_away/screens/report_form_screen.dart';
+import 'package:call_away/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,8 +20,11 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        // primaryColor: const Color(0xFFCE7A63),
+        //   textTheme:
+        //       const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))
       ),
+      // home: const SignUpScreen(),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

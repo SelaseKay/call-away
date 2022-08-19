@@ -5,8 +5,13 @@ import 'package:call_away/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -20,10 +25,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color(0xFFCE7A63),
+          primaryColor: const Color(0xFFCE7A63),
           textTheme:
-              const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))
-      ),
+              const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))),
       home: SignUpScreen(),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -65,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 //     const Duration(milliseconds: 550),
                                 pageBuilder:
                                     (context, animation, secondaryAnimatio) =>
-                                         ReportFormScreen(
+                                        ReportFormScreen(
                                   topLeftSvg: "assets/images/pipeline.svg",
                                   problemType: ProblemType.WaterProblem,
                                 ),
@@ -87,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 //     const Duration(milliseconds: 550),
                                 pageBuilder:
                                     (context, animation, secondaryAnimatio) =>
-                                         ReportFormScreen(
+                                        ReportFormScreen(
                                   problemType: ProblemType.Others,
                                   // pageHeading: "Others",
                                   topLeftSvg: "assets/images/others.svg",
@@ -114,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             //     const Duration(milliseconds: 550),
                             pageBuilder:
                                 (context, animation, secondaryAnimatio) =>
-                                     ReportFormScreen(
+                                    ReportFormScreen(
                               problemType: ProblemType.ElectricityProblem,
                               // pageHeading: "Electricity Problem",
                               topLeftSvg: "assets/images/electrician.svg",

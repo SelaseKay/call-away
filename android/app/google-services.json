@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "35696865082",
+    "project_id": "call-away-backend",
+    "storage_bucket": "call-away-backend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35696865082:android:be4cd6c1d0cef434e96a03",
+        "android_client_info": {
+          "package_name": "com.example.call_away"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "35696865082-2nbe3afm7vg8d43keekc0nmvbnts2v4t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAq0MGbUW_gamzsBOyh_BzWuqVgEhs7_SI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "35696865082-2nbe3afm7vg8d43keekc0nmvbnts2v4t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "35696865082-qpkl25v2utsldjm7komk58m0l1efdsg1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.callAway"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

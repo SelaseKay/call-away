@@ -21,15 +21,9 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
@@ -57,6 +51,24 @@ class DefaultFirebaseOptions {
     authDomain: 'call-away-backend.firebaseapp.com',
     storageBucket: 'call-away-backend.appspot.com',
     measurementId: 'G-DLQGFDDZXW',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyAq0MGbUW_gamzsBOyh_BzWuqVgEhs7_SI',
+    appId: '1:35696865082:android:be4cd6c1d0cef434e96a03',
+    messagingSenderId: '35696865082',
+    projectId: 'call-away-backend',
+    storageBucket: 'call-away-backend.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCHlKywK_VH7ZmohBnyuPYgXLPI897kRts',
+    appId: '1:35696865082:ios:47ae6bee9e74ef85e96a03',
+    messagingSenderId: '35696865082',
+    projectId: 'call-away-backend',
+    storageBucket: 'call-away-backend.appspot.com',
+    iosClientId: '35696865082-qpkl25v2utsldjm7komk58m0l1efdsg1.apps.googleusercontent.com',
+    iosBundleId: 'com.example.callAway',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(

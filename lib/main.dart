@@ -9,9 +9,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // firebaseApp.then((value) => const ProviderScope(child: MyApp())).catchError((e)=>debugPrint("An error occured: $e"));
   runApp(const ProviderScope(child: MyApp()));
 }
 

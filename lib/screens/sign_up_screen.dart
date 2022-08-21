@@ -2,6 +2,7 @@ import 'package:call_away/components/brand_logo.dart';
 import 'package:call_away/components/labeled_textfield.dart';
 import 'package:call_away/components/signing_button.dart';
 import 'package:call_away/components/text_span.dart';
+import 'package:call_away/notifier/authNotifier.dart';
 import 'package:call_away/provider/authProvider.dart';
 import 'package:call_away/screens/add_phone_number_screen.dart';
 import 'package:call_away/screens/login_screen.dart';
@@ -19,9 +20,9 @@ class SignUpScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isLoading = ref.watch(authProvider).isSignUpLoading;
+    // bool isLoading = ref.watch(authProvider).isSignUpLoading;
 
-    var authentication = ref.watch(authProvider.notifier);
+    AuthenticationState authState = ref.watch(authProvider);
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -82,21 +83,32 @@ class SignUpScreen extends ConsumerWidget {
                       child: SignButton(
                           text: "Sign Up",
                           onPressed: () async {
-                            await authentication.state.signUpUser(
+                            await ref.read(authProvider.notifier).signUpUser(
                                 _userNameController.text,
                                 _emailController.text,
                                 _passwordController.text);
 
-                                
-                          Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  // transitionDuration:
-                                  //     const Duration(milliseconds: 550),
-                                  pageBuilder:
-                                      (context, animation, secondaryAnimatio) =>
-                                          const AddPhoneNumberScreen(),
-                                ));
+                            print(
+                                "current state is ${ref.read(authProvider.notifier).state}");
+
+                            if (ref.read(authProvider.notifier).state
+                                is AuthenticationStateError) {
+                              print("state is error state");
+                            } else if (ref.read(authProvider.notifier).state
+                                is AuthenticationStateSuccess) {
+                              print("state is success state");
+                              // print(
+                              //     "Error occured while signing up: ${(authNotifier).successMessage}");
+                              Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    // transitionDuration:
+                                    //     const Duration(milliseconds: 550),
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimatio) =>
+                                        const AddPhoneNumberScreen(),
+                                  ));
+                            }
                           }),
                     ),
                     Padding(
@@ -119,7 +131,7 @@ class SignUpScreen extends ConsumerWidget {
                 )
               ],
             ),
-            isLoading
+            authState is AuthenticationStateLoading
                 ? Container(
                     color: Colors.black.withOpacity(0.5),
                     child: const Center(

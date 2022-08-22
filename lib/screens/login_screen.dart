@@ -3,9 +3,7 @@ import 'package:call_away/components/labeled_textfield.dart';
 import 'package:call_away/components/signing_button.dart';
 import 'package:call_away/components/text_span.dart';
 import 'package:call_away/screens/sign_up_screen.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);

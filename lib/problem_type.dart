@@ -1,5 +1,5 @@
 enum ProblemType {
-  WaterProblem,
-  ElectricityProblem,
-  Others
+  waterProblem,
+  electricityProblem,
+  others
 }

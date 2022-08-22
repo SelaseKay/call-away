@@ -13,7 +13,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // firebaseApp.then((value) => const ProviderScope(child: MyApp())).catchError((e)=>debugPrint("An error occured: $e"));
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -73,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     (context, animation, secondaryAnimatio) =>
                                         ReportFormScreen(
                                   topLeftSvg: "assets/images/pipeline.svg",
-                                  problemType: ProblemType.WaterProblem,
+                                  problemType: ProblemType.waterProblem,
                                 ),
                               ));
                         },
@@ -94,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 pageBuilder:
                                     (context, animation, secondaryAnimatio) =>
                                         ReportFormScreen(
-                                  problemType: ProblemType.Others,
+                                  problemType: ProblemType.others,
                                   // pageHeading: "Others",
                                   topLeftSvg: "assets/images/others.svg",
                                 ),
@@ -121,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             pageBuilder:
                                 (context, animation, secondaryAnimatio) =>
                                     ReportFormScreen(
-                              problemType: ProblemType.ElectricityProblem,
+                              problemType: ProblemType.electricityProblem,
                               // pageHeading: "Electricity Problem",
                               topLeftSvg: "assets/images/electrician.svg",
                             ),

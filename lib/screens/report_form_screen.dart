@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:call_away/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,7 +11,7 @@ import 'package:location/location.dart';
 class ReportFormScreen extends StatefulWidget {
   ReportFormScreen(
       {Key? key,
-      this.problemType = ProblemType.WaterProblem,
+      this.problemType = ProblemType.waterProblem,
       this.topLeftSvg = "assets/images/contact-us.svg"})
       : super(key: key);
 
@@ -38,11 +37,11 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
   final snackBar = (String text) => SnackBar(content: Text(text));
 
   ThemeData _getTheme() {
-    if (widget.problemType == ProblemType.ElectricityProblem) {
+    if (widget.problemType == ProblemType.electricityProblem) {
       return ThemeData(
           primaryColor: const Color(0xFF6C6461),
           primaryColorLight: const Color(0xFF6C6461).withOpacity(0.45));
-    } else if (widget.problemType == ProblemType.Others) {
+    } else if (widget.problemType == ProblemType.others) {
       return ThemeData(
           primaryColor: const Color(0xFF654A69),
           primaryColorLight: const Color(0xFF654A69).withOpacity(0.45));
@@ -53,9 +52,9 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
   }
 
   String _getHeading() {
-    if (widget.problemType == ProblemType.ElectricityProblem) {
+    if (widget.problemType == ProblemType.electricityProblem) {
       return "Electricity Problem";
-    } else if (widget.problemType == ProblemType.Others) {
+    } else if (widget.problemType == ProblemType.others) {
       return "Others";
     }
     return "Water Problem";
@@ -404,16 +403,5 @@ class _AddPhotoButton extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class _MySnackBar extends StatelessWidget {
-  const _MySnackBar({Key? key, required this.text}) : super(key: key);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return SnackBar(content: Text(text));
   }
 }

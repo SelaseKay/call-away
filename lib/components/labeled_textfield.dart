@@ -8,6 +8,7 @@ class LabeledTextField extends StatefulWidget {
       this.isPasswordField = false,
       this.keyboardType,
       this.hintText = "",
+      this.validator,
       this.controller})
       : super(key: key);
 
@@ -20,6 +21,8 @@ class LabeledTextField extends StatefulWidget {
   final TextInputType? keyboardType;
 
   final String hintText;
+
+  final FormFieldValidator<String>? validator;
 
   @override
   State<LabeledTextField> createState() => _LabeledTextFieldState();
@@ -44,6 +47,7 @@ class _LabeledTextFieldState extends State<LabeledTextField> {
                 height: 40.0,
                 child: TextFormField(
                   controller: widget.controller,
+                  validator: (value) => widget.validator!(value),
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -75,6 +79,7 @@ class _LabeledTextFieldState extends State<LabeledTextField> {
                 height: 40.0,
                 child: TextFormField(
                   textAlignVertical: TextAlignVertical.bottom,
+                  validator: (value) => widget.validator!(value),
                   controller: widget.controller,
                   keyboardType: widget.keyboardType,
                   decoration: InputDecoration(

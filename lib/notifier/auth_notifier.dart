@@ -24,7 +24,7 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
   final FirebaseAuth auth;
 
   Future<void> signUpUser(
-      String email, String password, String username) async {
+      String username, String email, String password) async {
     try {
       state = AuthenticationStateLoading();
       var credentials = await auth.createUserWithEmailAndPassword(
@@ -58,37 +58,16 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
           "Login message: ${(state as AuthenticationStateError).errorMessage}");
     }
   }
+
+  Future<void> logoutUser() async {
+    try {
+      state = AuthenticationStateLoading();
+      await auth.signOut();
+      state = AuthenticationStateSuccess("User signed out successfully");
+    } on FirebaseAuthException catch (e) {
+      state = AuthenticationStateError(e.message!);
+      print(
+          "Logout message: ${(state as AuthenticationStateError).errorMessage}");
+    }
+  }
 }
-
-// class AuthNotifier extends StateNotifier<Authentication> {
-//   AuthNotifier() : super(Authentication());
-
-//   final _auth = FirebaseAuth.instance;
-
-//   final _authentication = Authentication();
-
-//   Future<void> signUpUser(
-//       String username, String email, String password) async {
-//     try {
-//       state = Authentication(isSignUpLoading: true);
-//       var credentials = await _auth.createUserWithEmailAndPassword(
-//           email: email, password: password);
-//       User user = credentials.user!;
-//       await FirebaseFirestore.instance.collection("Users").doc(user.uid).set({
-//         "username": username,
-//         "email": email,
-//         "phone_number": null,
-//         "phone_verfied_at": null,
-//         "otp": null
-//       });
-//       state = Authentication(
-//           isSignUpLoading: false,
-//           signUpMessage: "Account created successfully");
-//       print(state.signUpMessage);
-//     } on FirebaseAuthException catch (e) {
-//       state =
-//           Authentication(isSignUpLoading: false, signUpMessage: "${e.message}");
-//       print("SignUpMessage: ${state.signUpMessage}");
-//     }
-//   }
-// }

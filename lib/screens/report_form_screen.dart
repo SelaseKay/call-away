@@ -365,10 +365,8 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
 }
 
 class _AddPhotoButton extends StatelessWidget {
-  _AddPhotoButton({Key? key, required this.onPressed, this.image})
+  const _AddPhotoButton({Key? key, required this.onPressed, this.image})
       : super(key: key);
-
-  bool isImageLoading = false;
 
   final VoidCallback onPressed;
 
@@ -396,9 +394,7 @@ class _AddPhotoButton extends StatelessWidget {
           child: InkWell(
               onTap: onPressed,
               child: Center(
-                child: isImageLoading
-                    ? const CircularProgressIndicator()
-                    : SvgPicture.asset('assets/images/add_photo.svg'),
+                child: SvgPicture.asset('assets/images/add_photo.svg'),
               )),
         ),
       ],

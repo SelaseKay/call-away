@@ -128,23 +128,23 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
   @override
   Widget build(BuildContext context) {
     final image = ref.watch(cameraImageProvider);
-    final location = ref.watch(locationProvider);
+    final locationState = ref.watch(locationProvider);
 
     ref.listen<XFile?>(cameraImageProvider, (previous, next) {
       ref.read(locationProvider.notifier).getDeviceCurrentLocation();
     });
 
-    // ref.listen<DeviceLocation>(locationProvider, (previous, next) {
-    //   print("location instance: ${next.toString()}");
-    //   if (!next.isLocationPermissionGranted!) {
-    //     ScaffoldMessenger.of(context)
-    //         .showSnackBar(snackBar("Location permission must be accepted."));
-    //   }
-    //   if (!next.isLocationServiceEnabled!) {
-    //     ScaffoldMessenger.of(context)
-    //         .showSnackBar(snackBar("Location service must be enabled."));
-    //   }
-    // });
+    ref.listen<DeviceLocationState>(locationProvider, (previous, next) {
+      print("location instance: ${next.toString()}");
+      if (next is DeviceLocationErrorState) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBar(next.errorText));
+      }
+      // if (!next.isLocationServiceEnabled!) {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(snackBar("Location service must be enabled."));
+      // }
+    });
 
     return Theme(
       data: _getTheme(),
@@ -247,11 +247,11 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),
-                              child: location.locationText.isEmpty
+                              child: locationState is DeviceLocationSuccessState
                                   ? SvgPicture.asset(
-                                      'assets/images/location.svg')
-                                  : SvgPicture.asset(
-                                      'assets/images/location_active.svg'),
+                                      'assets/images/location_active.svg')
+                                      : SvgPicture.asset(
+                                      'assets/images/location.svg'),
                             ),
                             const SizedBox(
                               width: 8.0,
@@ -259,8 +259,15 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 56.0),
-                                child: location.locationText.isEmpty
-                                    ? Text(
+                                child: locationState is DeviceLocationSuccessState
+                                ? Text(locationState.location,
+                                        style: GoogleFonts.prompt(
+                                          color: const Color(0xFF407BFF),
+                                          fontWeight: FontWeight.w400,
+                                          wordSpacing: 0.1,
+                                          fontSize: 14.0,
+                                        ))
+                                    : Text(
                                         "location of the problem will be generated automatically after adding picture.",
                                         style: GoogleFonts.prompt(
                                           color: const Color(0xFF7C7C7C)
@@ -269,13 +276,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                           wordSpacing: 0.1,
                                           fontSize: 14.0,
                                         ))
-                                    : Text(location.locationText,
-                                        style: GoogleFonts.prompt(
-                                          color: const Color(0xFF407BFF),
-                                          fontWeight: FontWeight.w400,
-                                          wordSpacing: 0.1,
-                                          fontSize: 14.0,
-                                        )),
+                                    ,
                               ),
                             )
                           ],
@@ -351,7 +352,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                   ],
                 )
               ]),
-          location.isLoading
+          locationState is DeviceLocationLoadingState
               ? Container(
                   color: Colors.black.withOpacity(0.5),
                   child: const Center(

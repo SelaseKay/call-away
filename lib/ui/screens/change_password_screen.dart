@@ -1,4 +1,4 @@
-import 'package:call_away/components/custom_layout.dart';
+import 'package:call_away/ui/components/custom_layout.dart';
 import 'package:flutter/material.dart';
 
 class ChangePasswordScreen extends StatelessWidget {

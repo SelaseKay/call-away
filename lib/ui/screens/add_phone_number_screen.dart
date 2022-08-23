@@ -1,6 +1,6 @@
-import 'package:call_away/components/continue_button.dart';
-import 'package:call_away/components/icon_button.dart';
-import 'package:call_away/components/labeled_textfield.dart';
+import 'package:call_away/ui/components/continue_button.dart';
+import 'package:call_away/ui/components/icon_button.dart';
+import 'package:call_away/ui/components/labeled_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

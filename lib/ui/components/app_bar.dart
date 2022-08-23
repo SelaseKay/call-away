@@ -1,4 +1,4 @@
-import 'package:call_away/components/icon_button.dart';
+import 'package:call_away/ui/components/icon_button.dart';
 import 'package:flutter/material.dart';
 
 class AppBarSection extends StatelessWidget {

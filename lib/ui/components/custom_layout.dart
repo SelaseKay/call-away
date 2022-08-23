@@ -1,4 +1,4 @@
-import 'package:call_away/components/app_bar.dart';
+import 'package:call_away/ui/components/app_bar.dart';
 import 'package:flutter/material.dart';
 
 class MyCustomLayout extends StatelessWidget {

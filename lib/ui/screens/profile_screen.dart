@@ -1,6 +1,6 @@
-import 'package:call_away/components/app_bar.dart';
-import 'package:call_away/screens/change_password_screen.dart';
-import 'package:call_away/screens/my_reports_screen.dart';
+import 'package:call_away/ui/components/app_bar.dart';
+import 'package:call_away/ui/screens/change_password_screen.dart';
+import 'package:call_away/ui/screens/my_reports_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

@@ -1,8 +1,8 @@
-import 'package:call_away/components/brand_logo.dart';
-import 'package:call_away/components/labeled_textfield.dart';
-import 'package:call_away/components/signing_button.dart';
-import 'package:call_away/components/text_span.dart';
-import 'package:call_away/screens/sign_up_screen.dart';
+import 'package:call_away/ui/components/brand_logo.dart';
+import 'package:call_away/ui/components/labeled_textfield.dart';
+import 'package:call_away/ui/components/signing_button.dart';
+import 'package:call_away/ui/components/text_span.dart';
+import 'package:call_away/ui/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {

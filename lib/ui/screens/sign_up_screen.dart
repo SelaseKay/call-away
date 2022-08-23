@@ -1,12 +1,12 @@
-import 'package:call_away/components/brand_logo.dart';
-import 'package:call_away/components/labeled_textfield.dart';
-import 'package:call_away/components/signing_button.dart';
-import 'package:call_away/components/text_span.dart';
-import 'package:call_away/notifier/auth_notifier.dart';
+import 'package:call_away/ui/components/brand_logo.dart';
+import 'package:call_away/ui/components/labeled_textfield.dart';
+import 'package:call_away/ui/components/signing_button.dart';
+import 'package:call_away/ui/components/text_span.dart';
+import 'package:call_away/services/auth_service.dart';
 import 'package:call_away/provider/auth_provider.dart';
 import 'package:call_away/provider/form_key_provider.dart';
-import 'package:call_away/screens/add_phone_number_screen.dart';
-import 'package:call_away/screens/login_screen.dart';
+import 'package:call_away/ui/screens/add_phone_number_screen.dart';
+import 'package:call_away/ui/screens/login_screen.dart';
 import 'package:call_away/utils/user_input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -130,6 +130,7 @@ class SignUpScreen extends ConsumerWidget {
                                                 secondaryAnimatio) =>
                                             const AddPhoneNumberScreen(),
                                       ));
+                                  Navigator.pop(context);
                                 }
 
                                 print(

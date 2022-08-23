@@ -1,14 +1,18 @@
 import 'dart:io';
 
-import 'package:call_away/custom-widget/custom_layout.dart';
+import 'package:call_away/model/location.dart';
+import 'package:call_away/provider/camera_image_provider.dart';
+import 'package:call_away/provider/location_provider.dart';
+import 'package:call_away/services/location_service.dart';
+import 'package:call_away/ui/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:location/location.dart';
 
-class ReportFormScreen extends StatefulWidget {
+class ReportFormScreen extends ConsumerStatefulWidget {
   ReportFormScreen(
       {Key? key,
       this.problemType = ProblemType.waterProblem,
@@ -20,19 +24,13 @@ class ReportFormScreen extends StatefulWidget {
   final String topLeftSvg;
 
   @override
-  State<ReportFormScreen> createState() => _ReportFormScreenState();
+  ConsumerState<ReportFormScreen> createState() => _ReportFormScreenState();
 }
 
-class _ReportFormScreenState extends State<ReportFormScreen> {
-  XFile? _imageField;
-
-  String _locatoinField = "";
-
+class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
   String _descriptionField = "";
 
   final TextEditingController _editingController = TextEditingController();
-
-  bool _isLoading = false;
 
   final snackBar = (String text) => SnackBar(content: Text(text));
 
@@ -60,85 +58,94 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
     return "Water Problem";
   }
 
-  Future<void> _getImageFromCamera() async {
-    final ImagePicker picker = ImagePicker();
-    try {
-      XFile? image = await picker.pickImage(source: ImageSource.camera);
-      setState(() {
-        _imageField = image;
-      });
-    } catch (e) {
-      debugPrint("Image picker exception: ${e.toString()}");
-    }
-  }
+  // Future<LocationData> _getDeviceCurrentLocation() async {
+  //   if (_imageField == null) {
+  //     debugPrint("Picture not added(Image is null)");
+  //     setState(() {
+  //       _isLoading = false;
+  //       _locatoinField = "";
+  //     });
+  //     return Future.error("Picture not added(Image is null)");
+  //   }
 
-  Future<LocationData> _getDeviceCurrentLocation() async {
-    if (_imageField == null) {
-      debugPrint("Picture not added(Image is null)");
-      setState(() {
-        _isLoading = false;
-        _locatoinField = "";
-      });
-      return Future.error("Picture not added(Image is null)");
-    }
+  //   Location location = Location();
 
-    Location location = Location();
+  //   bool serviceEnabled;
+  //   PermissionStatus permissionGranted;
 
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
+  //   LocationData? locationData;
 
-    LocationData? locationData;
+  //   try {
+  //     serviceEnabled = await location.serviceEnabled();
+  //     if (!serviceEnabled) {
+  //       serviceEnabled = await location.requestService();
+  //       if (!serviceEnabled) {
+  //         // Fluttertoast.showToast(msg: "Locatoin service must be enabled");
+  //         // ignore: use_build_context_synchronously
+  //         ScaffoldMessenger.of(context)
+  //             .showSnackBar(snackBar("Location service must be enabled."));
+  //         setState(() {
+  //           _isLoading = false;
+  //           _imageField = null;
+  //           _locatoinField = "";
+  //         });
+  //         return Future.error("Service is not enabled");
+  //       }
+  //     }
 
-    try {
-      serviceEnabled = await location.serviceEnabled();
-      if (!serviceEnabled) {
-        serviceEnabled = await location.requestService();
-        if (!serviceEnabled) {
-          // Fluttertoast.showToast(msg: "Locatoin service must be enabled");
-           // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(context).showSnackBar(snackBar("Location service must be enabled."));
-          setState(() {
-            _isLoading = false;
-            _imageField = null;
-            _locatoinField = "";
-          });
-          return Future.error("Service is not enabled");
-        }
-      }
+  //     permissionGranted = await location.hasPermission();
+  //     if (permissionGranted == PermissionStatus.denied) {
+  //       permissionGranted = await location.requestPermission();
+  //       if (permissionGranted != PermissionStatus.granted) {
+  //         //if user denies access permission
+  //         // ignore: use_build_context_synchronously
+  //         ScaffoldMessenger.of(context)
+  //             .showSnackBar(snackBar("Location permission must be accepted."));
+  //         setState(() {
+  //           _isLoading = false;
+  //           _imageField = null;
+  //           _locatoinField = "";
+  //         });
 
-      permissionGranted = await location.hasPermission();
-      if (permissionGranted == PermissionStatus.denied) {
-        permissionGranted = await location.requestPermission();
-        if (permissionGranted != PermissionStatus.granted) {
-          //if user denies access permission
-          // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(context).showSnackBar(snackBar("Location permission must be accepted."));
-          setState(() {
-            _isLoading = false;
-            _imageField = null;
-            _locatoinField = "";
-          });
+  //         return Future.error("Permission is not granted");
+  //       }
+  //     }
 
-          return Future.error("Permission is not granted");
-        }
-      }
+  //     locationData = await location.getLocation();
 
-      locationData = await location.getLocation();
+  //     debugPrint(
+  //         "Location: ${locationData.latitude}, ${locationData.longitude}");
 
-      debugPrint(
-          "Location: ${locationData.latitude}, ${locationData.longitude}");
-
-      setState(() {
-        _locatoinField = "${locationData!.latitude}, ${locationData.longitude}";
-      });
-    } catch (e) {
-      debugPrint("determinePositionException: ${e.toString()}");
-    }
-    return locationData!;
-  }
+  //     setState(() {
+  //       _locatoinField = "${locationData!.latitude}, ${locationData.longitude}";
+  //     });
+  //   } catch (e) {
+  //     debugPrint("determinePositionException: ${e.toString()}");
+  //   }
+  //   return locationData!;
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final image = ref.watch(cameraImageProvider);
+    final location = ref.watch(locationProvider);
+
+    ref.listen<XFile?>(cameraImageProvider, (previous, next) {
+      ref.read(locationProvider.notifier).getDeviceCurrentLocation();
+    });
+
+    // ref.listen<DeviceLocation>(locationProvider, (previous, next) {
+    //   print("location instance: ${next.toString()}");
+    //   if (!next.isLocationPermissionGranted!) {
+    //     ScaffoldMessenger.of(context)
+    //         .showSnackBar(snackBar("Location permission must be accepted."));
+    //   }
+    //   if (!next.isLocationServiceEnabled!) {
+    //     ScaffoldMessenger.of(context)
+    //         .showSnackBar(snackBar("Location service must be enabled."));
+    //   }
+    // });
+
     return Theme(
       data: _getTheme(),
       child: Stack(
@@ -165,17 +172,11 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                     children: [
                       // add photo section
                       _AddPhotoButton(
-                        image: _imageField,
+                        image: image,
                         onPressed: () async {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          await _getImageFromCamera();
-                          var location = await _getDeviceCurrentLocation();
-                          setState(() {
-                            _isLoading = false;
-                          });
-                          debugPrint("location: $location");
+                          ref
+                              .read(cameraImageProvider.notifier)
+                              .getImageFromCamera();
                         },
                       ),
                       const SizedBox(
@@ -246,7 +247,7 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),
-                              child: _locatoinField.isEmpty
+                              child: location.locationText.isEmpty
                                   ? SvgPicture.asset(
                                       'assets/images/location.svg')
                                   : SvgPicture.asset(
@@ -258,7 +259,7 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 56.0),
-                                child: _locatoinField.isEmpty
+                                child: location.locationText.isEmpty
                                     ? Text(
                                         "location of the problem will be generated automatically after adding picture.",
                                         style: GoogleFonts.prompt(
@@ -268,7 +269,7 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                                           wordSpacing: 0.1,
                                           fontSize: 14.0,
                                         ))
-                                    : Text(_locatoinField,
+                                    : Text(location.locationText,
                                         style: GoogleFonts.prompt(
                                           color: const Color(0xFF407BFF),
                                           fontWeight: FontWeight.w400,
@@ -284,7 +285,7 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                   ),
                 ),
 
-                // description Sectoin
+                // description Section
 
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
@@ -350,7 +351,7 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                   ],
                 )
               ]),
-          _isLoading
+          location.isLoading
               ? Container(
                   color: Colors.black.withOpacity(0.5),
                   child: const Center(

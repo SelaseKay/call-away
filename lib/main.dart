@@ -1,7 +1,7 @@
-import 'package:call_away/custom-widget/custom_layout.dart';
+import 'package:call_away/ui/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
-import 'package:call_away/screens/report_form_screen.dart';
-import 'package:call_away/screens/sign_up_screen.dart';
+import 'package:call_away/ui/screens/report_form_screen.dart';
+import 'package:call_away/ui/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,9 +16,20 @@ Future<void> main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    super.initState();
+    
+  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -29,8 +40,8 @@ class MyApp extends StatelessWidget {
           primaryColor: const Color(0xFFCE7A63),
           textTheme:
               const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))),
-      home: SignUpScreen(),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: SignUpScreen(),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }

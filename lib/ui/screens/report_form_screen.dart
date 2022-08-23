@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:call_away/model/location.dart';
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/location_provider.dart';
 import 'package:call_away/services/location_service.dart';
@@ -58,73 +57,6 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
     return "Water Problem";
   }
 
-  // Future<LocationData> _getDeviceCurrentLocation() async {
-  //   if (_imageField == null) {
-  //     debugPrint("Picture not added(Image is null)");
-  //     setState(() {
-  //       _isLoading = false;
-  //       _locatoinField = "";
-  //     });
-  //     return Future.error("Picture not added(Image is null)");
-  //   }
-
-  //   Location location = Location();
-
-  //   bool serviceEnabled;
-  //   PermissionStatus permissionGranted;
-
-  //   LocationData? locationData;
-
-  //   try {
-  //     serviceEnabled = await location.serviceEnabled();
-  //     if (!serviceEnabled) {
-  //       serviceEnabled = await location.requestService();
-  //       if (!serviceEnabled) {
-  //         // Fluttertoast.showToast(msg: "Locatoin service must be enabled");
-  //         // ignore: use_build_context_synchronously
-  //         ScaffoldMessenger.of(context)
-  //             .showSnackBar(snackBar("Location service must be enabled."));
-  //         setState(() {
-  //           _isLoading = false;
-  //           _imageField = null;
-  //           _locatoinField = "";
-  //         });
-  //         return Future.error("Service is not enabled");
-  //       }
-  //     }
-
-  //     permissionGranted = await location.hasPermission();
-  //     if (permissionGranted == PermissionStatus.denied) {
-  //       permissionGranted = await location.requestPermission();
-  //       if (permissionGranted != PermissionStatus.granted) {
-  //         //if user denies access permission
-  //         // ignore: use_build_context_synchronously
-  //         ScaffoldMessenger.of(context)
-  //             .showSnackBar(snackBar("Location permission must be accepted."));
-  //         setState(() {
-  //           _isLoading = false;
-  //           _imageField = null;
-  //           _locatoinField = "";
-  //         });
-
-  //         return Future.error("Permission is not granted");
-  //       }
-  //     }
-
-  //     locationData = await location.getLocation();
-
-  //     debugPrint(
-  //         "Location: ${locationData.latitude}, ${locationData.longitude}");
-
-  //     setState(() {
-  //       _locatoinField = "${locationData!.latitude}, ${locationData.longitude}";
-  //     });
-  //   } catch (e) {
-  //     debugPrint("determinePositionException: ${e.toString()}");
-  //   }
-  //   return locationData!;
-  // }
-
   @override
   Widget build(BuildContext context) {
     final image = ref.watch(cameraImageProvider);
@@ -135,15 +67,10 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
     });
 
     ref.listen<DeviceLocationState>(locationProvider, (previous, next) {
-      print("location instance: ${next.toString()}");
       if (next is DeviceLocationErrorState) {
         ScaffoldMessenger.of(context)
             .showSnackBar(snackBar(next.errorText));
       }
-      // if (!next.isLocationServiceEnabled!) {
-      //   ScaffoldMessenger.of(context)
-      //       .showSnackBar(snackBar("Location service must be enabled."));
-      // }
     });
 
     return Theme(

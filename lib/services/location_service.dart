@@ -1,4 +1,3 @@
-import 'package:call_away/model/location.dart';
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

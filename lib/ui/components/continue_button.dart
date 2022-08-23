@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class ContinueButton extends StatelessWidget {
   const ContinueButton({Key? key, required this.onPressed}) : super(key: key);
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {

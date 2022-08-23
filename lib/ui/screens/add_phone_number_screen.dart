@@ -1,6 +1,7 @@
 import 'package:call_away/ui/components/continue_button.dart';
 import 'package:call_away/ui/components/icon_button.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
+import 'package:call_away/ui/screens/otp_verification-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -58,7 +59,14 @@ class AddPhoneNumberScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: ContinueButton(onPressed: () {
-               
+                Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      // transitionDuration:
+                      //     const Duration(milliseconds: 550),
+                      pageBuilder: (context, animation, secondaryAnimatio) =>
+                          const OtpVerificationScreen(),
+                    ));
               }),
             ),
           ],

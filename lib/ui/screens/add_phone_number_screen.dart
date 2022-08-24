@@ -1,3 +1,5 @@
+import 'package:call_away/provider/otp_provider.dart';
+import 'package:call_away/services/otp_service.dart';
 import 'package:call_away/ui/components/continue_button.dart';
 import 'package:call_away/ui/components/icon_button.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
@@ -12,8 +14,19 @@ class AddPhoneNumberScreen extends ConsumerWidget {
 
   final _formKey = GlobalKey<FormState>();
 
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<OtpState>(otpProvider, (previous, next) {
+      if (next is OtpStateSuccess) {
+        Navigator.pushNamed(context, '/addPhoneNumber/verifyOtp');
+      } else if (next is OtpStateError) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(next.errorMessage)));
+      }
+    });
+
     return Theme(
       data: Theme.of(context).copyWith(
           textTheme: Theme.of(context).textTheme.copyWith(
@@ -60,6 +73,7 @@ class AddPhoneNumberScreen extends ConsumerWidget {
                 child: LabeledTextField(
                     label: "Phone Number",
                     hintText: "0540000000",
+                    controller: _controller,
                     validator: (value) => Validator.validatePhoneNumber(value!),
                     textInputFormatter: [
                       FilteringTextInputFormatter.digitsOnly
@@ -69,9 +83,11 @@ class AddPhoneNumberScreen extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: ContinueButton(onPressed: () {
+              child: ContinueButton(onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  Navigator.pushNamed(context, '/addPhoneNumber/verifyOtp');
+                  await ref
+                      .read(otpProvider.notifier)
+                      .sendOtpCode(_controller.text.trim());
                 }
               }),
             ),

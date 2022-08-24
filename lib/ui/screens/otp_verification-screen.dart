@@ -1,5 +1,8 @@
+import 'package:call_away/provider/otp_provider.dart';
+import 'package:call_away/services/otp_service.dart';
 import 'package:call_away/ui/components/continue_button.dart';
 import 'package:call_away/ui/components/icon_button.dart';
+import 'package:call_away/ui/components/loading_screen.dart';
 import 'package:call_away/ui/components/text_span.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +19,17 @@ class OtpVerificationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final otpState = ref.watch(otpProvider);
+
+    ref.listen(otpProvider, (previous, next) {
+      if (next is OtpStateSuccess) {
+        Navigator.pushNamed(context, 'home');
+      } else if (next is OtpStateError) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(next.errorMessage)));
+      }
+    });
+
     return Theme(
       data: Theme.of(context).copyWith(
           textTheme: Theme.of(context).textTheme.copyWith(
@@ -43,57 +57,64 @@ class OtpVerificationScreen extends ConsumerWidget {
           elevation: 0.0,
         ),
         body: SafeArea(
-            child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Text(
-                "We sent you a code to verify your phone number.",
-                style: GoogleFonts.prompt(
-                    textStyle: Theme.of(context).textTheme.bodyText2,
-                    color: const Color(0xFF9E9E9E)),
-              ),
+            ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 24.0),
+                  child: Text(
+                    "We sent you a code to verify your phone number.",
+                    style: GoogleFonts.prompt(
+                        textStyle: Theme.of(context).textTheme.bodyText2,
+                        color: const Color(0xFF9E9E9E)),
+                  ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Form(
+                        onChanged: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _OtpTextField(
+                              controller: _controller1,
+                              autoFocus: true,
+                            ),
+                            _OtpTextField(controller: _controller2),
+                            _OtpTextField(controller: _controller3),
+                            _OtpTextField(controller: _controller4),
+                          ],
+                        ))),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: ContinueButton(onPressed: () async {
+                    var otpCode = _controller1.text +
+                        _controller2.text +
+                        _controller3.text +
+                        _controller4.text;
+                    print("otp code is: $otpCode");
+                    if (otpCode.length != 4) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("Entered code is incomplete")));
+                    } else {
+                      await ref
+                          .read(otpProvider.notifier)
+                          .verifiyUserOtp(otpCode);
+                    }
+                  }),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: CustomTextSpan(
+                      onTapText: () {},
+                      clickableText: "\nResend",
+                      unclickableText: "I didn't receive a code."),
+                )
+              ],
             ),
-            Padding(
-                padding: const EdgeInsets.only(top: 24.0),
-                child: Form(
-                    onChanged: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _OtpTextField(
-                          controller: _controller1,
-                          autoFocus: true,
-                        ),
-                        _OtpTextField(controller: _controller2),
-                        _OtpTextField(controller: _controller3),
-                        _OtpTextField(controller: _controller4),
-                      ],
-                    ))),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: ContinueButton(onPressed: () {
-                var otpCode = _controller1.text +
-                    _controller2.text +
-                    _controller3.text +
-                    _controller4.text;
-                print("otp code is: $otpCode");
-                if (otpCode.length != 4) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Entered code is incomplete")));
-                } else {
-                  Navigator.pushNamed(context, 'home');
-                }
-              }),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: CustomTextSpan(
-                  onTapText: () {},
-                  clickableText: "\nResend",
-                  unclickableText: "I didn't receive a code."),
-            )
+            otpState is OtpStateLoading ? const LoadingScreen() : const SizedBox.shrink()
           ],
         )),
       ),

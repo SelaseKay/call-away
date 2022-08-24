@@ -1,4 +1,3 @@
-import 'package:call_away/provider/otp_code_provider.dart';
 import 'package:call_away/ui/components/continue_button.dart';
 import 'package:call_away/ui/components/icon_button.dart';
 import 'package:call_away/ui/components/text_span.dart';

@@ -82,6 +82,8 @@ class OtpVerificationScreen extends ConsumerWidget {
                 if (otpCode.length != 4) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Entered code is incomplete")));
+                } else {
+                  Navigator.pushNamed(context, 'home');
                 }
               }),
             ),
@@ -98,7 +100,6 @@ class OtpVerificationScreen extends ConsumerWidget {
     );
   }
 }
-
 
 class _OtpTextField extends ConsumerWidget {
   const _OtpTextField(

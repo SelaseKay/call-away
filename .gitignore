@@ -46,4 +46,12 @@ app.*.map.json
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
-/android/app/release
+/android/app/release/
+
+
+/sms_service/sms.postman_collection.json/
+
+# Api keys
+/env.dart
+
+

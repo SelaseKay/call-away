@@ -1,4 +1,6 @@
+import 'package:call_away/ui/screens/add_phone_number_screen.dart';
 import 'package:call_away/ui/screens/home_screen.dart';
+import 'package:call_away/ui/screens/login_screen.dart';
 import 'package:call_away/ui/screens/otp_verification-screen.dart';
 import 'package:call_away/ui/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
@@ -34,13 +36,19 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+
+      initialRoute: '/',
+      routes: {
+        '/':(context) => LoginScreen(),
+        '/signUp':(context) => SignUpScreen(),
+        '/addPhoneNumber':(context) => AddPhoneNumberScreen(),
+        '/addPhoneNumber/verifyOtp':(context) => OtpVerificationScreen(),
+        'home':(context) => const HomeScreen(title: "Call Away")
+      },
       theme: ThemeData(
           primaryColor: const Color(0xFFCE7A63),
           textTheme:
               const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))),
-      // home: SignUpScreen(),
-      home: OtpVerificationScreen()
-      // home: const HomeScreen(title: 'Flutter Demo Home Page'),
     );
   }
 }

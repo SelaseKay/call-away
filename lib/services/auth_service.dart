@@ -18,6 +18,10 @@ class AuthenticationStateSuccess extends AuthenticationState {
 
 class AuthenticationStateLoading extends AuthenticationState {}
 
+class AuthenticationStateUserVerified extends AuthenticationState {}
+
+
+
 class AuthNotifier extends StateNotifier<AuthenticationState> {
   AuthNotifier(this.auth) : super(AuthenticationStateSuccess(""));
 
@@ -30,11 +34,12 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
       var credentials = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = credentials.user!;
+      FirebaseFirestore.instance.collection("Users").doc(user.uid);
       await FirebaseFirestore.instance.collection("Users").doc(user.uid).set({
         "username": username,
         "email": email,
         "phone_number": null,
-        "phone_verfied_at": null,
+        "phone_verified_at": null,
         "otp": null
       });
       state = AuthenticationStateSuccess("Account created successfully");
@@ -50,12 +55,27 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
   Future<void> loginUser(String email, String password) async {
     try {
       state = AuthenticationStateLoading();
-      await auth.signInWithEmailAndPassword(email: email, password: password);
+      final credentials = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      final user = credentials.user;
+
+      final userDoc = await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(user!.uid)
+          .get();
+
+      if (userDoc["phone_verified_at"] != null) {
+        state = AuthenticationStateUserVerified();
+      } else {
+        state = AuthenticationStateError("User is not verified");
+      }
+
       state = AuthenticationStateSuccess("Login successful");
     } on FirebaseAuthException catch (e) {
       state = AuthenticationStateError(e.message!);
       print(
           "Login message: ${(state as AuthenticationStateError).errorMessage}");
+      return Future.error(e.message!);
     }
   }
 

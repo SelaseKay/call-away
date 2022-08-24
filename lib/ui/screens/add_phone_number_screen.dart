@@ -1,20 +1,19 @@
-import 'package:call_away/provider/form_key_provider.dart';
 import 'package:call_away/ui/components/continue_button.dart';
 import 'package:call_away/ui/components/icon_button.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
-import 'package:call_away/ui/screens/otp_verification-screen.dart';
+import 'package:call_away/utils/user_input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AddPhoneNumberScreen extends ConsumerWidget {
-  const AddPhoneNumberScreen({Key? key}) : super(key: key);
+  AddPhoneNumberScreen({Key? key}) : super(key: key);
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final formKey = ref.watch(formKeyProvider);
-
     return Theme(
       data: Theme.of(context).copyWith(
           textTheme: Theme.of(context).textTheme.copyWith(
@@ -57,10 +56,11 @@ class AddPhoneNumberScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: Form(
-                key: formKey,
+                key: _formKey,
                 child: LabeledTextField(
                     label: "Phone Number",
-                    hintText: "0541439384",
+                    hintText: "0540000000",
+                    validator: (value) => Validator.validatePhoneNumber(value!),
                     textInputFormatter: [
                       FilteringTextInputFormatter.digitsOnly
                     ],
@@ -70,15 +70,8 @@ class AddPhoneNumberScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: ContinueButton(onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        // transitionDuration:
-                        //     const Duration(milliseconds: 550),
-                        pageBuilder: (context, animation, secondaryAnimatio) =>
-                            OtpVerificationScreen(),
-                      ));
+                if (_formKey.currentState!.validate()) {
+                  Navigator.pushNamed(context, '/addPhoneNumber/verifyOtp');
                 }
               }),
             ),

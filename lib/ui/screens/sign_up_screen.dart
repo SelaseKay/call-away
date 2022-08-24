@@ -1,12 +1,11 @@
 import 'package:call_away/ui/components/brand_logo.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
+import 'package:call_away/ui/components/loading_screen.dart';
 import 'package:call_away/ui/components/signing_button.dart';
 import 'package:call_away/ui/components/text_span.dart';
 import 'package:call_away/services/auth_service.dart';
 import 'package:call_away/provider/auth_provider.dart';
 import 'package:call_away/provider/form_key_provider.dart';
-import 'package:call_away/ui/screens/add_phone_number_screen.dart';
-import 'package:call_away/ui/screens/login_screen.dart';
 import 'package:call_away/utils/user_input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,18 +19,23 @@ class SignUpScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // bool isLoading = ref.watch(authProvider).isSignUpLoading;
-
     AuthenticationState authState = ref.watch(authProvider);
 
     var formKey = ref.watch(formKeyProvider);
 
-    ref.listen<AuthenticationState>(authProvider, ((previous, next) {
-      if (next is AuthenticationStateError) {
+    ref.listen(authProvider, (previous, next) {
+      if (next is AuthenticationStateSuccess) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(next.successMessage)));
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/addPhoneNumber', (route) => false);
+      } else if (next is AuthenticationStateError) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(next.errorMessage)));
+      } else if (next is AuthenticationStateLoading) {
+        FocusScope.of(context).unfocus();
       }
-    }));
+    });
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -110,31 +114,23 @@ class SignUpScreen extends ConsumerWidget {
                                         _emailController.text.trim(),
                                         _passwordController.text.trim());
 
-                                var state =
-                                    ref.read(authProvider.notifier).state;
+                                // var state =
+                                //     ref.read(authProvider.notifier).state;
 
-                                if (state is AuthenticationStateError) {
-                                  print(
-                                      "An error occured: ${(state).errorMessage}");
-                                } else if (state
-                                    is AuthenticationStateSuccess) {
-                                  print(
-                                      "Success message: ${(state).successMessage}");
+                                // if (state is AuthenticationStateError) {
+                                //   print(
+                                //       "An error occured: ${(state).errorMessage}");
+                                // } else if (state
+                                //     is AuthenticationStateSuccess) {
+                                //   Navigator.pushNamed(
+                                //       context, '/addPhoneNumber');
+                                //   // Navigator.pop(context);
+                                //   print(
+                                //       "Success message: ${(state).successMessage}");
+                                // }
 
-                                  Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                        // transitionDuration:
-                                        //     const Duration(milliseconds: 550),
-                                        pageBuilder: (context, animation,
-                                                secondaryAnimatio) =>
-                                            const AddPhoneNumberScreen(),
-                                      ));
-                                  Navigator.pop(context);
-                                }
-
-                                print(
-                                    "current state is ${ref.read(authProvider.notifier).state}");
+                                // print(
+                                //     "current state is ${ref.read(authProvider.notifier).state}");
 
                                 // print(
                                 //     "Error occured while signing up: ${(authNotifier).successMessage}");
@@ -147,15 +143,8 @@ class SignUpScreen extends ConsumerWidget {
                               const EdgeInsets.only(top: 8.0, bottom: 16.0),
                           child: CustomTextSpan(
                               onTapText: () {
-                                Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      // transitionDuration:
-                                      //     const Duration(milliseconds: 550),
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimatio) =>
-                                          LoginScreen(),
-                                    ));
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/', (route) => false);
                               },
                               clickableText: "Login",
                               unclickableText: "Already have an account? ")),
@@ -165,12 +154,7 @@ class SignUpScreen extends ConsumerWidget {
               ],
             ),
             authState is AuthenticationStateLoading
-                ? Container(
-                    color: Colors.black.withOpacity(0.5),
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
+                ? const LoadingScreen()
                 : const SizedBox.shrink()
           ],
         )),

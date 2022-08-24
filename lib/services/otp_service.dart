@@ -67,6 +67,9 @@ class OtpService extends StateNotifier<OtpState> {
         state = OtpStateError(e.message!);
         return Future.error(e.message!);
       }
+    } else {
+      state = OtpStateError("Code entered does not match code sent via sms");
+      return Future.error("Code entered does not match code sent via sms");
     }
   }
 

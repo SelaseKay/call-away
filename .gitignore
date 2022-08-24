@@ -52,6 +52,6 @@ app.*.map.json
 /sms_service/sms.postman_collection.json/
 
 # Api keys
-lib/env.dart
+/lib/env.dart
 
 

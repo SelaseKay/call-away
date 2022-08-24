@@ -22,16 +22,14 @@ class Validator {
     }
     return null;
   }
-}
 
-String validateUserInput(String email, String password, String? username) {
-  if (email.isEmpty || password.isEmpty || username!.isEmpty) {
-    return "Fiels should not be empty";
+  static String? validatePhoneNumber(String phoneNumber) {
+    if (phoneNumber.isEmpty) {
+      return "Phone number field should not be emtpy";
+    }
+    if (phoneNumber.length < 10) {
+      return "Phone number should contain 10 digits";
+    }
+    return null;
   }
-
-  if (password.length <= 6) {
-    return "Password should have more than 6 characters";
-  }
-
-  return "";
 }

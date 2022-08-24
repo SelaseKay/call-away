@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LabeledTextField extends StatefulWidget {
@@ -9,6 +10,7 @@ class LabeledTextField extends StatefulWidget {
       this.keyboardType,
       this.hintText = "",
       this.validator,
+      this.textInputFormatter,
       this.controller})
       : super(key: key);
 
@@ -23,6 +25,8 @@ class LabeledTextField extends StatefulWidget {
   final String hintText;
 
   final FormFieldValidator<String>? validator;
+
+  final List<TextInputFormatter>? textInputFormatter;
 
   @override
   State<LabeledTextField> createState() => _LabeledTextFieldState();
@@ -82,6 +86,7 @@ class _LabeledTextFieldState extends State<LabeledTextField> {
                   validator: (value) => widget.validator!(value),
                   controller: widget.controller,
                   keyboardType: widget.keyboardType,
+                  inputFormatters: widget.textInputFormatter,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(

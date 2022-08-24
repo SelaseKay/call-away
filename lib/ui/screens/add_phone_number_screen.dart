@@ -1,15 +1,20 @@
+import 'package:call_away/provider/form_key_provider.dart';
 import 'package:call_away/ui/components/continue_button.dart';
 import 'package:call_away/ui/components/icon_button.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
 import 'package:call_away/ui/screens/otp_verification-screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddPhoneNumberScreen extends StatelessWidget {
+class AddPhoneNumberScreen extends ConsumerWidget {
   const AddPhoneNumberScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = ref.watch(formKeyProvider);
+
     return Theme(
       data: Theme.of(context).copyWith(
           textTheme: Theme.of(context).textTheme.copyWith(
@@ -49,24 +54,32 @@ class AddPhoneNumberScreen extends StatelessWidget {
                     color: const Color(0xFF9E9E9E)),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(top: 16.0),
-              child: LabeledTextField(
-                  label: "Phone Number",
-                  hintText: "0541439384",
-                  keyboardType: TextInputType.number),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Form(
+                key: formKey,
+                child: LabeledTextField(
+                    label: "Phone Number",
+                    hintText: "0541439384",
+                    textInputFormatter: [
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    keyboardType: TextInputType.number),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: ContinueButton(onPressed: () {
-                Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      // transitionDuration:
-                      //     const Duration(milliseconds: 550),
-                      pageBuilder: (context, animation, secondaryAnimatio) =>
-                          OtpVerificationScreen(),
-                    ));
+                if (formKey.currentState!.validate()) {
+                  Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        // transitionDuration:
+                        //     const Duration(milliseconds: 550),
+                        pageBuilder: (context, animation, secondaryAnimatio) =>
+                            OtpVerificationScreen(),
+                      ));
+                }
               }),
             ),
           ],

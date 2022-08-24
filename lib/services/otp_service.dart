@@ -43,6 +43,7 @@ class OtpService extends StateNotifier<OtpState> {
     };
 
     try {
+      state = OtpStateLoading();
       await dio.post("https://sms-api.draytechits.com/send_api_sms",
           data: jsonEncode(params));
       state = OtpStateSuccess(otpCode: _otpCode);

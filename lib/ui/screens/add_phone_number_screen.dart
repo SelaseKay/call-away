@@ -20,7 +20,7 @@ class AddPhoneNumberScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<OtpState>(otpProvider, (previous, next) {
       if (next is OtpStateSuccess) {
-        Navigator.pushNamed(context, '/addPhoneNumber/verifyOtp');
+        Navigator.pushNamedAndRemoveUntil(context, '/addPhoneNumber/verifyOtp', (route) => false);
       } else if (next is OtpStateError) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(next.errorMessage)));

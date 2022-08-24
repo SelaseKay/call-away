@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
           textTheme:
               const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))),
       // home: SignUpScreen(),
-      home: const OtpVerificationScreen()
+      home: OtpVerificationScreen()
       // home: const HomeScreen(title: 'Flutter Demo Home Page'),
     );
   }

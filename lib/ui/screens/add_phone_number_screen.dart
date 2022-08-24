@@ -65,7 +65,7 @@ class AddPhoneNumberScreen extends StatelessWidget {
                       // transitionDuration:
                       //     const Duration(milliseconds: 550),
                       pageBuilder: (context, animation, secondaryAnimatio) =>
-                          const OtpVerificationScreen(),
+                          OtpVerificationScreen(),
                     ));
               }),
             ),

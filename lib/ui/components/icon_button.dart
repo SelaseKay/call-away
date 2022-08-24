@@ -21,6 +21,7 @@ class MyIconButton extends StatelessWidget {
         color: const Color(0xFFEFEFEF),
         borderRadius: const BorderRadius.all(Radius.circular(50.0)),
         child: InkWell(
+          focusColor: const Color(0xFFEFEFEF),
           borderRadius: const BorderRadius.all(Radius.circular(50.0)),
           onTap: onPressed,
           child: Center(

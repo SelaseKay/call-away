@@ -39,11 +39,17 @@ class AddPhoneNumberScreen extends ConsumerWidget {
               headline6: const TextStyle(
                 color: Color(0xFFA1887F),
               ),
-              bodyText2: const TextStyle(color: Color(0xFF9E9E9E)))),
+              bodyText2: const TextStyle(
+                color: Color(0xFF9E9E9E),
+              ))),
       child: Scaffold(
         appBar: AppBar(
           leading: Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 8.0, bottom: 8.0),
+            padding: const EdgeInsets.only(
+              left: 16.0,
+              top: 8.0,
+              bottom: 8.0,
+            ),
             child: MyIconButton(
               icon: Icons.arrow_back_ios_rounded,
               iconColor: Theme.of(context).primaryColor,
@@ -63,19 +69,26 @@ class AddPhoneNumberScreen extends ConsumerWidget {
             child: Stack(
           children: [
             ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+              ),
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 24.0),
+                  padding: const EdgeInsets.only(
+                    top: 24.0,
+                  ),
                   child: Text(
                     "Add your phone number for verification",
                     style: GoogleFonts.prompt(
-                        textStyle: Theme.of(context).textTheme.bodyText2,
-                        color: const Color(0xFF9E9E9E)),
+                      textStyle: Theme.of(context).textTheme.bodyText2,
+                      color: const Color(0xFF9E9E9E),
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
+                  padding: const EdgeInsets.only(
+                    top: 16.0,
+                  ),
                   child: Form(
                     key: _formKey,
                     child: LabeledTextField(
@@ -85,20 +98,24 @@ class AddPhoneNumberScreen extends ConsumerWidget {
                         validator: (value) =>
                             Validator.validatePhoneNumber(value!),
                         textInputFormatter: [
-                          FilteringTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.digitsOnly,
                         ],
                         keyboardType: TextInputType.number),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: ContinueButton(onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await ref
-                          .read(otpProvider.notifier)
-                          .sendOtpCode(_controller.text.trim());
-                    }
-                  }),
+                  padding: const EdgeInsets.only(
+                    top: 16.0,
+                  ),
+                  child: ContinueButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        await ref
+                            .read(otpProvider.notifier)
+                            .sendOtpCode(_controller.text.trim());
+                      }
+                    },
+                  ),
                 ),
               ],
             ),

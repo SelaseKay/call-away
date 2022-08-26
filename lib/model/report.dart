@@ -1,14 +1,23 @@
+import 'package:call_away/model/report_status.dart';
 import 'package:call_away/problem_type.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+// import 'package:json_annotation/json_annotation.dart';
 
-class Report {
-  String? id;
-  final XFile image;
-  final ProblemType problemType;
-  final String description;
+part 'report.freezed.dart';
+part 'report.g.dart';
 
-  Report(
-      {required this.image,
-      required this.problemType,
-      required this.description});
+@freezed
+class Report with _$Report {
+  
+  const factory Report(
+      {String? reportId,
+      @Default("")
+      String imageUrl,
+      required String location,
+      required String description,
+      required ProblemType problemType,
+      ReportStatus? status}) = _Report;
+
+  factory Report.fromJson(Map<String, Object?> json) => _$ReportFromJson(json);
+
 }

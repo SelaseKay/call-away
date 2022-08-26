@@ -2,14 +2,18 @@ import 'dart:io';
 
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/location_provider.dart';
+import 'package:call_away/provider/report_provider.dart';
 import 'package:call_away/services/location_service.dart';
 import 'package:call_away/ui/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
+import 'package:call_away/utils/user_input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../model/report.dart';
 
 class ReportFormScreen extends ConsumerStatefulWidget {
   ReportFormScreen(
@@ -27,21 +31,23 @@ class ReportFormScreen extends ConsumerStatefulWidget {
 }
 
 class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
-  String _descriptionField = "";
+  final _descriptionController = TextEditingController();
 
-  final TextEditingController _editingController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   final snackBar = (String text) => SnackBar(content: Text(text));
 
   ThemeData _getTheme() {
     if (widget.problemType == ProblemType.electricityProblem) {
       return ThemeData(
-          primaryColor: const Color(0xFF6C6461),
-          primaryColorLight: const Color(0xFF6C6461).withOpacity(0.45));
+        primaryColor: const Color(0xFF6C6461),
+        primaryColorLight: const Color(0xFF6C6461).withOpacity(0.45),
+      );
     } else if (widget.problemType == ProblemType.others) {
       return ThemeData(
-          primaryColor: const Color(0xFF654A69),
-          primaryColorLight: const Color(0xFF654A69).withOpacity(0.45));
+        primaryColor: const Color(0xFF654A69),
+        primaryColorLight: const Color(0xFF654A69).withOpacity(0.45),
+      );
     }
     return ThemeData(
         primaryColor: const Color(0xFF039BE5),
@@ -61,6 +67,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
   Widget build(BuildContext context) {
     final image = ref.watch(cameraImageProvider);
     final locationState = ref.watch(locationProvider);
+    final reportSubState = ref.watch(reportProvider);
 
     ref.listen<XFile?>(cameraImageProvider, (previous, next) {
       ref.read(locationProvider.notifier).getDeviceCurrentLocation();
@@ -68,8 +75,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
 
     ref.listen<DeviceLocationState>(locationProvider, (previous, next) {
       if (next is DeviceLocationErrorState) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar(next.errorText));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar(next.errorText));
       }
     });
 
@@ -164,12 +170,14 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                       Container(
                         padding: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(4.0)),
-                            border: Border.all(
-                                width: 1.5,
-                                color:
-                                    const Color(0xFF000000).withOpacity(0.32))),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(4.0),
+                          ),
+                          border: Border.all(
+                            width: 1.5,
+                            color: const Color(0xFF000000).withOpacity(0.32),
+                          ),
+                        ),
                         child: Row(
                           children: [
                             Padding(
@@ -177,7 +185,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                               child: locationState is DeviceLocationSuccessState
                                   ? SvgPicture.asset(
                                       'assets/images/location_active.svg')
-                                      : SvgPicture.asset(
+                                  : SvgPicture.asset(
                                       'assets/images/location.svg'),
                             ),
                             const SizedBox(
@@ -186,8 +194,9 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 56.0),
-                                child: locationState is DeviceLocationSuccessState
-                                ? Text(locationState.location,
+                                child: locationState
+                                        is DeviceLocationSuccessState
+                                    ? Text(locationState.location,
                                         style: GoogleFonts.prompt(
                                           color: const Color(0xFF407BFF),
                                           fontWeight: FontWeight.w400,
@@ -202,8 +211,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                           fontWeight: FontWeight.normal,
                                           wordSpacing: 0.1,
                                           fontSize: 14.0,
-                                        ))
-                                    ,
+                                        )),
                               ),
                             )
                           ],
@@ -230,21 +238,31 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                       const SizedBox(
                         height: 4.0,
                       ),
-                      TextField(
-                        maxLines: 4,
-                        controller: _editingController,
-                        decoration: InputDecoration(
-                          focusColor: _getTheme().primaryColor,
-                          focusedBorder: OutlineInputBorder(
+                      Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          maxLines: 4,
+                          controller: _descriptionController,
+                          validator: (value) =>
+                              Validator.valiedateReportDescription(value!),
+                          decoration: InputDecoration(
+                            focusColor: _getTheme().primaryColor,
+                            focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                  width: 1.5, color: _getTheme().primaryColor)),
-                          border: OutlineInputBorder(
+                                width: 1.5,
+                                color: _getTheme().primaryColor,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
                               borderSide: BorderSide(
-                                  width: 1.5,
-                                  color: const Color(0xFF000000)
-                                      .withOpacity(0.32))),
-                          hintText:
-                              'Type a brief description of the problem...',
+                                width: 1.5,
+                                color:
+                                    const Color(0xFF000000).withOpacity(0.32),
+                              ),
+                            ),
+                            hintText:
+                                'Type a brief description of the problem...',
+                          ),
                         ),
                       )
                     ],
@@ -257,16 +275,53 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 40.0, bottom: 40.0),
+                      padding: const EdgeInsets.only(
+                        top: 40.0,
+                        bottom: 40.0,
+                      ),
                       child: SizedBox(
                         height: 48.0,
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                primary: _getTheme().primaryColor,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(8.0)))),
-                            onPressed: () {},
+                              primary: _getTheme().primaryColor,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8.0),
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                if (ref
+                                        .read(cameraImageProvider.notifier)
+                                        .state ==
+                                    null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          "Image field should not be empty"),
+                                    ),
+                                  );
+                                } else if (ref
+                                    .read(locationProvider.notifier)
+                                    .state is! DeviceLocationSuccessState) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          "Location field should not be empty"),
+                                    ),
+                                  );
+                                } else {
+                                  // ref
+                                  //     .read(reportProvider.notifier)
+                                  //     .submitReport(
+                                  //       Report(
+                                          
+                                  //       )
+                                  //     );
+                                }
+                              }
+                            },
                             child: Text(
                               "Submit Report",
                               style: GoogleFonts.prompt(

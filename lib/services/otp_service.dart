@@ -32,8 +32,11 @@ class OtpService extends StateNotifier<OtpState> {
 
   var _otpCode = "";
 
+  var _phoneNumber = "";
+
   Future<void> sendOtpCode(String phoneNumber) async {
     _otpCode = _generateOtpCode();
+    _phoneNumber = phoneNumber;
     var params = {
       "skey": sKey,
       "ckey": cKey,
@@ -59,9 +62,12 @@ class OtpService extends StateNotifier<OtpState> {
       try {
         state = OtpStateLoading();
         await FirebaseFirestore.instance
-            .collection("Users")
+            .collection("users")
             .doc(user!.uid)
-            .update({"phone_verified_at": Timestamp.now().toString()});
+            .update({
+          "phone_number": _phoneNumber,
+          "phone_number,phone_verified_at": Timestamp.now().toDate().toString(),
+        });
         state = OtpStateSuccess();
       } on FirebaseAuthException catch (e) {
         state = OtpStateError(e.message!);

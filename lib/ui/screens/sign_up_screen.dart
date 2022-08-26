@@ -1,3 +1,4 @@
+import 'package:call_away/model/user.dart';
 import 'package:call_away/ui/components/brand_logo.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
@@ -40,17 +41,23 @@ class SignUpScreen extends ConsumerWidget {
     return Theme(
       data: Theme.of(context).copyWith(
           primaryColor: const Color(0xFFCE7A63),
-          textTheme:
-              const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))),
+          textTheme: const TextTheme(
+              headline6: TextStyle(
+            color: Color(0xFFA1887F),
+          ))),
       child: Scaffold(
         body: SafeArea(
             child: Stack(
           children: [
             ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+              ),
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(top: 12.0),
+                  padding: EdgeInsets.only(
+                    top: 12.0,
+                  ),
                   child: BrandLogo(),
                 ),
                 Form(
@@ -59,7 +66,9 @@ class SignUpScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 48.0),
+                        padding: const EdgeInsets.only(
+                          top: 48.0,
+                        ),
                         child: Text(
                           "Sign Up",
                           style: Theme.of(context).textTheme.headline6,
@@ -75,7 +84,9 @@ class SignUpScreen extends ConsumerWidget {
                             controller: _userNameController,
                           )),
                       Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
+                          padding: const EdgeInsets.only(
+                            top: 16.0,
+                          ),
                           child: LabeledTextField(
                             label: "Email",
                             hintText: "jondoe@gmail.com",
@@ -84,7 +95,9 @@ class SignUpScreen extends ConsumerWidget {
                             controller: _emailController,
                           )),
                       Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
+                          padding: const EdgeInsets.only(
+                            top: 16.0,
+                          ),
                           child: LabeledTextField(
                             label: "Password",
                             isPasswordField: true,
@@ -93,7 +106,9 @@ class SignUpScreen extends ConsumerWidget {
                             controller: _passwordController,
                           )),
                       Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
+                          padding: const EdgeInsets.only(
+                            top: 16.0,
+                          ),
                           child: CustomTextSpan(
                             onTapText: () {
                               //navigate to terms and coditions page
@@ -110,37 +125,21 @@ class SignUpScreen extends ConsumerWidget {
                                 await ref
                                     .read(authProvider.notifier)
                                     .signUpUser(
-                                        _userNameController.text.trim(),
-                                        _emailController.text.trim(),
-                                        _passwordController.text.trim());
-
-                                // var state =
-                                //     ref.read(authProvider.notifier).state;
-
-                                // if (state is AuthenticationStateError) {
-                                //   print(
-                                //       "An error occured: ${(state).errorMessage}");
-                                // } else if (state
-                                //     is AuthenticationStateSuccess) {
-                                //   Navigator.pushNamed(
-                                //       context, '/addPhoneNumber');
-                                //   // Navigator.pop(context);
-                                //   print(
-                                //       "Success message: ${(state).successMessage}");
-                                // }
-
-                                // print(
-                                //     "current state is ${ref.read(authProvider.notifier).state}");
-
-                                // print(
-                                //     "Error occured while signing up: ${(authNotifier).successMessage}");
-
+                                      UserModel(
+                                          username:
+                                              _userNameController.text.trim(),
+                                          email: _emailController.text.trim(),
+                                          password:
+                                              _passwordController.text.trim()),
+                                    );
                               }
                             }),
                       ),
                       Padding(
-                          padding:
-                              const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                          padding: const EdgeInsets.only(
+                            top: 8.0,
+                            bottom: 16.0,
+                          ),
                           child: CustomTextSpan(
                               onTapText: () {
                                 Navigator.pushNamedAndRemoveUntil(

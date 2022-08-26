@@ -1,3 +1,4 @@
+import 'package:call_away/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,28 +21,23 @@ class AuthenticationStateLoading extends AuthenticationState {}
 
 class AuthenticationStateUserVerified extends AuthenticationState {}
 
-
-
 class AuthNotifier extends StateNotifier<AuthenticationState> {
   AuthNotifier(this.auth) : super(AuthenticationStateSuccess(""));
 
   final FirebaseAuth auth;
 
-  Future<void> signUpUser(
-      String username, String email, String password) async {
+  Future<void> signUpUser(UserModel userModel) async {
     try {
       state = AuthenticationStateLoading();
       var credentials = await auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+          email: userModel.email, password: userModel.password);
       User user = credentials.user!;
-      FirebaseFirestore.instance.collection("Users").doc(user.uid);
-      await FirebaseFirestore.instance.collection("Users").doc(user.uid).set({
-        "username": username,
-        "email": email,
-        "phone_number": null,
-        "phone_verified_at": null,
-        "otp": null
-      });
+      // FirebaseFirestore.instance.collection("Users").doc(user.uid);
+      
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .set(userModel.toJson());
       state = AuthenticationStateSuccess("Account created successfully");
       print(
           'succes message: ${(state as AuthenticationStateSuccess).successMessage}');

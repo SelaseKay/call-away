@@ -1,6 +1,16 @@
-import 'package:flutter/cupertino.dart';
 
-enum ReportTagStatus { delivered, received, pending, resolved }
+
+import 'package:flutter/material.dart';
+
+enum ReportTagStatus {
+  delivered,
+  received,
+  pending,
+  resolved;
+
+  String toJson() => name;
+  static ReportTagStatus fromJson(String json) => values.byName(json);
+}
 
 abstract class ReportTagState {
   Color get textColor;
@@ -14,7 +24,7 @@ class DeliveredReportTagState implements ReportTagState {
 
   @override
   Color get textColor => const Color(0xFF42A5F5);
-  
+
   @override
   String get title => "Delivered";
 }

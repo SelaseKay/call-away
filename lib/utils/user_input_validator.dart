@@ -32,4 +32,11 @@ class Validator {
     }
     return null;
   }
+
+  static String? valiedateReportDescription(String description) {
+    if (description.isEmpty) {
+      return "Description field should not be empty";
+    }
+    return null;
+  }
 }

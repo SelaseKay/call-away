@@ -4,15 +4,9 @@ part 'user.freezed.dart';
 
 part 'user.g.dart';
 
-// @JsonSerializable()
+
 @freezed
 class UserModel with _$UserModel {
-  // String? userId;
-  // String username;
-  // String email;
-  // String password;
-  // String phone;
-  // String phoneVerifiedAt;
 
   const factory UserModel(
       {String? userId,

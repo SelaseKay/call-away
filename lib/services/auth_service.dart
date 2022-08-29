@@ -56,11 +56,11 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
       final user = credentials.user;
 
       final userDoc = await FirebaseFirestore.instance
-          .collection("Users")
+          .collection("users")
           .doc(user!.uid)
           .get();
 
-      if (userDoc["phone_verified_at"] != null) {
+      if (userDoc["phoneVerifiedAt"] != null) {
         state = AuthenticationStateUserVerified();
       } else {
         state = AuthenticationStateError("User is not verified");

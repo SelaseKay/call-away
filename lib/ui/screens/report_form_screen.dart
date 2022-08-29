@@ -4,6 +4,7 @@ import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/location_provider.dart';
 import 'package:call_away/provider/report_provider.dart';
 import 'package:call_away/services/location_service.dart';
+import 'package:call_away/services/report_submission_service.dart';
 import 'package:call_away/ui/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
 import 'package:call_away/utils/user_input_validator.dart';
@@ -76,6 +77,19 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
     ref.listen<DeviceLocationState>(locationProvider, (previous, next) {
       if (next is DeviceLocationErrorState) {
         ScaffoldMessenger.of(context).showSnackBar(snackBar(next.errorText));
+      }
+    });
+
+    ref.listen<ReportSubmissionState>(reportProvider, (previous, next) {
+      if (next is ReportSubmissionStateLoading) {
+        FocusScope.of(context).unfocus();
+      } else if (next is ReportSubmissionStateSuccess) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(next.successMessage)));
+        Navigator.pop(context);
+      } else if (next is ReportSubmissionStateError) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(next.errorMessage)));
       }
     });
 
@@ -312,13 +326,20 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                     ),
                                   );
                                 } else {
-                                  // ref
-                                  //     .read(reportProvider.notifier)
-                                  //     .submitReport(
-                                  //       Report(
-                                          
-                                  //       )
-                                  //     );
+                                  final location = (ref
+                                          .read(locationProvider.notifier)
+                                          .state as DeviceLocationSuccessState)
+                                      .location;
+                                  ref
+                                      .read(reportProvider.notifier)
+                                      .submitReport(
+                                        Report(
+                                            location: location,
+                                            description: _descriptionController
+                                                .text
+                                                .trim(),
+                                            problemType: widget.problemType),
+                                      );
                                 }
                               }
                             },
@@ -334,7 +355,8 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                   ],
                 )
               ]),
-          locationState is DeviceLocationLoadingState
+          locationState is DeviceLocationLoadingState ||
+                  reportSubState is ReportSubmissionStateLoading
               ? Container(
                   color: Colors.black.withOpacity(0.5),
                   child: const Center(

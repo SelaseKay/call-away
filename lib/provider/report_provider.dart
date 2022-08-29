@@ -4,5 +4,5 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final reportProvider =
     StateNotifierProvider<ReportSubmissionService, ReportSubmissionState>(
         (ref) {
-  return ReportSubmissionService();
+  return ReportSubmissionService(ref);
 });

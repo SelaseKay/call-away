@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:call_away/model/report_label_type.dart';
 import 'package:call_away/model/report_status.dart';
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/location_provider.dart';
@@ -192,13 +193,17 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                           ),
                           border: Border.all(
                             width: 1.5,
-                            color: const Color(0xFF000000).withOpacity(0.32),
+                            color: const Color(0xFF000000).withOpacity(
+                              0.32,
+                            ),
                           ),
                         ),
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
+                              padding: const EdgeInsets.only(
+                                left: 4.0,
+                              ),
                               child: locationState is DeviceLocationSuccessState
                                   ? SvgPicture.asset(
                                       'assets/images/location_active.svg')
@@ -241,7 +246,9 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                 // description Section
 
                 Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
+                  padding: const EdgeInsets.only(
+                    top: 20.0,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -346,7 +353,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                             time: Timestamp.now()
                                                 .toDate()
                                                 .toString(),
-                                            status: ReportTagStatus.delivered,
+                                            status: ReportLabelType.delivered,
                                           ),
                                         ),
                                       );

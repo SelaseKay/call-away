@@ -9,18 +9,18 @@ part of 'report_status.dart';
 _$_ReportStatus _$$_ReportStatusFromJson(Map<String, dynamic> json) =>
     _$_ReportStatus(
       time: json['time'] as String? ?? "",
-      status: $enumDecodeNullable(_$ReportTagStatusEnumMap, json['status']),
+      status: $enumDecodeNullable(_$ReportLabelTypeEnumMap, json['status']),
     );
 
 Map<String, dynamic> _$$_ReportStatusToJson(_$_ReportStatus instance) =>
     <String, dynamic>{
       'time': instance.time,
-      'status': instance.status,
+      'status': _$ReportLabelTypeEnumMap[instance.status],
     };
 
-const _$ReportTagStatusEnumMap = {
-  ReportTagStatus.delivered: 'delivered',
-  ReportTagStatus.received: 'received',
-  ReportTagStatus.pending: 'pending',
-  ReportTagStatus.resolved: 'resolved',
+const _$ReportLabelTypeEnumMap = {
+  ReportLabelType.delivered: 'delivered',
+  ReportLabelType.received: 'received',
+  ReportLabelType.pending: 'pending',
+  ReportLabelType.resolved: 'resolved',
 };

@@ -1,3 +1,4 @@
+import 'package:call_away/model/report_label_type.dart';
 import 'package:call_away/provider/my_reports_provider.dart';
 import 'package:call_away/services/reports_retrieval_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
@@ -139,7 +140,8 @@ class _ReportItem extends StatelessWidget {
                     title,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.prompt(
-                        textStyle: Theme.of(context).textTheme.bodyText1),
+                      textStyle: Theme.of(context).textTheme.bodyText1,
+                    ),
                   ),
                   const SizedBox(
                     height: 2.0,
@@ -166,20 +168,20 @@ class _ReportItem extends StatelessWidget {
 }
 
 class _ReportTag extends StatelessWidget {
-  const _ReportTag({Key? key, this.tagStatus = ReportTagStatus.delivered})
+  const _ReportTag({Key? key, this.tagStatus = ReportLabelType.delivered})
       : super(key: key);
 
-  final ReportTagStatus tagStatus;
+  final ReportLabelType tagStatus;
 
   ReportTagState getTagState() {
     switch (tagStatus) {
-      case ReportTagStatus.delivered:
+      case ReportLabelType.delivered:
         return DeliveredReportTagState();
-      case ReportTagStatus.received:
+      case ReportLabelType.received:
         return ReceivedReportTagState();
-      case ReportTagStatus.pending:
+      case ReportLabelType.pending:
         return PendingReportTagState();
-      case ReportTagStatus.resolved:
+      case ReportLabelType.resolved:
         return ResolvedReportTagState();
       default:
         return DeliveredReportTagState();

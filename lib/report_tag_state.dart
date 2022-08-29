@@ -2,15 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-enum ReportTagStatus {
-  delivered,
-  received,
-  pending,
-  resolved;
 
-  String toJson() => name;
-  static ReportTagStatus fromJson(String json) => values.byName(json);
-}
 
 abstract class ReportTagState {
   Color get textColor;

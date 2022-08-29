@@ -29,8 +29,8 @@ class ReportSubmissionStateLoading extends ReportSubmissionState {}
 class ReportSubmissionService extends StateNotifier<ReportSubmissionState> {
   ReportSubmissionService(this.ref) : super(ReportSubmissionStateInitial());
 
-  final AutoDisposeStateNotifierProviderRef<ReportSubmissionService, ReportSubmissionState>
-      ref;
+  final AutoDisposeStateNotifierProviderRef<ReportSubmissionService,
+      ReportSubmissionState> ref;
 
   Future<void> submitReport(Report report) async {
     state = ReportSubmissionStateLoading();
@@ -69,7 +69,7 @@ class ReportSubmissionService extends StateNotifier<ReportSubmissionState> {
   Future<String> _uploadReportImage(XFile image) async {
     final storageRef = FirebaseStorage.instance.ref();
 
-    final reportImageRef = storageRef.child("report_image.jpg");
+    final reportImageRef = storageRef.child(image.name);
 
     final imageFile = File(image.path);
 

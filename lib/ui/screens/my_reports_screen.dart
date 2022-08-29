@@ -1,5 +1,6 @@
 import 'package:call_away/model/report_label_type.dart';
 import 'package:call_away/provider/my_reports_provider.dart';
+import 'package:call_away/provider/report_provider.dart';
 import 'package:call_away/services/reports_retrieval_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
 import 'package:call_away/report_tag_state.dart';
@@ -23,9 +24,63 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
     ref.read(myReportsProvider.notifier).getMyReports();
   }
 
+  Widget? _getWidget(ReportRetrievalState state) {
+    if (state is ReportRetrievalStateSuccess) {
+      if (state.reports.isEmpty) {
+        return const Center(
+          child: Text(
+            "No Report History",
+            style: TextStyle(
+                color: Color(0x00AFAFAF),
+                fontWeight: FontWeight.w400,
+                fontSize: 16.0),
+          ),
+        );
+      }
+      return ListView.builder(
+        itemCount: state.reports.length,
+        itemBuilder: (context, index) {
+          final report = state.reports[index];
+
+          return Padding(
+            padding:
+                EdgeInsets.only(top: index == 0 ? 32.0 : 0.0, bottom: 16.0),
+            child: _ReportItem(
+              key: Key(index.toString()),
+              title: "Reports#${report.reportId.toString().substring(0, 8)}",
+              date: report.status!.time,
+            ),
+          );
+        },
+      );
+    } else if (state is ReportRetrievalStateError) {
+      return Center(
+        child: Text(
+          state.errorMessage,
+          style: const TextStyle(
+            color: Color(0x00AFAFAF),
+            fontWeight: FontWeight.w400,
+            fontSize: 16.0,
+          ),
+        ),
+      );
+    }
+    return const Center();
+  }
+
   @override
   Widget build(BuildContext context) {
     final myReportsState = ref.watch(myReportsProvider);
+
+    ref.listen(myReportsProvider, (previous, next) {
+      if (next is ReportRetrievalStateError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.errorMessage),
+          ),
+        );
+      }
+    });
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -57,32 +112,33 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
                       ),
                     ),
                     Expanded(
-                      child: myReportsState is ReportRetrievalStateSuccess
-                          ? ListView.builder(
-                              itemCount: myReportsState.reports.length,
-                              itemBuilder: (context, index) {
-                                final report = myReportsState.reports[index];
+                      child: _getWidget(myReportsState)!,
+                      // child: myReportsState is ReportRetrievalStateSuccess
+                      //     ? ListView.builder(
+                      //         itemCount: myReportsState.reports.length,
+                      //         itemBuilder: (context, index) {
+                      //           final report = myReportsState.reports[index];
 
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      top: index == 0 ? 32.0 : 0.0,
-                                      bottom: 16.0),
-                                  child: _ReportItem(
-                                    key: Key(index.toString()),
-                                    title:
-                                        "Reports#${report.reportId.toString().substring(0, 8)}",
-                                    date: report.status!.time,
-                                  ),
-                                );
-                              },
-                            )
-                          : Center(
-                              child: Text(
-                                "Report List is Empty",
-                                style:
-                                    Theme.of(context).textTheme.headlineMedium,
-                              ),
-                            ),
+                      //           return Padding(
+                      //             padding: EdgeInsets.only(
+                      //                 top: index == 0 ? 32.0 : 0.0,
+                      //                 bottom: 16.0),
+                      //             child: _ReportItem(
+                      //               key: Key(index.toString()),
+                      //               title:
+                      //                   "Reports#${report.reportId.toString().substring(0, 8)}",
+                      //               date: report.status!.time,
+                      //             ),
+                      //           );
+                      //         },
+                      //       )
+                      //     : Center(
+                      //         child: Text(
+                      //           "Report List is Empty",
+                      //           style:
+                      //               Theme.of(context).textTheme.headlineMedium,
+                      //         ),
+                      //       ),
                     )
                   ],
                 ),

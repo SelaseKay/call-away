@@ -62,37 +62,25 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
                               itemCount: myReportsState.reports.length,
                               itemBuilder: (context, index) {
                                 final report = myReportsState.reports[index];
+
                                 return Padding(
                                   padding: EdgeInsets.only(
                                       top: index == 0 ? 32.0 : 0.0,
                                       bottom: 16.0),
                                   child: _ReportItem(
                                     key: Key(index.toString()),
-                                    title: "Reports#${report.reportId}",
+                                    title:
+                                        "Reports#${report.reportId.toString().substring(0, 8)}",
                                     date: report.status!.time,
                                   ),
                                 );
                               },
-                              // padding: const EdgeInsets.only(bottom: 16.0),
-                              // children: const [
-                              //   Padding(
-                              //     padding: EdgeInsets.only(top: 32.0),
-                              //     child: _ReportItem(),
-                              //   ),
-                              //   SizedBox(
-                              //     height: 16.0,
-                              //   ),
-                              //   _ReportItem(),
-                              //   SizedBox(
-                              //     height: 16.0,
-                              //   ),
-                              //   _ReportItem()
-                              // ],
                             )
                           : Center(
                               child: Text(
                                 "Report List is Empty",
-                                style: Theme.of(context).textTheme.headline6,
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
                               ),
                             ),
                     )

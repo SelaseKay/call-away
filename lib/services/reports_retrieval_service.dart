@@ -25,6 +25,7 @@ class ReportRetrievalService extends StateNotifier<ReportRetrievalState> {
   ReportRetrievalService() : super(ReportRetrievalStateInitial());
 
   Future<void> getMyReports() async {
+    print("getMyReports caled.");
     final user = FirebaseAuth.instance.currentUser;
 
     state = ReportRetrievalStateLoading();

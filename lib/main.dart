@@ -51,6 +51,7 @@ class _MyAppState extends State<MyApp> {
         '/': (context) => isUserLoggedIn
             ? const HomeScreen(title: "Call Away")
             : LoginScreen(),
+        'login': (context) => LoginScreen(),
         '/signUp': (context) => SignUpScreen(),
         '/addPhoneNumber': (context) => AddPhoneNumberScreen(),
         '/addPhoneNumber/verifyOtp': (context) => OtpVerificationScreen(),

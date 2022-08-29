@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:call_away/model/report_status.dart';
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/location_provider.dart';
 import 'package:call_away/provider/report_provider.dart';
+import 'package:call_away/report_tag_state.dart';
 import 'package:call_away/services/location_service.dart';
 import 'package:call_away/services/report_submission_service.dart';
 import 'package:call_away/ui/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
 import 'package:call_away/utils/user_input_validator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -334,11 +337,18 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                       .read(reportProvider.notifier)
                                       .submitReport(
                                         Report(
-                                            location: location,
-                                            description: _descriptionController
-                                                .text
-                                                .trim(),
-                                            problemType: widget.problemType),
+                                          location: location,
+                                          description: _descriptionController
+                                              .text
+                                              .trim(),
+                                          problemType: widget.problemType,
+                                          status: ReportStatus(
+                                            time: Timestamp.now()
+                                                .toDate()
+                                                .toString(),
+                                            status: ReportTagStatus.delivered,
+                                          ),
+                                        ),
                                       );
                                 }
                               }

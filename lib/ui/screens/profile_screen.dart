@@ -1,14 +1,34 @@
+import 'package:call_away/provider/auth_provider.dart';
+import 'package:call_away/services/auth_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
+import 'package:call_away/ui/components/loading_screen.dart';
 import 'package:call_away/ui/screens/change_password_screen.dart';
 import 'package:call_away/ui/screens/my_reports_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+
+    ref.listen(authProvider, (previous, next) {
+      if (next is AuthenticationStateSuccess) {
+        Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
+      } else if (next is AuthenticationStateError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              next.errorMessage,
+            ),
+          ),
+        );
+      }
+    });
+
     return Theme(
       data: Theme.of(context).copyWith(
           primaryColor: const Color(0xFFA1887F),
@@ -19,7 +39,11 @@ class ProfileScreen extends StatelessWidget {
           outlinedButtonTheme: OutlinedButtonThemeData(
               style: OutlinedButton.styleFrom(
             padding: const EdgeInsets.only(
-                left: 0.0, top: 4.0, bottom: 4.0, right: 0.0),
+              left: 0.0,
+              top: 4.0,
+              bottom: 4.0,
+              right: 0.0,
+            ),
             side: const BorderSide(color: Color(0xFFEF5350)),
           )),
           textTheme: const TextTheme(
@@ -32,94 +56,108 @@ class ProfileScreen extends StatelessWidget {
               bodyText1: TextStyle(color: Color(0xFFD9D9D9)))),
       child: Scaffold(
         body: SafeArea(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
+          child: Stack(
             children: [
               Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: AppBarSection(
-                    title: "Profile",
-                    rPositionIcon: Icons.edit,
-                    onRPositionIconPressed: () {
-                      //On Right Position Icon Pressed
-                    },
-                  )),
-              Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.only(top: 40.0),
-                child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
                   children: [
-                    const _ProfileHeader(),
-                    const Padding(
-                        padding: EdgeInsets.only(top: 40.0), child: Divider()),
                     Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: _ProfileItem(
-                        asset: "assets/images/mail.svg",
-                        itemText: "judekwashie70@gmail.com",
-                        style: Theme.of(context).textTheme.bodyText1,
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: AppBarSection(
+                          title: "Profile",
+                          rPositionIcon: Icons.edit,
+                          onRPositionIconPressed: () {
+                            //On Right Position Icon Pressed
+                          },
+                        )),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 40.0),
+                        child: ListView(
+                          children: [
+                            const _ProfileHeader(),
+                            const Padding(
+                                padding: EdgeInsets.only(top: 40.0),
+                                child: Divider()),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: _ProfileItem(
+                                asset: "assets/images/mail.svg",
+                                itemText: "judekwashie70@gmail.com",
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            _ProfileItem(
+                              asset: "assets/images/phone.svg",
+                              itemText: "+233 54 143 9384",
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                            const Divider(),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            _ProfileItem(
+                              asset: "assets/images/report_history.svg",
+                              itemText: "My Reports",
+                              isArrowVisible: true,
+                              isClickable: true,
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimatio) =>
+                                        const MyReportsScreen(),
+                                  )),
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            _ProfileItem(
+                              asset: "assets/images/change_password.svg",
+                              itemText: "Change Password",
+                              isArrowVisible: true,
+                              isClickable: true,
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimatio) =>
+                                        const ChangePasswordScreen(),
+                                  )),
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                            const SizedBox(
+                              height: 8.0,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 20.0,
+                              ),
+                              child: _LogoutButton(onPressed: () {
+                                ref.read(authProvider.notifier).logoutUser();
+                              }),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    _ProfileItem(
-                      asset: "assets/images/phone.svg",
-                      itemText: "+233 54 143 9384",
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    const Divider(),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    _ProfileItem(
-                      asset: "assets/images/report_history.svg",
-                      itemText: "My Reports",
-                      isArrowVisible: true,
-                      isClickable: true,
-                      onPressed: () => Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimatio) =>
-                                    const MyReportsScreen(),
-                          )),
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    _ProfileItem(
-                      asset: "assets/images/change_password.svg",
-                      itemText: "Change Password",
-                      isArrowVisible: true,
-                      isClickable: true,
-                      onPressed: () => Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimatio) =>
-                                    const ChangePasswordScreen(),
-                          )),
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    const SizedBox(
-                      height: 8.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: _LogoutButton(onPressed: () {}),
                     )
                   ],
                 ),
-              ))
+              ),
+              authState is AuthenticationStateLoading
+                  ? const LoadingScreen()
+                  : const SizedBox.shrink()
             ],
           ),
-        )),
+        ),
       ),
     );
   }

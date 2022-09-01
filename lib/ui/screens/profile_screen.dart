@@ -31,57 +31,79 @@ class ProfileScreen extends ConsumerWidget {
 
     return Theme(
       data: Theme.of(context).copyWith(
-          primaryColor: const Color(0xFFA1887F),
-          dividerTheme: const DividerThemeData(
-            thickness: 1.5,
-            color: Color(0xFFDDD3D0),
+        primaryColor: const Color(0xFFA1887F),
+        dividerTheme: const DividerThemeData(
+          thickness: 1.5,
+          color: Color(0xFFDDD3D0),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+            style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.only(
+            left: 0.0,
+            top: 4.0,
+            bottom: 4.0,
+            right: 0.0,
           ),
-          outlinedButtonTheme: OutlinedButtonThemeData(
-              style: OutlinedButton.styleFrom(
-            padding: const EdgeInsets.only(
-              left: 0.0,
-              top: 4.0,
-              bottom: 4.0,
-              right: 0.0,
-            ),
-            side: const BorderSide(color: Color(0xFFEF5350)),
-          )),
-          textTheme: const TextTheme(
-              headline6: TextStyle(color: Color(0xFFA1887F)),
-              subtitle1: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF252525),
-              ),
-              subtitle2: TextStyle(color: Color(0xFF999999)),
-              bodyText1: TextStyle(color: Color(0xFFD9D9D9)))),
+          side: const BorderSide(
+            color: Color(0xFFEF5350),
+          ),
+        )),
+        textTheme: const TextTheme(
+          headline6: TextStyle(
+            color: Color(0xFFA1887F),
+          ),
+          subtitle1: TextStyle(
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF252525),
+          ),
+          subtitle2: TextStyle(
+            color: Color(0xFF999999),
+          ),
+          bodyText1: TextStyle(
+            color: Color(0xFFD9D9D9),
+          ),
+        ),
+      ),
       child: Scaffold(
         body: SafeArea(
           child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                ),
                 child: Column(
                   children: [
                     Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: AppBarSection(
-                          title: "Profile",
-                          rPositionIcon: Icons.edit,
-                          onRPositionIconPressed: () {
-                            //On Right Position Icon Pressed
-                          },
-                        )),
+                      padding: const EdgeInsets.only(
+                        top: 8.0,
+                      ),
+                      child: AppBarSection(
+                        title: "Profile",
+                        rPositionIcon: Icons.edit,
+                        onRPositionIconPressed: () {
+                          //On Right Position Icon Pressed
+                        },
+                      ),
+                    ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 40.0),
+                        padding: const EdgeInsets.only(
+                          top: 40.0,
+                        ),
                         child: ListView(
                           children: [
                             const _ProfileHeader(),
                             const Padding(
-                                padding: EdgeInsets.only(top: 40.0),
-                                child: Divider()),
+                              padding: EdgeInsets.only(
+                                top: 40.0,
+                              ),
+                              child: Divider(),
+                            ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 24.0),
+                              padding: const EdgeInsets.only(
+                                top: 24.0,
+                              ),
                               child: _ProfileItem(
                                 asset: "assets/images/mail.svg",
                                 itemText: "judekwashie70@gmail.com",

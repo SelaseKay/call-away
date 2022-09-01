@@ -1,6 +1,5 @@
 import 'package:call_away/model/report_label_type.dart';
 import 'package:call_away/provider/my_reports_provider.dart';
-import 'package:call_away/provider/report_provider.dart';
 import 'package:call_away/services/reports_retrieval_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
 import 'package:call_away/report_tag_state.dart';
@@ -27,14 +26,27 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
   Widget? _getWidget(ReportRetrievalState state) {
     if (state is ReportRetrievalStateSuccess) {
       if (state.reports.isEmpty) {
-        return const Center(
-          child: Text(
-            "No Report History",
-            style: TextStyle(
-                color: Color(0x00AFAFAF),
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              "assets/images/empty_report_list.svg",
+              height: 80.0,
+              width: 80.0,
+            ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            const Text(
+              "No Report History",
+              style: TextStyle(
+                color: Color(0xFFA5A5A5),
                 fontWeight: FontWeight.w400,
-                fontSize: 16.0),
-          ),
+                fontSize: 16.0,
+              ),
+            ),
+          ],
         );
       }
       return ListView.builder(
@@ -113,32 +125,6 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
                     ),
                     Expanded(
                       child: _getWidget(myReportsState)!,
-                      // child: myReportsState is ReportRetrievalStateSuccess
-                      //     ? ListView.builder(
-                      //         itemCount: myReportsState.reports.length,
-                      //         itemBuilder: (context, index) {
-                      //           final report = myReportsState.reports[index];
-
-                      //           return Padding(
-                      //             padding: EdgeInsets.only(
-                      //                 top: index == 0 ? 32.0 : 0.0,
-                      //                 bottom: 16.0),
-                      //             child: _ReportItem(
-                      //               key: Key(index.toString()),
-                      //               title:
-                      //                   "Reports#${report.reportId.toString().substring(0, 8)}",
-                      //               date: report.status!.time,
-                      //             ),
-                      //           );
-                      //         },
-                      //       )
-                      //     : Center(
-                      //         child: Text(
-                      //           "Report List is Empty",
-                      //           style:
-                      //               Theme.of(context).textTheme.headlineMedium,
-                      //         ),
-                      //       ),
                     )
                   ],
                 ),

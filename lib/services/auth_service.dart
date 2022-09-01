@@ -1,5 +1,4 @@
 import 'package:call_away/model/user.dart';
-import 'package:call_away/provider/login_state_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,7 +34,6 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
       var credentials = await auth.createUserWithEmailAndPassword(
           email: userModel.email, password: userModel.password);
       User user = credentials.user!;
-      // FirebaseFirestore.instance.collection("Users").doc(user.uid);
 
       await FirebaseFirestore.instance
           .collection("users")

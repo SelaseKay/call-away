@@ -23,7 +23,7 @@ class OtpVerificationScreen extends ConsumerWidget {
 
     ref.listen(otpProvider, (previous, next) {
       if (next is OtpStateSuccess) {
-        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       } else if (next is OtpStateError) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(next.errorMessage)));

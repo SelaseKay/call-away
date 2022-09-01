@@ -48,7 +48,7 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
             child: _ReportItem(
               key: Key(index.toString()),
               title: "Reports#${report.reportId.toString().substring(0, 8)}",
-              date: report.status!.time,
+              date: report.status!.time.substring(0, 16),
             ),
           );
         },

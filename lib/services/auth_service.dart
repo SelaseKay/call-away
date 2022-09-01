@@ -1,9 +1,12 @@
 import 'package:call_away/model/user.dart';
+import 'package:call_away/provider/login_state_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class AuthenticationState {}
+
+class AuthenticationStateInitial extends AuthenticationState {}
 
 class AuthenticationStateError extends AuthenticationState {
   AuthenticationStateError(this.errorMessage);
@@ -12,9 +15,9 @@ class AuthenticationStateError extends AuthenticationState {
 }
 
 class AuthenticationStateSuccess extends AuthenticationState {
-  AuthenticationStateSuccess(this.successMessage);
+  AuthenticationStateSuccess({this.isUserVerified = false});
 
-  final String successMessage;
+  final bool isUserVerified;
 }
 
 class AuthenticationStateLoading extends AuthenticationState {}
@@ -22,7 +25,7 @@ class AuthenticationStateLoading extends AuthenticationState {}
 class AuthenticationStateUserVerified extends AuthenticationState {}
 
 class AuthNotifier extends StateNotifier<AuthenticationState> {
-  AuthNotifier(this.auth) : super(AuthenticationStateSuccess(""));
+  AuthNotifier(this.auth) : super(AuthenticationStateInitial());
 
   final FirebaseAuth auth;
 
@@ -33,14 +36,12 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
           email: userModel.email, password: userModel.password);
       User user = credentials.user!;
       // FirebaseFirestore.instance.collection("Users").doc(user.uid);
-      
+
       await FirebaseFirestore.instance
           .collection("users")
           .doc(user.uid)
-          .set(userModel.toJson());
-      state = AuthenticationStateSuccess("Account created successfully");
-      print(
-          'succes message: ${(state as AuthenticationStateSuccess).successMessage}');
+          .set(userModel.copyWith(userId: user.uid).toJson());
+      state = AuthenticationStateSuccess();
     } on FirebaseAuthException catch (e) {
       state = AuthenticationStateError(e.message!);
       print(
@@ -61,12 +62,12 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
           .get();
 
       if (userDoc["phoneVerifiedAt"] != null) {
-        state = AuthenticationStateUserVerified();
+        state = AuthenticationStateSuccess(isUserVerified: true);
       } else {
         state = AuthenticationStateError("User is not verified");
       }
 
-      state = AuthenticationStateSuccess("Login successful");
+      // state = AuthenticationStateSuccess("Login successful");
     } on FirebaseAuthException catch (e) {
       state = AuthenticationStateError(e.message!);
       print(
@@ -79,7 +80,7 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
     try {
       state = AuthenticationStateLoading();
       await auth.signOut();
-      state = AuthenticationStateSuccess("User signed out successfully");
+      state = AuthenticationStateSuccess();
     } on FirebaseAuthException catch (e) {
       state = AuthenticationStateError(e.message!);
       print(

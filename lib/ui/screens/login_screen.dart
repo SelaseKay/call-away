@@ -22,20 +22,24 @@ class LoginScreen extends ConsumerWidget {
     final authState = ref.watch(authProvider);
 
     ref.listen(authProvider, (previous, next) {
-      if (next is AuthenticationStateSuccess) {
-        // ScaffoldMessenger.of(context)
-        //     .showSnackBar(SnackBar(content: Text(next.successMessage)));
+      if (next is AuthenticationStateSuccess && next.isUserVerified) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          "/home",
+          (route) => false,
+        );
       } else if (next is AuthenticationStateError) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(next.errorMessage)));
         if (next.errorMessage == "User is not verified") {
           Navigator.pushNamedAndRemoveUntil(
-              context, "/addPhoneNumber", (route) => false);
+            context,
+            "/addPhoneNumber",
+            (route) => false,
+          );
         }
       } else if (next is AuthenticationStateLoading) {
         FocusScope.of(context).unfocus();
-      } else if (next is AuthenticationStateUserVerified) {
-        Navigator.pushNamedAndRemoveUntil(context, "home", (route) => false);
       }
     });
     return Theme(

@@ -9,7 +9,8 @@ part 'user.g.dart';
 class UserModel with _$UserModel {
 
   const factory UserModel(
-      {required String username ,
+      {String? userId,
+      required String username,
       required String email,
       required String password,
       @Default("")

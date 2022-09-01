@@ -17,7 +17,7 @@ class ProfileScreen extends ConsumerWidget {
 
     ref.listen(authProvider, (previous, next) {
       if (next is AuthenticationStateSuccess) {
-        Navigator.pushNamedAndRemoveUntil(context, "login", (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
       } else if (next is AuthenticationStateError) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

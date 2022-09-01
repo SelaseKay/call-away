@@ -26,8 +26,6 @@ class SignUpScreen extends ConsumerWidget {
 
     ref.listen(authProvider, (previous, next) {
       if (next is AuthenticationStateSuccess) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(next.successMessage)));
         Navigator.pushNamedAndRemoveUntil(
             context, '/addPhoneNumber', (route) => false);
       } else if (next is AuthenticationStateError) {

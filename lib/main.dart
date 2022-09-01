@@ -1,3 +1,4 @@
+import 'package:call_away/provider/login_state_provider.dart';
 import 'package:call_away/ui/screens/add_phone_number_screen.dart';
 import 'package:call_away/ui/screens/home_screen.dart';
 import 'package:call_away/ui/screens/login_screen.dart';
@@ -17,15 +18,15 @@ Future<void> main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  var isUserLoggedIn = false;
+class _MyAppState extends ConsumerState<MyApp> {
+  bool _isUserLoggedIn = false;
 
   @override
   void initState() {
@@ -33,8 +34,9 @@ class _MyAppState extends State<MyApp> {
     FirebaseAuth.instance.authStateChanges().listen((user) {
       if (user != null) {
         setState(() {
-          isUserLoggedIn = true;
+          _isUserLoggedIn = true;
         });
+        // ref.read(loginStateProvider.notifier).state = true;
         print("User: ${user.email}");
       }
     });
@@ -48,14 +50,14 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => isUserLoggedIn
+        '/': (context) => _isUserLoggedIn
             ? const HomeScreen(title: "Call Away")
             : LoginScreen(),
-        'login': (context) => LoginScreen(),
+        '/login': (context) => LoginScreen(),
         '/signUp': (context) => SignUpScreen(),
         '/addPhoneNumber': (context) => AddPhoneNumberScreen(),
         '/addPhoneNumber/verifyOtp': (context) => OtpVerificationScreen(),
-        'home': (context) => const HomeScreen(title: "Call Away")
+        '/home': (context) => const HomeScreen(title: "Call Away")
       },
       theme: ThemeData(
           primaryColor: const Color(0xFFCE7A63),

@@ -101,6 +101,21 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
                             child: Image.network(
                               reportDetailsState.report.imageUrl,
                               fit: BoxFit.fill,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              },
                             ),
                           ),
                           const SizedBox(
@@ -123,6 +138,9 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
                                 ),
                               ],
                             ),
+                          ),
+                          const SizedBox(
+                            height: 16.0,
                           ),
                           _ReportItem(
                             title: "Description",

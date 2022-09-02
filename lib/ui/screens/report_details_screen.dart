@@ -78,35 +78,28 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
                       padding: const EdgeInsets.only(top: 8.0),
                       child: AppBarSection(
                         title:
-                            "Report${(reportDetailsState as ReportDetailsStateSuccess).report.reportId.toString().substring(0, 8)}",
+                            "Report#${(reportDetailsState as ReportDetailsStateSuccess).report.reportId.toString().substring(0, 8)}",
                         isRightWidgetVisible: false,
                       ),
                     ),
                     Expanded(
                       child: ListView(
                         children: [
-                          Container(
-                            margin: const EdgeInsets.only(
-                              top: 24.0,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              16.0,
                             ),
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(
-                                  16.0,
-                                ),
-                              ),
-                            ),
-                            width: double.infinity,
-                            height: imageHeight,
                             child: Image.network(
+                              height: imageHeight,
+                              width: double.infinity,
                               reportDetailsState.report.imageUrl,
-                              fit: BoxFit.fill,
                               loadingBuilder: (BuildContext context,
                                   Widget child,
                                   ImageChunkEvent? loadingProgress) {
                                 if (loadingProgress == null) return child;
                                 return Center(
                                   child: CircularProgressIndicator(
+                                    color: const Color(0xFFDBAC65),
                                     value: loadingProgress.expectedTotalBytes !=
                                             null
                                         ? loadingProgress
@@ -126,7 +119,7 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
                             child: Row(
                               children: [
                                 const Icon(
-                                  Icons.location_on,
+                                  Icons.location_on_outlined,
                                   color: Color(0xFF979797),
                                 ),
                                 const SizedBox(

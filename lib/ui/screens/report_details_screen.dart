@@ -85,34 +85,43 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
                     Expanded(
                       child: ListView(
                         children: [
+                          const SizedBox(
+                            height: 24.0,
+                          ),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(
-                              16.0,
+                              8.0,
                             ),
                             child: Image.network(
                               height: imageHeight,
                               width: double.infinity,
+                              fit: BoxFit.fill,
                               reportDetailsState.report.imageUrl,
                               loadingBuilder: (BuildContext context,
                                   Widget child,
                                   ImageChunkEvent? loadingProgress) {
                                 if (loadingProgress == null) return child;
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    color: const Color(0xFFDBAC65),
-                                    value: loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                        : null,
+                                return SizedBox(
+                                  height: imageHeight,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: const Color(0xFFDBAC65),
+                                      value:
+                                          loadingProgress.expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                    ),
                                   ),
                                 );
                               },
                             ),
                           ),
                           const SizedBox(
-                            height: 16.0,
+                            height: 24.0,
                           ),
                           _ReportItem(
                             title: "Location",

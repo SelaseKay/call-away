@@ -3,32 +3,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-abstract class ReportRetrievalState {}
+abstract class ReportsState {}
 
-class ReportRetrievalStateInitial extends ReportRetrievalState {}
+class ReportsStateInitial extends ReportsState {}
 
-class ReportRetrievalStateLoading extends ReportRetrievalState {}
+class ReportsStateLoading extends ReportsState {}
 
-class ReportRetrievalStateSuccess extends ReportRetrievalState {
-  ReportRetrievalStateSuccess(this.reports);
+class ReportsStateSuccess extends ReportsState {
+  ReportsStateSuccess(this.reports);
 
   final List<Report> reports;
 }
 
-class ReportRetrievalStateError extends ReportRetrievalState {
-  ReportRetrievalStateError(this.errorMessage);
+class ReportsStateError extends ReportsState {
+  ReportsStateError(this.errorMessage);
 
   final String errorMessage;
 }
 
-class ReportRetrievalService extends StateNotifier<ReportRetrievalState> {
-  ReportRetrievalService() : super(ReportRetrievalStateInitial());
+class ReportRetrievalService extends StateNotifier<ReportsState> {
+  ReportRetrievalService() : super(ReportsStateInitial());
 
   Future<void> getMyReports() async {
     print("getMyReports called.");
     final user = FirebaseAuth.instance.currentUser;
 
-    state = ReportRetrievalStateLoading();
+    state = ReportsStateLoading();
 
     FirebaseFirestore.instance
         .collection("users")
@@ -41,9 +41,9 @@ class ReportRetrievalService extends StateNotifier<ReportRetrievalState> {
       final reports =
           jsonReports.map((report) => Report.fromJson(report)).toList();
 
-      state = ReportRetrievalStateSuccess(reports.reversed.toList());
+      state = ReportsStateSuccess(reports.reversed.toList());
     }).catchError((e) {
-      state = ReportRetrievalStateError(e.toString());
+      state = ReportsStateError(e.toString());
     });
   }
 }

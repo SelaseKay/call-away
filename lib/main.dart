@@ -57,7 +57,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         '/signUp': (context) => SignUpScreen(),
         '/addPhoneNumber': (context) => AddPhoneNumberScreen(),
         '/addPhoneNumber/verifyOtp': (context) => OtpVerificationScreen(),
-        '/home': (context) => const HomeScreen(title: "Call Away")
+        '/home': (context) => const HomeScreen(title: "Call Away"),
       },
       theme: ThemeData(
           primaryColor: const Color(0xFFCE7A63),

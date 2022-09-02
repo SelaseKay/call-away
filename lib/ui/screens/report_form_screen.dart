@@ -4,8 +4,7 @@ import 'package:call_away/model/report_label_type.dart';
 import 'package:call_away/model/report_status.dart';
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/location_provider.dart';
-import 'package:call_away/provider/report_provider.dart';
-import 'package:call_away/report_tag_state.dart';
+import 'package:call_away/provider/report_submission_state_provider.dart';
 import 'package:call_away/services/location_service.dart';
 import 'package:call_away/services/report_submission_service.dart';
 import 'package:call_away/ui/custom-widget/custom_layout.dart';
@@ -72,7 +71,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
   Widget build(BuildContext context) {
     final image = ref.watch(cameraImageProvider);
     final locationState = ref.watch(locationProvider);
-    final reportSubState = ref.watch(reportProvider);
+    final reportSubState = ref.watch(reportSubmissionStateProvider);
 
     ref.listen<XFile?>(cameraImageProvider, (previous, next) {
       ref.read(locationProvider.notifier).getDeviceCurrentLocation();
@@ -84,7 +83,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
       }
     });
 
-    ref.listen<ReportSubmissionState>(reportProvider, (previous, next) {
+    ref.listen<ReportSubmissionState>(reportSubmissionStateProvider, (previous, next) {
       if (next is ReportSubmissionStateLoading) {
         FocusScope.of(context).unfocus();
       } else if (next is ReportSubmissionStateSuccess) {
@@ -341,7 +340,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                           .state as DeviceLocationSuccessState)
                                       .location;
                                   ref
-                                      .read(reportProvider.notifier)
+                                      .read(reportSubmissionStateProvider.notifier)
                                       .submitReport(
                                         Report(
                                           location: location,

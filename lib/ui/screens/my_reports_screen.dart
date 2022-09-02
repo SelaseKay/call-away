@@ -4,6 +4,7 @@ import 'package:call_away/services/reports_retrieval_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
 import 'package:call_away/report_tag_state.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
+import 'package:call_away/ui/screens/report_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,8 +24,8 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
     ref.read(myReportsProvider.notifier).getMyReports();
   }
 
-  Widget? _getWidget(ReportRetrievalState state) {
-    if (state is ReportRetrievalStateSuccess) {
+  Widget? _getWidget(ReportsState state) {
+    if (state is ReportsStateSuccess) {
       if (state.reports.isEmpty) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -59,13 +60,22 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
                 EdgeInsets.only(top: index == 0 ? 32.0 : 0.0, bottom: 16.0),
             child: _ReportItem(
               key: Key(index.toString()),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimatio) =>
+                        ReportDetailsScreen(reportId: report.reportId!),
+                  ),
+                );
+              },
               title: "Reports#${report.reportId.toString().substring(0, 8)}",
               date: report.status!.time.substring(0, 16),
             ),
           );
         },
       );
-    } else if (state is ReportRetrievalStateError) {
+    } else if (state is ReportsStateError) {
       return Center(
         child: Text(
           state.errorMessage,
@@ -85,7 +95,7 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
     final myReportsState = ref.watch(myReportsProvider);
 
     ref.listen(myReportsProvider, (previous, next) {
-      if (next is ReportRetrievalStateError) {
+      if (next is ReportsStateError) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.errorMessage),
@@ -129,7 +139,7 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
                   ],
                 ),
               ),
-              myReportsState is ReportRetrievalStateLoading
+              myReportsState is ReportsStateLoading
                   ? const LoadingScreen()
                   : const SizedBox.shrink()
             ],
@@ -141,52 +151,60 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
 }
 
 class _ReportItem extends StatelessWidget {
-  const _ReportItem(
-      {Key? key, this.title = "Report#njo24", this.date = "23 Apr, 2022 21:08"})
-      : super(key: key);
+  const _ReportItem({
+    Key? key,
+    this.title = "",
+    this.date = "",
+    required this.onPressed,
+  }) : super(key: key);
   final String title;
   final String date;
+
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              'assets/images/report.svg',
-              height: 24.0,
-              width: 24.0,
-            ),
-            const SizedBox(
-              width: 16.0,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.prompt(
-                      textStyle: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 2.0,
-                  ),
-                  Text(
-                    date,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.prompt(
-                        textStyle: Theme.of(context).textTheme.subtitle1),
-                  ),
-                ],
+        InkWell(
+          onTap: onPressed,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'assets/images/report.svg',
+                height: 24.0,
+                width: 24.0,
               ),
-            ),
-            const _ReportTag()
-          ],
+              const SizedBox(
+                width: 16.0,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.prompt(
+                        textStyle: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 2.0,
+                    ),
+                    Text(
+                      date,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.prompt(
+                          textStyle: Theme.of(context).textTheme.subtitle1),
+                    ),
+                  ],
+                ),
+              ),
+              const _ReportTag()
+            ],
+          ),
         ),
         const Padding(
           padding: EdgeInsets.only(top: 8.0),

@@ -59,14 +59,15 @@ class OtpService extends StateNotifier<OtpState> {
     if (userOtp == _otpCode) {
       final user = FirebaseAuth.instance.currentUser;
 
+
       try {
         state = OtpStateLoading();
         await FirebaseFirestore.instance
             .collection("users")
             .doc(user!.uid)
             .update({
-          "phone_number": _phoneNumber,
-          "phone_number,phone_verified_at": Timestamp.now().toDate().toString(),
+          "phone": _phoneNumber,
+          "phoneVerifiedAt": Timestamp.now().toDate().toString(),
         });
         state = OtpStateSuccess();
       } on FirebaseAuthException catch (e) {

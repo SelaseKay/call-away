@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:call_away/model/report_status.dart';
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/location_provider.dart';
 import 'package:call_away/provider/report_provider.dart';
+import 'package:call_away/report_tag_state.dart';
 import 'package:call_away/services/location_service.dart';
 import 'package:call_away/services/report_submission_service.dart';
 import 'package:call_away/ui/custom-widget/custom_layout.dart';
@@ -334,11 +336,16 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                       .read(reportProvider.notifier)
                                       .submitReport(
                                         Report(
-                                            location: location,
-                                            description: _descriptionController
-                                                .text
-                                                .trim(),
-                                            problemType: widget.problemType),
+                                          location: location,
+                                          description: _descriptionController
+                                              .text
+                                              .trim(),
+                                          problemType: widget.problemType,
+                                          status: ReportStatus(
+                                            time: DateTime.now().toString(),
+                                            status: ReportTagStatus.delivered,
+                                          ),
+                                        ),
                                       );
                                 }
                               }

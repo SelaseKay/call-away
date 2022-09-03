@@ -29,7 +29,7 @@ class ReportSubmissionStateLoading extends ReportSubmissionState {}
 class ReportSubmissionService extends StateNotifier<ReportSubmissionState> {
   ReportSubmissionService(this.ref) : super(ReportSubmissionStateInitial());
 
-  final StateNotifierProviderRef<ReportSubmissionService, ReportSubmissionState>
+  final AutoDisposeStateNotifierProviderRef<ReportSubmissionService, ReportSubmissionState>
       ref;
 
   Future<void> submitReport(Report report) async {

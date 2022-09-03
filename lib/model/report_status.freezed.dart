@@ -21,7 +21,7 @@ ReportStatus _$ReportStatusFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ReportStatus {
   String get time => throw _privateConstructorUsedError;
-  ReportTagStatus? get status => throw _privateConstructorUsedError;
+  ReportLabelType? get status => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +34,7 @@ abstract class $ReportStatusCopyWith<$Res> {
   factory $ReportStatusCopyWith(
           ReportStatus value, $Res Function(ReportStatus) then) =
       _$ReportStatusCopyWithImpl<$Res>;
-  $Res call({String time, ReportTagStatus? status});
+  $Res call({String time, ReportLabelType? status});
 }
 
 /// @nodoc
@@ -58,7 +58,7 @@ class _$ReportStatusCopyWithImpl<$Res> implements $ReportStatusCopyWith<$Res> {
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ReportTagStatus?,
+              as ReportLabelType?,
     ));
   }
 }
@@ -70,7 +70,7 @@ abstract class _$$_ReportStatusCopyWith<$Res>
           _$_ReportStatus value, $Res Function(_$_ReportStatus) then) =
       __$$_ReportStatusCopyWithImpl<$Res>;
   @override
-  $Res call({String time, ReportTagStatus? status});
+  $Res call({String time, ReportLabelType? status});
 }
 
 /// @nodoc
@@ -97,7 +97,7 @@ class __$$_ReportStatusCopyWithImpl<$Res>
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ReportTagStatus?,
+              as ReportLabelType?,
     ));
   }
 }
@@ -114,7 +114,7 @@ class _$_ReportStatus implements _ReportStatus {
   @JsonKey()
   final String time;
   @override
-  final ReportTagStatus? status;
+  final ReportLabelType? status;
 
   @override
   String toString() {
@@ -152,7 +152,7 @@ class _$_ReportStatus implements _ReportStatus {
 
 abstract class _ReportStatus implements ReportStatus {
   const factory _ReportStatus(
-      {final String time, final ReportTagStatus? status}) = _$_ReportStatus;
+      {final String time, final ReportLabelType? status}) = _$_ReportStatus;
 
   factory _ReportStatus.fromJson(Map<String, dynamic> json) =
       _$_ReportStatus.fromJson;
@@ -160,7 +160,7 @@ abstract class _ReportStatus implements ReportStatus {
   @override
   String get time;
   @override
-  ReportTagStatus? get status;
+  ReportLabelType? get status;
   @override
   @JsonKey(ignore: true)
   _$$_ReportStatusCopyWith<_$_ReportStatus> get copyWith =>

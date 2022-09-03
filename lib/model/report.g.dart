@@ -23,7 +23,7 @@ Map<String, dynamic> _$$_ReportToJson(_$_Report instance) => <String, dynamic>{
       'location': instance.location,
       'description': instance.description,
       'problemType': _$ProblemTypeEnumMap[instance.problemType]!,
-      'status': instance.status,
+      'status': instance.status?.toJson(),
     };
 
 const _$ProblemTypeEnumMap = {

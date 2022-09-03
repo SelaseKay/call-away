@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:call_away/model/report_label_type.dart';
 import 'package:call_away/model/report_status.dart';
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/location_provider.dart';
@@ -10,6 +11,7 @@ import 'package:call_away/services/report_submission_service.dart';
 import 'package:call_away/ui/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
 import 'package:call_away/utils/user_input_validator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -191,13 +193,17 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                           ),
                           border: Border.all(
                             width: 1.5,
-                            color: const Color(0xFF000000).withOpacity(0.32),
+                            color: const Color(0xFF000000).withOpacity(
+                              0.32,
+                            ),
                           ),
                         ),
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
+                              padding: const EdgeInsets.only(
+                                left: 4.0,
+                              ),
                               child: locationState is DeviceLocationSuccessState
                                   ? SvgPicture.asset(
                                       'assets/images/location_active.svg')
@@ -240,7 +246,9 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                 // description Section
 
                 Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
+                  padding: const EdgeInsets.only(
+                    top: 20.0,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -342,8 +350,10 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                               .trim(),
                                           problemType: widget.problemType,
                                           status: ReportStatus(
-                                            time: DateTime.now().toString(),
-                                            status: ReportTagStatus.delivered,
+                                            time: Timestamp.now()
+                                                .toDate()
+                                                .toString(),
+                                            status: ReportLabelType.delivered,
                                           ),
                                         ),
                                       );

@@ -1,9 +1,12 @@
+import 'package:call_away/model/report_label_type.dart';
 import 'package:call_away/provider/report_details_provider.dart';
 import 'package:call_away/services/report_details_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
+import 'package:call_away/ui/components/report_status_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ReportDetailsScreen extends ConsumerStatefulWidget {
   const ReportDetailsScreen({
@@ -136,7 +139,10 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
                                 ),
                                 Text(
                                   reportDetailsState.report.location,
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  style: GoogleFonts.prompt(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
                                 ),
                               ],
                             ),
@@ -148,7 +154,10 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
                             title: "Description",
                             child: Text(
                               reportDetailsState.report.description,
-                              style: Theme.of(context).textTheme.bodyText1,
+                              style: GoogleFonts.prompt(
+                                textStyle:
+                                    Theme.of(context).textTheme.bodyText1,
+                              ),
                             ),
                           ),
                         ],
@@ -182,12 +191,104 @@ class _ReportItem extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.bodyText2,
+          style: GoogleFonts.prompt(
+            textStyle: Theme.of(context).textTheme.bodyText2,
+          ),
         ),
         const SizedBox(
           height: 8.0,
         ),
         child
+      ],
+    );
+  }
+}
+
+class _ReportStatusTable extends StatelessWidget {
+  const _ReportStatusTable({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Divider(),
+        const SizedBox(
+          height: 4.0,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "Staus",
+              style: GoogleFonts.prompt(
+                textStyle: Theme.of(context).textTheme.bodyText2,
+              ),
+            ),
+            const Icon(
+              Icons.schedule,
+              color: Color(0xFFFF9963),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 4.0,
+        ),
+        const Divider(),
+        const SizedBox(
+          height: 8.0,
+        ),
+        const _ReportStatusItem(
+          dateTime: "N/A",
+          child: ReportStatusTag(
+            tagStatus: ReportLabelType.delivered,
+          ),
+        ),
+        const _ReportStatusItem(
+          dateTime: "N/A",
+          child: ReportStatusTag(
+            tagStatus: ReportLabelType.received,
+          ),
+        ),
+        const _ReportStatusItem(
+          dateTime: "N/A",
+          child: ReportStatusTag(
+            tagStatus: ReportLabelType.pending,
+          ),
+        ),
+        const _ReportStatusItem(
+          dateTime: "N/A",
+          child: ReportStatusTag(
+            tagStatus: ReportLabelType.resolved,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ReportStatusItem extends StatelessWidget {
+  const _ReportStatusItem({
+    Key? key,
+    required this.child,
+    required this.dateTime,
+  }) : super(key: key);
+
+  final Widget child;
+  final String dateTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        child,
+        Text(
+          dateTime,
+          style: GoogleFonts.prompt(
+            textStyle: Theme.of(context).textTheme.bodyText1,
+          ),
+        ),
       ],
     );
   }

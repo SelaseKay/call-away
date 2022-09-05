@@ -9,8 +9,8 @@ part 'report_status.g.dart';
 @freezed
 class ReportStatus with _$ReportStatus {
   const factory ReportStatus({
-    @Default("") String time,
-    ReportLabelType? status,
+    @Default("N/A") String time,
+    ReportLabelType? label,
   }) = _ReportStatus;
 
   factory ReportStatus.fromJson(Map<String, Object?> json) =>

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../model/report.dart';
+
 class ReportDetailsScreen extends ConsumerStatefulWidget {
   const ReportDetailsScreen({
     Key? key,
@@ -69,108 +71,110 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
       ),
       child: Scaffold(
         body: SafeArea(
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: AppBarSection(
-                        title:
-                            "Report#${(reportDetailsState as ReportDetailsStateSuccess).report.reportId.toString().substring(0, 8)}",
-                        isRightWidgetVisible: false,
+          child: reportDetailsState is ReportDetailsStateLoading
+              ? const LoadingScreen()
+              : Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: AppBarSection(
+                          title:
+                              "Report#${(reportDetailsState as ReportDetailsStateSuccess).report.reportId.toString().substring(0, 8)}",
+                          isRightWidgetVisible: false,
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: ListView(
-                        children: [
-                          const SizedBox(
-                            height: 24.0,
-                          ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              8.0,
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            const SizedBox(
+                              height: 24.0,
                             ),
-                            child: Image.network(
-                              height: imageHeight,
-                              width: double.infinity,
-                              fit: BoxFit.fill,
-                              reportDetailsState.report.imageUrl,
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent? loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return SizedBox(
-                                  height: imageHeight,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: const Color(0xFFDBAC65),
-                                      value:
-                                          loadingProgress.expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                              : null,
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                8.0,
+                              ),
+                              child: Image.network(
+                                height: imageHeight,
+                                width: double.infinity,
+                                fit: BoxFit.fill,
+                                reportDetailsState.report.imageUrl,
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return SizedBox(
+                                    height: imageHeight,
+                                    child: const Center(
+                                      child: CircularProgressIndicator(
+                                        color: Color(
+                                          0xFFDBAC65,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 24.0,
-                          ),
-                          _ReportItem(
-                            title: "Location",
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.location_on_outlined,
-                                  color: Color(0xFF979797),
-                                ),
-                                const SizedBox(
-                                  width: 16.0,
-                                ),
-                                Text(
-                                  reportDetailsState.report.location,
-                                  style: GoogleFonts.prompt(
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 16.0,
-                          ),
-                          _ReportItem(
-                            title: "Description",
-                            child: Text(
-                              reportDetailsState.report.description,
-                              style: GoogleFonts.prompt(
-                                textStyle:
-                                    Theme.of(context).textTheme.bodyText1,
+                                  );
+                                },
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              height: 24.0,
+                            ),
+                            _ReportItem(
+                              title: "Location",
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.location_on_outlined,
+                                    color: Color(0xFF818181),
+                                  ),
+                                  const SizedBox(
+                                    width: 16.0,
+                                  ),
+                                  Text(
+                                    reportDetailsState.report.location,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            _ReportItem(
+                              title: "Description",
+                              child: Text(
+                                reportDetailsState.report.description,
+                                style: GoogleFonts.prompt(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyText1),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            _ReportItem(
+                              title: "Problem Type",
+                              child: Text(
+                                reportDetailsState.report.problemType.name,
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            _ReportStatusTable(
+                              report: reportDetailsState.report,
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              reportDetailsState is ReportDetailsStateLoading
-                  ? const LoadingScreen()
-                  : const SizedBox.shrink()
-            ],
-          ),
         ),
       ),
     );
@@ -205,16 +209,20 @@ class _ReportItem extends StatelessWidget {
 }
 
 class _ReportStatusTable extends StatelessWidget {
-  const _ReportStatusTable({Key? key}) : super(key: key);
+  const _ReportStatusTable({
+    Key? key,
+    required this.report,
+  }) : super(key: key);
+
+  final Report report;
 
   @override
   Widget build(BuildContext context) {
+    var statuses = report.status;
+
     return Column(
       children: [
         const Divider(),
-        const SizedBox(
-          height: 4.0,
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -231,36 +239,49 @@ class _ReportStatusTable extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(
-          height: 4.0,
-        ),
         const Divider(),
         const SizedBox(
           height: 8.0,
         ),
-        const _ReportStatusItem(
-          dateTime: "N/A",
-          child: ReportStatusTag(
-            tagStatus: ReportLabelType.delivered,
+        _ReportStatusItem(
+          dateTime:
+              statuses[0] == null ? "N/A" : statuses[0]!.time.substring(0, 16),
+          child: const ReportStatusTag(
+            label: ReportLabelType.delivered,
           ),
         ),
-        const _ReportStatusItem(
-          dateTime: "N/A",
-          child: ReportStatusTag(
-            tagStatus: ReportLabelType.received,
+        const SizedBox(
+          height: 16.0,
+        ),
+        _ReportStatusItem(
+          dateTime:
+              statuses[1] == null ? "N/A" : statuses[1]!.time.substring(0, 16),
+          child: const ReportStatusTag(
+            label: ReportLabelType.received,
           ),
         ),
-        const _ReportStatusItem(
-          dateTime: "N/A",
-          child: ReportStatusTag(
-            tagStatus: ReportLabelType.pending,
+        const SizedBox(
+          height: 16.0,
+        ),
+        _ReportStatusItem(
+          dateTime:
+              statuses[2] == null ? "N/A" : statuses[2]!.time.substring(0, 16),
+          child: const ReportStatusTag(
+            label: ReportLabelType.pending,
           ),
         ),
-        const _ReportStatusItem(
-          dateTime: "N/A",
-          child: ReportStatusTag(
-            tagStatus: ReportLabelType.resolved,
+        const SizedBox(
+          height: 16.0,
+        ),
+        _ReportStatusItem(
+          dateTime:
+              statuses[3] == null ? "N/A" : statuses[3]!.time.substring(0, 16),
+          child: const ReportStatusTag(
+            label: ReportLabelType.resolved,
           ),
+        ),
+        const SizedBox(
+          height: 8.0,
         ),
       ],
     );

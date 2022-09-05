@@ -4,11 +4,14 @@ import 'package:call_away/services/reports_retrieval_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
 import 'package:call_away/report_tag_state.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
+import 'package:call_away/ui/components/report_status_tag.dart';
 import 'package:call_away/ui/screens/report_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../model/report.dart';
 
 class MyReportsScreen extends ConsumerStatefulWidget {
   const MyReportsScreen({Key? key}) : super(key: key);
@@ -50,6 +53,13 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
           ],
         );
       }
+
+      _getCurrentReportStatus(Report report) {
+        return report.status.reversed
+            .toList()
+            .firstWhere((data) => data != null);
+      }
+
       return ListView.builder(
         itemCount: state.reports.length,
         itemBuilder: (context, index) {
@@ -59,7 +69,9 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
             padding:
                 EdgeInsets.only(top: index == 0 ? 32.0 : 0.0, bottom: 16.0),
             child: _ReportItem(
-              key: Key(index.toString()),
+              key: Key(
+                index.toString(),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -69,8 +81,9 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
                   ),
                 );
               },
-              title: "Reports#${report.reportId.toString().substring(0, 8)}",
-              date: report.status!.time.substring(0, 16),
+              label: _getCurrentReportStatus(report)!.label!,
+              title: "Report#${report.reportId.toString().substring(0, 8)}",
+              date: _getCurrentReportStatus(report)!.time,
             ),
           );
         },
@@ -155,10 +168,12 @@ class _ReportItem extends StatelessWidget {
     Key? key,
     this.title = "",
     this.date = "",
+    this.label = ReportLabelType.delivered,
     required this.onPressed,
   }) : super(key: key);
   final String title;
   final String date;
+  final ReportLabelType label;
 
   final VoidCallback onPressed;
 
@@ -194,7 +209,7 @@ class _ReportItem extends StatelessWidget {
                       height: 2.0,
                     ),
                     Text(
-                      date,
+                      date.substring(0, 16),
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.prompt(
                           textStyle: Theme.of(context).textTheme.subtitle1),
@@ -202,7 +217,9 @@ class _ReportItem extends StatelessWidget {
                   ],
                 ),
               ),
-              const _ReportTag()
+              ReportStatusTag(
+                label: label,
+              ),
             ],
           ),
         ),

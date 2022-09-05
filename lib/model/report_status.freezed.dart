@@ -21,7 +21,7 @@ ReportStatus _$ReportStatusFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ReportStatus {
   String get time => throw _privateConstructorUsedError;
-  ReportLabelType? get status => throw _privateConstructorUsedError;
+  ReportLabelType? get label => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +34,7 @@ abstract class $ReportStatusCopyWith<$Res> {
   factory $ReportStatusCopyWith(
           ReportStatus value, $Res Function(ReportStatus) then) =
       _$ReportStatusCopyWithImpl<$Res>;
-  $Res call({String time, ReportLabelType? status});
+  $Res call({String time, ReportLabelType? label});
 }
 
 /// @nodoc
@@ -48,16 +48,16 @@ class _$ReportStatusCopyWithImpl<$Res> implements $ReportStatusCopyWith<$Res> {
   @override
   $Res call({
     Object? time = freezed,
-    Object? status = freezed,
+    Object? label = freezed,
   }) {
     return _then(_value.copyWith(
       time: time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as String,
-      status: status == freezed
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
+      label: label == freezed
+          ? _value.label
+          : label // ignore: cast_nullable_to_non_nullable
               as ReportLabelType?,
     ));
   }
@@ -70,7 +70,7 @@ abstract class _$$_ReportStatusCopyWith<$Res>
           _$_ReportStatus value, $Res Function(_$_ReportStatus) then) =
       __$$_ReportStatusCopyWithImpl<$Res>;
   @override
-  $Res call({String time, ReportLabelType? status});
+  $Res call({String time, ReportLabelType? label});
 }
 
 /// @nodoc
@@ -87,16 +87,16 @@ class __$$_ReportStatusCopyWithImpl<$Res>
   @override
   $Res call({
     Object? time = freezed,
-    Object? status = freezed,
+    Object? label = freezed,
   }) {
     return _then(_$_ReportStatus(
       time: time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as String,
-      status: status == freezed
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
+      label: label == freezed
+          ? _value.label
+          : label // ignore: cast_nullable_to_non_nullable
               as ReportLabelType?,
     ));
   }
@@ -105,7 +105,7 @@ class __$$_ReportStatusCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ReportStatus implements _ReportStatus {
-  const _$_ReportStatus({this.time = "", this.status});
+  const _$_ReportStatus({this.time = "N/A", this.label});
 
   factory _$_ReportStatus.fromJson(Map<String, dynamic> json) =>
       _$$_ReportStatusFromJson(json);
@@ -114,11 +114,11 @@ class _$_ReportStatus implements _ReportStatus {
   @JsonKey()
   final String time;
   @override
-  final ReportLabelType? status;
+  final ReportLabelType? label;
 
   @override
   String toString() {
-    return 'ReportStatus(time: $time, status: $status)';
+    return 'ReportStatus(time: $time, label: $label)';
   }
 
   @override
@@ -127,7 +127,7 @@ class _$_ReportStatus implements _ReportStatus {
         (other.runtimeType == runtimeType &&
             other is _$_ReportStatus &&
             const DeepCollectionEquality().equals(other.time, time) &&
-            const DeepCollectionEquality().equals(other.status, status));
+            const DeepCollectionEquality().equals(other.label, label));
   }
 
   @JsonKey(ignore: true)
@@ -135,7 +135,7 @@ class _$_ReportStatus implements _ReportStatus {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(time),
-      const DeepCollectionEquality().hash(status));
+      const DeepCollectionEquality().hash(label));
 
   @JsonKey(ignore: true)
   @override
@@ -152,7 +152,7 @@ class _$_ReportStatus implements _ReportStatus {
 
 abstract class _ReportStatus implements ReportStatus {
   const factory _ReportStatus(
-      {final String time, final ReportLabelType? status}) = _$_ReportStatus;
+      {final String time, final ReportLabelType? label}) = _$_ReportStatus;
 
   factory _ReportStatus.fromJson(Map<String, dynamic> json) =
       _$_ReportStatus.fromJson;
@@ -160,7 +160,7 @@ abstract class _ReportStatus implements ReportStatus {
   @override
   String get time;
   @override
-  ReportLabelType? get status;
+  ReportLabelType? get label;
   @override
   @JsonKey(ignore: true)
   _$$_ReportStatusCopyWith<_$_ReportStatus> get copyWith =>

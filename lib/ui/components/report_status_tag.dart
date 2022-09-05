@@ -3,13 +3,13 @@ import 'package:call_away/report_tag_state.dart';
 import 'package:flutter/cupertino.dart';
 
 class ReportStatusTag extends StatelessWidget {
-  const ReportStatusTag({Key? key, this.tagStatus = ReportLabelType.delivered})
+  const ReportStatusTag({Key? key, this.label = ReportLabelType.delivered})
       : super(key: key);
 
-  final ReportLabelType tagStatus;
+  final ReportLabelType label;
 
   ReportTagState getTagState() {
-    switch (tagStatus) {
+    switch (label) {
       case ReportLabelType.delivered:
         return DeliveredReportTagState();
       case ReportLabelType.received:

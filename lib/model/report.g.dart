@@ -12,9 +12,12 @@ _$_Report _$$_ReportFromJson(Map<String, dynamic> json) => _$_Report(
       location: json['location'] as String,
       description: json['description'] as String,
       problemType: $enumDecode(_$ProblemTypeEnumMap, json['problemType']),
-      status: json['status'] == null
-          ? null
-          : ReportStatus.fromJson(json['status'] as Map<String, dynamic>),
+      status: (json['status'] as List<dynamic>?)
+              ?.map((e) => e == null
+                  ? null
+                  : ReportStatus.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [null, null, null, null],
     );
 
 Map<String, dynamic> _$$_ReportToJson(_$_Report instance) => <String, dynamic>{
@@ -23,7 +26,7 @@ Map<String, dynamic> _$$_ReportToJson(_$_Report instance) => <String, dynamic>{
       'location': instance.location,
       'description': instance.description,
       'problemType': _$ProblemTypeEnumMap[instance.problemType]!,
-      'status': instance.status?.toJson(),
+      'status': instance.status.map((e) => e?.toJson()).toList(),
     };
 
 const _$ProblemTypeEnumMap = {

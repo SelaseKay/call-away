@@ -16,7 +16,8 @@ class Report with _$Report {
       required String location,
       required String description,
       required ProblemType problemType,
-      ReportStatus? status}) = _Report;
+      @Default([null, null, null, null])
+      List<ReportStatus?> status}) = _Report;
 
   factory Report.fromJson(Map<String, Object?> json) => _$ReportFromJson(json);
 

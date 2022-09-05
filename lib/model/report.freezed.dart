@@ -25,7 +25,7 @@ mixin _$Report {
   String get location => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   ProblemType get problemType => throw _privateConstructorUsedError;
-  ReportStatus? get status => throw _privateConstructorUsedError;
+  List<ReportStatus?> get status => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,9 +42,7 @@ abstract class $ReportCopyWith<$Res> {
       String location,
       String description,
       ProblemType problemType,
-      ReportStatus? status});
-
-  $ReportStatusCopyWith<$Res>? get status;
+      List<ReportStatus?> status});
 }
 
 /// @nodoc
@@ -88,19 +86,8 @@ class _$ReportCopyWithImpl<$Res> implements $ReportCopyWith<$Res> {
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as ReportStatus?,
+              as List<ReportStatus?>,
     ));
-  }
-
-  @override
-  $ReportStatusCopyWith<$Res>? get status {
-    if (_value.status == null) {
-      return null;
-    }
-
-    return $ReportStatusCopyWith<$Res>(_value.status!, (value) {
-      return _then(_value.copyWith(status: value));
-    });
   }
 }
 
@@ -115,10 +102,7 @@ abstract class _$$_ReportCopyWith<$Res> implements $ReportCopyWith<$Res> {
       String location,
       String description,
       ProblemType problemType,
-      ReportStatus? status});
-
-  @override
-  $ReportStatusCopyWith<$Res>? get status;
+      List<ReportStatus?> status});
 }
 
 /// @nodoc
@@ -161,9 +145,9 @@ class __$$_ReportCopyWithImpl<$Res> extends _$ReportCopyWithImpl<$Res>
           : problemType // ignore: cast_nullable_to_non_nullable
               as ProblemType,
       status: status == freezed
-          ? _value.status
+          ? _value._status
           : status // ignore: cast_nullable_to_non_nullable
-              as ReportStatus?,
+              as List<ReportStatus?>,
     ));
   }
 }
@@ -177,7 +161,8 @@ class _$_Report implements _Report {
       required this.location,
       required this.description,
       required this.problemType,
-      this.status});
+      final List<ReportStatus?> status = const [null, null, null, null]})
+      : _status = status;
 
   factory _$_Report.fromJson(Map<String, dynamic> json) =>
       _$$_ReportFromJson(json);
@@ -193,8 +178,13 @@ class _$_Report implements _Report {
   final String description;
   @override
   final ProblemType problemType;
+  final List<ReportStatus?> _status;
   @override
-  final ReportStatus? status;
+  @JsonKey()
+  List<ReportStatus?> get status {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_status);
+  }
 
   @override
   String toString() {
@@ -213,7 +203,7 @@ class _$_Report implements _Report {
                 .equals(other.description, description) &&
             const DeepCollectionEquality()
                 .equals(other.problemType, problemType) &&
-            const DeepCollectionEquality().equals(other.status, status));
+            const DeepCollectionEquality().equals(other._status, _status));
   }
 
   @JsonKey(ignore: true)
@@ -225,7 +215,7 @@ class _$_Report implements _Report {
       const DeepCollectionEquality().hash(location),
       const DeepCollectionEquality().hash(description),
       const DeepCollectionEquality().hash(problemType),
-      const DeepCollectionEquality().hash(status));
+      const DeepCollectionEquality().hash(_status));
 
   @JsonKey(ignore: true)
   @override
@@ -247,7 +237,7 @@ abstract class _Report implements Report {
       required final String location,
       required final String description,
       required final ProblemType problemType,
-      final ReportStatus? status}) = _$_Report;
+      final List<ReportStatus?> status}) = _$_Report;
 
   factory _Report.fromJson(Map<String, dynamic> json) = _$_Report.fromJson;
 
@@ -262,7 +252,7 @@ abstract class _Report implements Report {
   @override
   ProblemType get problemType;
   @override
-  ReportStatus? get status;
+  List<ReportStatus?> get status;
   @override
   @JsonKey(ignore: true)
   _$$_ReportCopyWith<_$_Report> get copyWith =>

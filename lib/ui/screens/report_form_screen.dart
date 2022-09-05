@@ -83,7 +83,8 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
       }
     });
 
-    ref.listen<ReportSubmissionState>(reportSubmissionStateProvider, (previous, next) {
+    ref.listen<ReportSubmissionState>(reportSubmissionStateProvider,
+        (previous, next) {
       if (next is ReportSubmissionStateLoading) {
         FocusScope.of(context).unfocus();
       } else if (next is ReportSubmissionStateSuccess) {
@@ -340,7 +341,8 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                           .state as DeviceLocationSuccessState)
                                       .location;
                                   ref
-                                      .read(reportSubmissionStateProvider.notifier)
+                                      .read(reportSubmissionStateProvider
+                                          .notifier)
                                       .submitReport(
                                         Report(
                                           location: location,
@@ -348,12 +350,17 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                               .text
                                               .trim(),
                                           problemType: widget.problemType,
-                                          status: ReportStatus(
-                                            time: Timestamp.now()
-                                                .toDate()
-                                                .toString(),
-                                            status: ReportLabelType.delivered,
-                                          ),
+                                          status: [
+                                            ReportStatus(
+                                              time: Timestamp.now()
+                                                  .toDate()
+                                                  .toString(),
+                                              label: ReportLabelType.delivered,
+                                            ),
+                                            null,
+                                            null,
+                                            null
+                                          ],
                                         ),
                                       );
                                 }

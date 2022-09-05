@@ -8,14 +8,14 @@ part of 'report_status.dart';
 
 _$_ReportStatus _$$_ReportStatusFromJson(Map<String, dynamic> json) =>
     _$_ReportStatus(
-      time: json['time'] as String? ?? "",
-      status: $enumDecodeNullable(_$ReportLabelTypeEnumMap, json['status']),
+      time: json['time'] as String? ?? "N/A",
+      label: $enumDecodeNullable(_$ReportLabelTypeEnumMap, json['label']),
     );
 
 Map<String, dynamic> _$$_ReportStatusToJson(_$_ReportStatus instance) =>
     <String, dynamic>{
       'time': instance.time,
-      'status': _$ReportLabelTypeEnumMap[instance.status],
+      'label': _$ReportLabelTypeEnumMap[instance.label],
     };
 
 const _$ReportLabelTypeEnumMap = {

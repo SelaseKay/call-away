@@ -66,102 +66,98 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
       ),
       child: Scaffold(
         body: SafeArea(
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: AppBarSection(
-                        title:
-                            "Report#${(reportDetailsState as ReportDetailsStateSuccess).report.reportId.toString().substring(0, 8)}",
-                        isRightWidgetVisible: false,
+          child: reportDetailsState is ReportDetailsStateLoading
+              ? const LoadingScreen()
+              : Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: AppBarSection(
+                          title:
+                              "Report#${(reportDetailsState as ReportDetailsStateSuccess).report.reportId.toString().substring(0, 8)}",
+                          isRightWidgetVisible: false,
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: ListView(
-                        children: [
-                          const SizedBox(
-                            height: 24.0,
-                          ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              8.0,
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            const SizedBox(
+                              height: 24.0,
                             ),
-                            child: Image.network(
-                              height: imageHeight,
-                              width: double.infinity,
-                              fit: BoxFit.fill,
-                              reportDetailsState.report.imageUrl,
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent? loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return SizedBox(
-                                  height: imageHeight,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: const Color(0xFFDBAC65),
-                                      value:
-                                          loadingProgress.expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                              : null,
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                8.0,
+                              ),
+                              child: Image.network(
+                                height: imageHeight,
+                                width: double.infinity,
+                                fit: BoxFit.fill,
+                                reportDetailsState.report.imageUrl,
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return SizedBox(
+                                    height: imageHeight,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: const Color(0xFFDBAC65),
+                                        value: loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                loadingProgress
+                                                    .expectedTotalBytes!
+                                            : null,
+                                      ),
                                     ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 24.0,
+                            ),
+                            _ReportItem(
+                              title: "Location",
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.location_on_outlined,
+                                    color: Color(0xFF979797),
                                   ),
-                                );
-                              },
+                                  const SizedBox(
+                                    width: 16.0,
+                                  ),
+                                  Text(
+                                    reportDetailsState.report.location,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 24.0,
-                          ),
-                          _ReportItem(
-                            title: "Location",
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.location_on_outlined,
-                                  color: Color(0xFF979797),
-                                ),
-                                const SizedBox(
-                                  width: 16.0,
-                                ),
-                                Text(
-                                  reportDetailsState.report.location,
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                ),
-                              ],
+                            const SizedBox(
+                              height: 16.0,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 16.0,
-                          ),
-                          _ReportItem(
-                            title: "Description",
-                            child: Text(
-                              reportDetailsState.report.description,
-                              style: Theme.of(context).textTheme.bodyText1,
+                            _ReportItem(
+                              title: "Description",
+                              child: Text(
+                                reportDetailsState.report.description,
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              reportDetailsState is ReportDetailsStateLoading
-                  ? const LoadingScreen()
-                  : const SizedBox.shrink()
-            ],
-          ),
         ),
       ),
     );

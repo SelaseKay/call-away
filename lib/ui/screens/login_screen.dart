@@ -74,6 +74,7 @@ class LoginScreen extends ConsumerWidget {
                           padding: const EdgeInsets.only(top: 48.0),
                           child: LabeledTextField(
                             label: "Email",
+                            keyboardType: TextInputType.emailAddress,
                             hintText: "jondoe@gmail.com",
                             validator: (value) =>
                                 Validator.validateEmail(value!),

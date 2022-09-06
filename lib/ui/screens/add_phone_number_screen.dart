@@ -4,6 +4,7 @@ import 'package:call_away/ui/components/continue_button.dart';
 import 'package:call_away/ui/components/icon_button.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
+import 'package:call_away/ui/screens/otp_verification-screen.dart';
 import 'package:call_away/utils/user_input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,8 +24,19 @@ class AddPhoneNumberScreen extends ConsumerWidget {
 
     ref.listen<OtpState>(otpProvider, (previous, next) {
       if (next is OtpStateSuccess) {
+        final phoneNumber = _controller.text.trim();
+        // Navigator.push(
+        //   context,
+        //   PageRouteBuilder(
+        //     pageBuilder: (context, animation, secondaryAnimatio) =>
+        //         OtpVerificationScreen(
+        //       phoneNumber: _controller.text.trim(),
+        //     ),
+        //   ),
+        // );
         Navigator.pushNamedAndRemoveUntil(
-            context, '/addPhoneNumber/verifyOtp', (route) => false);
+            context, '/addPhoneNumber/verifyOtp', (route) => false,
+            arguments: phoneNumber);
       } else if (next is OtpStateError) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(next.errorMessage)));

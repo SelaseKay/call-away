@@ -59,7 +59,9 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
           .doc(user!.uid)
           .get();
 
-      if (userDoc["phoneVerifiedAt"] != null) {
+      final userModel = UserModel.fromJson(userDoc.data()!);
+
+      if (userModel.phoneVerifiedAt.isNotEmpty) {
         state = AuthenticationStateSuccess(isUserVerified: true);
       } else {
         state = AuthenticationStateError("User is not verified");

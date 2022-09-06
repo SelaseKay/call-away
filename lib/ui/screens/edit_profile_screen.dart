@@ -68,10 +68,6 @@ class EditProfileScreen extends ConsumerWidget {
           headline6: TextStyle(
             color: Color(0xFFA1887F),
           ),
-          subtitle1: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF252525),
-          ),
           subtitle2: TextStyle(
             color: Color(0xFF999999),
           ),
@@ -81,97 +77,105 @@ class EditProfileScreen extends ConsumerWidget {
         ),
       ),
       child: Scaffold(
-        body: SafeArea(
-          child: profileUpdateState is ProfileUpdateStateLoading
-              ? const LoadingScreen()
-              : Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8.0,
-                        ),
-                        child: AppBarSection(
-                          title: "Edit Profile",
-                          action: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(
-                                      24,
-                                    ),
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8.0,
+                      ),
+                      child: AppBarSection(
+                        title: "Edit Profile",
+                        action: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(
+                                    24,
                                   ),
-                                ),
-                                side: const BorderSide(
-                                  color: Color(0xFFDA7B23),
-                                  width: 1,
                                 ),
                               ),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  final username = _nameController.text.trim();
-                                  final email = _emailController.text.trim();
-                                  ref
-                                      .read(profileUpdateStateProvider.notifier)
-                                      .updateUserNameEmail(username, email);
-                                }
-                              },
-                              child: Text(
-                                "Save",
-                                style: GoogleFonts.prompt(
-                                  textStyle: const TextStyle(
-                                    color: Color(0xFFDA7B23),
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                              side: const BorderSide(
+                                color: Color(0xFFDA7B23),
+                                width: 1,
+                              ),
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                final username = _nameController.text.trim();
+                                final email = _emailController.text.trim();
+                                ref
+                                    .read(profileUpdateStateProvider.notifier)
+                                    .updateUserNameEmail(username, email);
+                              }
+                            },
+                            child: Text(
+                              "Save",
+                              style: GoogleFonts.prompt(
+                                textStyle: const TextStyle(
+                                  color: Color(0xFFDA7B23),
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400,
                                 ),
-                              )),
+                              ),
+                            )),
+                      ),
+                    ),
+                    Expanded(
+                      child: Form(
+                        key: _formKey,
+                        child: ListView(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(
+                                top: 32.0,
+                              ),
+                              child: UserAvatar(),
+                            ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                            const Divider(),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            LabeledTextField(
+                              label: "Name",
+                              controller: _nameController,
+                              validator: (value) =>
+                                  Validator.validateUsername(value!),
+                            ),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            LabeledTextField(
+                              label: "Email",
+                              validator: (value) =>
+                                  Validator.validateEmail(value!),
+                              controller: _emailController,
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                          ],
                         ),
                       ),
-                      Expanded(
-                        child: Form(
-                          key: _formKey,
-                          child: ListView(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.only(
-                                  top: 32.0,
-                                ),
-                                child: UserAvatar(),
-                              ),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              const Divider(),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                              LabeledTextField(
-                                label: "Name",
-                                controller: _nameController,
-                                validator: (value) =>
-                                    Validator.validateUsername(value!),
-                              ),
-                              const SizedBox(
-                                height: 16.0,
-                              ),
-                              LabeledTextField(
-                                label: "Email",
-                                validator: (value) =>
-                                    Validator.validateEmail(value!),
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
+              ),
+            ),
+            profileUpdateState is ProfileUpdateStateLoading
+                ? const LoadingScreen()
+                : const SizedBox.shrink()
+          ],
         ),
       ),
     );

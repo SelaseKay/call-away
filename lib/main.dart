@@ -1,14 +1,22 @@
+import 'package:call_away/model/user.dart';
 import 'package:call_away/provider/login_state_provider.dart';
 import 'package:call_away/ui/screens/add_phone_number_screen.dart';
 import 'package:call_away/ui/screens/home_screen.dart';
 import 'package:call_away/ui/screens/login_screen.dart';
 import 'package:call_away/ui/screens/otp_verification-screen.dart';
 import 'package:call_away/ui/screens/sign_up_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
+enum UserState {
+  verified,
+  notVerified,
+  notSignedUp,
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,20 +34,40 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-  bool _isUserLoggedIn = false;
+  UserState _userState = UserState.notSignedUp;
 
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((user) {
+    FirebaseAuth.instance.authStateChanges().listen((user) async {
       if (user != null) {
-        setState(() {
-          _isUserLoggedIn = true;
-        });
+        final usr = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.uid)
+            .get();
+        final userModel = UserModel.fromJson(usr.data()!);
+
+        if (userModel.phoneVerifiedAt.isNotEmpty) {
+          setState(() {
+            _userState = UserState.verified;
+          });
+        } else {
+          setState(() {
+            _userState = UserState.notVerified;
+          });
+        }
+        print("User state is: ${_userState.name}");
         // ref.read(loginStateProvider.notifier).state = true;
         print("User: ${user.email}");
       }
     });
+  }
+
+  Widget _getStartUpPage() {
+    if (_userState == UserState.verified) {
+      return const HomeScreen(title: "Call Away");
+    }
+    return LoginScreen();
   }
 
   // This widget is the root of your application.
@@ -50,9 +78,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => _isUserLoggedIn
-            ? const HomeScreen(title: "Call Away")
-            : LoginScreen(),
+        '/': (context) => _getStartUpPage(),
         '/login': (context) => LoginScreen(),
         '/signUp': (context) => SignUpScreen(),
         '/addPhoneNumber': (context) => AddPhoneNumberScreen(),

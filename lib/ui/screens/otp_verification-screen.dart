@@ -10,7 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OtpVerificationScreen extends ConsumerWidget {
-  OtpVerificationScreen({Key? key}) : super(key: key);
+  OtpVerificationScreen({Key? key})
+      : super(key: key);
+
 
   final _controller1 = TextEditingController();
   final _controller2 = TextEditingController();
@@ -23,12 +25,15 @@ class OtpVerificationScreen extends ConsumerWidget {
 
     ref.listen(otpProvider, (previous, next) {
       if (next is OtpStateSuccess) {
+        print("Otp Verification successful");
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       } else if (next is OtpStateError) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(next.errorMessage)));
       }
     });
+
+    final phoneNumber = ModalRoute.of(context)!.settings.arguments as String;
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -73,20 +78,18 @@ class OtpVerificationScreen extends ConsumerWidget {
                 ),
                 Padding(
                     padding: const EdgeInsets.only(top: 24.0),
-                    child: Form(
-                        onChanged: () {},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _OtpTextField(
-                              controller: _controller1,
-                              autoFocus: true,
-                            ),
-                            _OtpTextField(controller: _controller2),
-                            _OtpTextField(controller: _controller3),
-                            _OtpTextField(controller: _controller4),
-                          ],
-                        ))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _OtpTextField(
+                          controller: _controller1,
+                          autoFocus: true,
+                        ),
+                        _OtpTextField(controller: _controller2),
+                        _OtpTextField(controller: _controller3),
+                        _OtpTextField(controller: _controller4),
+                      ],
+                    )),
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: ContinueButton(onPressed: () async {
@@ -108,13 +111,17 @@ class OtpVerificationScreen extends ConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: CustomTextSpan(
-                      onTapText: () {},
+                      onTapText: () {
+                        ref.read(otpProvider.notifier).sendOtpCode(phoneNumber);
+                      },
                       clickableText: "\nResend",
                       unclickableText: "I didn't receive a code."),
                 )
               ],
             ),
-            otpState is OtpStateLoading ? const LoadingScreen() : const SizedBox.shrink()
+            otpState is OtpStateLoading
+                ? const LoadingScreen()
+                : const SizedBox.shrink()
           ],
         )),
       ),

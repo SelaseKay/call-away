@@ -6,7 +6,6 @@ import 'package:call_away/ui/components/signing_button.dart';
 import 'package:call_away/ui/components/text_span.dart';
 import 'package:call_away/services/auth_service.dart';
 import 'package:call_away/provider/auth_provider.dart';
-import 'package:call_away/provider/form_key_provider.dart';
 import 'package:call_away/utils/user_input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,11 +17,12 @@ class SignUpScreen extends ConsumerWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AuthenticationState authState = ref.watch(authProvider);
 
-    var formKey = ref.watch(formKeyProvider);
 
     ref.listen(authProvider, (previous, next) {
       if (next is AuthenticationStateSuccess) {
@@ -59,7 +59,7 @@ class SignUpScreen extends ConsumerWidget {
                   child: BrandLogo(),
                 ),
                 Form(
-                  key: formKey,
+                  key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -88,6 +88,7 @@ class SignUpScreen extends ConsumerWidget {
                           child: LabeledTextField(
                             label: "Email",
                             hintText: "jondoe@gmail.com",
+                            keyboardType: TextInputType.emailAddress,
                             validator: (value) =>
                                 Validator.validateEmail(value!),
                             controller: _emailController,
@@ -119,7 +120,7 @@ class SignUpScreen extends ConsumerWidget {
                         child: SignButton(
                             text: "Sign Up",
                             onPressed: () async {
-                              if (formKey.currentState!.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 await ref
                                     .read(authProvider.notifier)
                                     .signUpUser(

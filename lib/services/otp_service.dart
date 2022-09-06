@@ -42,7 +42,7 @@ class OtpService extends StateNotifier<OtpState> {
       "ckey": cKey,
       "recip": phoneNumber,
       "sender_id": "Call Away",
-      "smsbody": "Your OTP code is: $_otpCode"
+      "smsbody": "Your OTP code is: $_otpCode.\nDon't share code with anyone."
     };
 
     try {

@@ -148,7 +148,7 @@ class EditProfileScreen extends ConsumerWidget {
                               height: 16.0,
                             ),
                             LabeledTextField(
-                              label: "Name",
+                              label: "Username",
                               controller: _nameController,
                               validator: (value) =>
                                   Validator.validateUsername(value!),

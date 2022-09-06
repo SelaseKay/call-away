@@ -1,6 +1,7 @@
 import 'package:call_away/provider/profile_update_state_provider.dart';
 import 'package:call_away/services/profile_update_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
+import 'package:call_away/ui/components/icon_button.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
 import 'package:call_away/ui/components/user_avatar.dart';
@@ -16,6 +17,25 @@ class EditProfileScreen extends ConsumerWidget {
   final _emailController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  _showModalBottomSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(
+            8.0,
+          ),
+          topRight: Radius.circular(
+            8.0,
+          ),
+        ),
+      ),
+      context: context,
+      builder: (BuildContext context) {
+        return const _MyModalBottomSheet();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -134,11 +154,13 @@ class EditProfileScreen extends ConsumerWidget {
                         key: _formKey,
                         child: ListView(
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.only(
+                            Padding(
+                              padding: const EdgeInsets.only(
                                 top: 32.0,
                               ),
-                              child: UserAvatar(),
+                              child: UserAvatar(
+                                onPressed: () => _showModalBottomSheet(context),
+                              ),
                             ),
                             const SizedBox(
                               height: 20.0,
@@ -180,6 +202,99 @@ class EditProfileScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _MyModalBottomSheet extends StatelessWidget {
+  const _MyModalBottomSheet({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+        vertical: 16.0,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Profile Photo",
+            style: TextStyle(
+              color: const Color(0xFF000000).withOpacity(0.75),
+              fontWeight: FontWeight.w500,
+              fontSize: 16.0,
+            ),
+          ),
+          const SizedBox(
+            height: 16.0,
+          ),
+          Row(
+            children: [
+              _ModalBottomSheetItem(
+                text: "Camera",
+                onPressed: () {},
+                child: const MyIconButton(
+                  icon: Icons.photo_camera,
+                  iconColor: Color(0xFFE48938),
+                  buttonColor: Color(0xFFD3D3D3),
+                  height: 40.0,
+                  width: 40.0,
+                ),
+              ),
+              const SizedBox(
+                width: 32.0,
+              ),
+              _ModalBottomSheetItem(
+                text: "Gallery",
+                onPressed: () {},
+                child: const MyIconButton(
+                  icon: Icons.image,
+                  iconColor: Color(0xFFE48938),
+                  buttonColor: Color(0xFFD3D3D3),
+                  height: 40.0,
+                  width: 40.0,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ModalBottomSheetItem extends StatelessWidget {
+  const _ModalBottomSheetItem({
+    Key? key,
+    required this.child,
+    required this.text,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final Widget child;
+  final String text;
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        child,
+        const SizedBox(
+          height: 4.0,
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            color: const Color(0xFF111111).withOpacity(0.50),
+            fontSize: 14.0,
+          ),
+        ),
+      ],
     );
   }
 }

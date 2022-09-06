@@ -5,6 +5,11 @@ class MyIconButton extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.iconColor,
+    this.height = 40.0,
+    this.width = 40.0,
+    this.buttonColor = const Color(
+      0xFFEFEFEF,
+    ),
     this.onPressed,
   }) : super(key: key);
   final IconData icon;
@@ -12,16 +17,21 @@ class MyIconButton extends StatelessWidget {
 
   final Color iconColor;
 
+  final Color buttonColor;
+
+  final double height;
+  final double width;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40.0,
-      width: 40.0,
+      height: height,
+      width: width,
       child: Material(
-        color: const Color(0xFFEFEFEF),
-        borderRadius: const BorderRadius.all(
+        color: buttonColor,
+        borderRadius: BorderRadius.all(
           Radius.circular(
-            50.0,
+            height / 2,
           ),
         ),
         child: InkWell(

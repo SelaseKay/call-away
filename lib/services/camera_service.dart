@@ -13,4 +13,14 @@ class CameraService extends StateNotifier<XFile?> {
       print("Image picker exception: ${e.toString()}");
     }
   }
+
+  Future<void> getImageFromGallery() async{
+     final ImagePicker picker = ImagePicker();
+    try {
+      XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      state = image;
+    } catch (e) {
+      print("Image picker exception: ${e.toString()}");
+    } 
+  }
 }

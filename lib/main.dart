@@ -39,6 +39,9 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     super.initState();
+    //    WidgetsBinding.instance.addPostFrameCallback((_){
+    //   _checkUserState();
+    // });
     FirebaseAuth.instance.authStateChanges().listen((user) async {
       if (user != null) {
         final usr = await FirebaseFirestore.instance
@@ -48,13 +51,9 @@ class _MyAppState extends ConsumerState<MyApp> {
         final userModel = UserModel.fromJson(usr.data()!);
 
         if (userModel.phoneVerifiedAt.isNotEmpty) {
-          setState(() {
-            _userState = UserState.verified;
-          });
+          _userState = UserState.verified;
         } else {
-          setState(() {
-            _userState = UserState.notVerified;
-          });
+          _userState = UserState.notVerified;
         }
         print("User state is: ${_userState.name}");
         // ref.read(loginStateProvider.notifier).state = true;
@@ -62,6 +61,31 @@ class _MyAppState extends ConsumerState<MyApp> {
       }
     });
   }
+
+  // _checkUserState(){
+  //   FirebaseAuth.instance.authStateChanges().listen((user) async {
+  //     if (user != null) {
+  //       final usr = await FirebaseFirestore.instance
+  //           .collection("users")
+  //           .doc(user.uid)
+  //           .get();
+  //       final userModel = UserModel.fromJson(usr.data()!);
+
+  //       if (userModel.phoneVerifiedAt.isNotEmpty) {
+  //         setState(() {
+  //           _userState = UserState.verified;
+  //         });
+  //       } else {
+  //         setState(() {
+  //           _userState = UserState.notVerified;
+  //         });
+  //       }
+  //       print("User state is: ${_userState.name}");
+  //       // ref.read(loginStateProvider.notifier).state = true;
+  //       print("User: ${user.email}");
+  //     }
+  //   });
+  // }
 
   // This widget is the root of your application.
   @override

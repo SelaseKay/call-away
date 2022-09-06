@@ -130,7 +130,7 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
               subtitle1: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.normal,
-                  color: Color(0xFF949494)))),
+                  color: Color(0xFF949494),),),),
       child: Scaffold(
         body: SafeArea(
           child: Stack(
@@ -143,7 +143,7 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
                       padding: EdgeInsets.only(top: 8.0),
                       child: AppBarSection(
                         title: "My Reports",
-                        isRightWidgetVisible: false,
+                        action: null,
                       ),
                     ),
                     Expanded(

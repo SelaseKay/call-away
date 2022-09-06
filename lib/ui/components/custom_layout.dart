@@ -2,13 +2,19 @@ import 'package:call_away/ui/components/app_bar.dart';
 import 'package:flutter/material.dart';
 
 class MyCustomLayout extends StatelessWidget {
-  const MyCustomLayout(
-      {Key? key, required this.appBarTitle, required this.children, this.rPositionIcon})
-      : super(key: key);
+  const MyCustomLayout({
+    Key? key,
+    required this.appBarTitle,
+    required this.children,
+    this.rPositionIcon,
+    this.appBarAction,
+  }) : super(key: key);
 
   final String appBarTitle;
 
   final List<Widget> children;
+
+  final Widget? appBarAction;
 
   final IconData? rPositionIcon;
 
@@ -23,7 +29,7 @@ class MyCustomLayout extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8.0),
               child: AppBarSection(
                 title: appBarTitle,
-                rPositionIcon: rPositionIcon,
+                action: appBarAction,
               )),
           Expanded(
               child: ListView(

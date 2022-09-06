@@ -19,7 +19,11 @@ class MyIconButton extends StatelessWidget {
       width: 40.0,
       child: Material(
         color: const Color(0xFFEFEFEF),
-        borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(
+            50.0,
+          ),
+        ),
         child: InkWell(
           focusColor: const Color(0xFFEFEFEF),
           borderRadius: const BorderRadius.all(Radius.circular(50.0)),

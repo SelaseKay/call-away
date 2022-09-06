@@ -1,8 +1,10 @@
 import 'package:call_away/provider/auth_provider.dart';
 import 'package:call_away/services/auth_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
+import 'package:call_away/ui/components/icon_button.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
 import 'package:call_away/ui/screens/change_password_screen.dart';
+import 'package:call_away/ui/screens/edit_profile_screen.dart';
 import 'package:call_away/ui/screens/my_reports_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -79,12 +81,21 @@ class ProfileScreen extends ConsumerWidget {
                         top: 8.0,
                       ),
                       child: AppBarSection(
-                        title: "Profile",
-                        rPositionIcon: Icons.edit,
-                        onRPositionIconPressed: () {
-                          //On Right Position Icon Pressed
-                        },
-                      ),
+                          title: "Profile",
+                          action: MyIconButton(
+                            icon: Icons.edit,
+                            iconColor: const Color(0xFFA1887F),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation, secondaryAnimatio) =>
+                                          EditProfileScreen(),
+                                ),
+                              );
+                            },
+                          )),
                     ),
                     Expanded(
                       child: Padding(
@@ -148,12 +159,13 @@ class ProfileScreen extends ConsumerWidget {
                               isArrowVisible: true,
                               isClickable: true,
                               onPressed: () => Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimatio) =>
-                                        const ChangePasswordScreen(),
-                                  )),
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation, secondaryAnimatio) =>
+                                          const ChangePasswordScreen(),
+                                ),
+                              ),
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             const SizedBox(

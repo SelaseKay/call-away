@@ -84,7 +84,7 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
                         child: AppBarSection(
                           title:
                               "Report#${(reportDetailsState as ReportDetailsStateSuccess).report.reportId.toString().substring(0, 8)}",
-                          isRightWidgetVisible: false,
+                          action: null,
                         ),
                       ),
                       Expanded(

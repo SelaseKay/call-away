@@ -34,6 +34,7 @@ class ProfileUpdateService extends StateNotifier<ProfileUpdateState> {
           .doc(user.uid)
           .update({
         "username": username,
+        "email": email,
       });
       state = ProfileUpdateStateSuccess("Profile Updated");
     } on FirebaseAuthException catch (e) {

@@ -22,7 +22,9 @@ class EditProfileScreen extends ConsumerWidget {
     final profileUpdateState = ref.watch(profileUpdateStateProvider);
 
     ref.listen(profileUpdateStateProvider, (previous, next) {
-      if (next is ProfileUpdateStateError) {
+      if (next is ProfileUpdateStateLoading) {
+        FocusScope.of(context).unfocus();
+      } else if (next is ProfileUpdateStateError) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.errorMessage),

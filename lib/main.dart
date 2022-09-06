@@ -63,13 +63,6 @@ class _MyAppState extends ConsumerState<MyApp> {
     });
   }
 
-  Widget _getStartUpPage() {
-    if (_userState == UserState.verified) {
-      return const HomeScreen(title: "Call Away");
-    }
-    return LoginScreen();
-  }
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -78,7 +71,11 @@ class _MyAppState extends ConsumerState<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => _getStartUpPage(),
+        '/': (context) => _userState == UserState.verified
+            ? const HomeScreen(
+                title: "Call Away",
+              )
+            : LoginScreen(),
         '/login': (context) => LoginScreen(),
         '/signUp': (context) => SignUpScreen(),
         '/addPhoneNumber': (context) => AddPhoneNumberScreen(),

@@ -14,6 +14,8 @@ class UserModel with _$UserModel {
       required String email,
       required String password,
       @Default("")
+      String profilePicUrl,
+      @Default("")
       String phone,
       @Default("")
       String phoneVerifiedAt}) = _UserModel;

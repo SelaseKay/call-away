@@ -24,6 +24,7 @@ mixin _$UserModel {
   String get username => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
+  String get profilePicUrl => throw _privateConstructorUsedError;
   String get phone => throw _privateConstructorUsedError;
   String get phoneVerifiedAt => throw _privateConstructorUsedError;
 
@@ -42,6 +43,7 @@ abstract class $UserModelCopyWith<$Res> {
       String username,
       String email,
       String password,
+      String profilePicUrl,
       String phone,
       String phoneVerifiedAt});
 }
@@ -60,6 +62,7 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
     Object? username = freezed,
     Object? email = freezed,
     Object? password = freezed,
+    Object? profilePicUrl = freezed,
     Object? phone = freezed,
     Object? phoneVerifiedAt = freezed,
   }) {
@@ -79,6 +82,10 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
       password: password == freezed
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
+              as String,
+      profilePicUrl: profilePicUrl == freezed
+          ? _value.profilePicUrl
+          : profilePicUrl // ignore: cast_nullable_to_non_nullable
               as String,
       phone: phone == freezed
           ? _value.phone
@@ -103,6 +110,7 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       String username,
       String email,
       String password,
+      String profilePicUrl,
       String phone,
       String phoneVerifiedAt});
 }
@@ -123,6 +131,7 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
     Object? username = freezed,
     Object? email = freezed,
     Object? password = freezed,
+    Object? profilePicUrl = freezed,
     Object? phone = freezed,
     Object? phoneVerifiedAt = freezed,
   }) {
@@ -142,6 +151,10 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
       password: password == freezed
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
+              as String,
+      profilePicUrl: profilePicUrl == freezed
+          ? _value.profilePicUrl
+          : profilePicUrl // ignore: cast_nullable_to_non_nullable
               as String,
       phone: phone == freezed
           ? _value.phone
@@ -163,6 +176,7 @@ class _$_UserModel implements _UserModel {
       required this.username,
       required this.email,
       required this.password,
+      this.profilePicUrl = "",
       this.phone = "",
       this.phoneVerifiedAt = ""});
 
@@ -179,6 +193,9 @@ class _$_UserModel implements _UserModel {
   final String password;
   @override
   @JsonKey()
+  final String profilePicUrl;
+  @override
+  @JsonKey()
   final String phone;
   @override
   @JsonKey()
@@ -186,7 +203,7 @@ class _$_UserModel implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(userId: $userId, username: $username, email: $email, password: $password, phone: $phone, phoneVerifiedAt: $phoneVerifiedAt)';
+    return 'UserModel(userId: $userId, username: $username, email: $email, password: $password, profilePicUrl: $profilePicUrl, phone: $phone, phoneVerifiedAt: $phoneVerifiedAt)';
   }
 
   @override
@@ -198,6 +215,8 @@ class _$_UserModel implements _UserModel {
             const DeepCollectionEquality().equals(other.username, username) &&
             const DeepCollectionEquality().equals(other.email, email) &&
             const DeepCollectionEquality().equals(other.password, password) &&
+            const DeepCollectionEquality()
+                .equals(other.profilePicUrl, profilePicUrl) &&
             const DeepCollectionEquality().equals(other.phone, phone) &&
             const DeepCollectionEquality()
                 .equals(other.phoneVerifiedAt, phoneVerifiedAt));
@@ -211,6 +230,7 @@ class _$_UserModel implements _UserModel {
       const DeepCollectionEquality().hash(username),
       const DeepCollectionEquality().hash(email),
       const DeepCollectionEquality().hash(password),
+      const DeepCollectionEquality().hash(profilePicUrl),
       const DeepCollectionEquality().hash(phone),
       const DeepCollectionEquality().hash(phoneVerifiedAt));
 
@@ -233,6 +253,7 @@ abstract class _UserModel implements UserModel {
       required final String username,
       required final String email,
       required final String password,
+      final String profilePicUrl,
       final String phone,
       final String phoneVerifiedAt}) = _$_UserModel;
 
@@ -247,6 +268,8 @@ abstract class _UserModel implements UserModel {
   String get email;
   @override
   String get password;
+  @override
+  String get profilePicUrl;
   @override
   String get phone;
   @override

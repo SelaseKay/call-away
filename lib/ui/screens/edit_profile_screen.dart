@@ -1,3 +1,4 @@
+import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/profile_update_state_provider.dart';
 import 'package:call_away/services/profile_update_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
@@ -9,6 +10,7 @@ import 'package:call_away/utils/user_input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends ConsumerWidget {
   EditProfileScreen({Key? key}) : super(key: key);
@@ -128,13 +130,21 @@ class EditProfileScreen extends ConsumerWidget {
                                 width: 1,
                               ),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 final username = _nameController.text.trim();
                                 final email = _emailController.text.trim();
-                                ref
+
+                                final profilePic = ref
+                                    .read(cameraImageProvider.notifier)
+                                    .state;
+
+                                await ref
                                     .read(profileUpdateStateProvider.notifier)
                                     .updateUserNameEmail(username, email);
+                                await ref
+                                    .read(profileUpdateStateProvider.notifier)
+                                    .updateProfilePic(profilePic!);
                               }
                             },
                             child: Text(
@@ -160,6 +170,10 @@ class EditProfileScreen extends ConsumerWidget {
                               ),
                               child: UserAvatar(
                                 onPressed: () => _showModalBottomSheet(context),
+                                profilePicUrl: profileUpdateState
+                                        is ProfileUpdateStateSuccess
+                                    ? profileUpdateState.user.profilePicUrl
+                                    : "",
                               ),
                             ),
                             const SizedBox(
@@ -206,11 +220,18 @@ class EditProfileScreen extends ConsumerWidget {
   }
 }
 
-class _MyModalBottomSheet extends StatelessWidget {
+class _MyModalBottomSheet extends ConsumerWidget {
   const _MyModalBottomSheet({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    ref.listen<XFile?>(cameraImageProvider, (previous, next) {
+      if (next != null) {
+        Navigator.pop(context);
+      }
+    });
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
@@ -235,7 +256,11 @@ class _MyModalBottomSheet extends StatelessWidget {
             children: [
               _ModalBottomSheetItem(
                 text: "Camera",
-                onPressed: () {},
+                onPressed: () async {
+                  await ref
+                      .read(cameraImageProvider.notifier)
+                      .getImageFromCamera();
+                },
                 child: const MyIconButton(
                   icon: Icons.photo_camera,
                   iconColor: Color(0xFFE48938),
@@ -249,7 +274,12 @@ class _MyModalBottomSheet extends StatelessWidget {
               ),
               _ModalBottomSheetItem(
                 text: "Gallery",
-                onPressed: () {},
+                onPressed: () async {
+                  print("gallery item clicked");
+                  await ref
+                      .read(cameraImageProvider.notifier)
+                      .getImageFromGallery();
+                },
                 child: const MyIconButton(
                   icon: Icons.image,
                   iconColor: Color(0xFFE48938),
@@ -281,20 +311,23 @@ class _ModalBottomSheetItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        child,
-        const SizedBox(
-          height: 4.0,
-        ),
-        Text(
-          text,
-          style: TextStyle(
-            color: const Color(0xFF111111).withOpacity(0.50),
-            fontSize: 14.0,
+    return InkWell(
+      onTap: onPressed,
+      child: Column(
+        children: [
+          child,
+          const SizedBox(
+            height: 4.0,
           ),
-        ),
-      ],
+          Text(
+            text,
+            style: TextStyle(
+              color: const Color(0xFF111111).withOpacity(0.50),
+              fontSize: 14.0,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

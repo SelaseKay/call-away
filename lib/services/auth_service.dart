@@ -14,9 +14,10 @@ class AuthenticationStateError extends AuthenticationState {
 }
 
 class AuthenticationStateSuccess extends AuthenticationState {
-  AuthenticationStateSuccess({this.isUserVerified = false});
+  AuthenticationStateSuccess({this.isUserVerified = false, this.user});
 
   final bool isUserVerified;
+  final UserModel? user;
 }
 
 class AuthenticationStateLoading extends AuthenticationState {}
@@ -74,6 +75,24 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
           "Login message: ${(state as AuthenticationStateError).errorMessage}");
       return Future.error(e.message!);
     }
+  }
+
+  Future<void> getCurrentUserModel() async {
+    state = AuthenticationStateLoading();
+
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .get()
+        .then((value) {
+      final userModel = UserModel.fromJson(value.data()!);
+
+      state = AuthenticationStateSuccess(isUserVerified: true, user: userModel);
+    }).catchError((e) {
+      state = AuthenticationStateError(e.toString());
+    });
   }
 
   Future<void> logoutUser() async {

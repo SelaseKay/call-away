@@ -29,6 +29,8 @@ class ProfileUpdateStateError extends ProfileUpdateState {
 class ProfileUpdateService extends StateNotifier<ProfileUpdateState> {
   ProfileUpdateService() : super(ProfileUpdateStateInitial());
 
+  late UserModel _user;
+
   Future<void> updateUserNameEmail(String username, String email) async {
     state = ProfileUpdateStateLoading();
 
@@ -59,15 +61,15 @@ class ProfileUpdateService extends StateNotifier<ProfileUpdateState> {
   Future<void> updateProfilePic(XFile? image) async {
     state = ProfileUpdateStateLoading();
 
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+
     final storageRef = FirebaseStorage.instance.ref();
 
-    final profilePicRef = storageRef.child(image!.name);
+    final profilePicRef = storageRef.child("profile$userId.jpg");
 
-    await profilePicRef.putFile(File(image.path));
+    await profilePicRef.putFile(File(image!.path));
 
     final profilePicUrl = await profilePicRef.getDownloadURL();
-
-    final userId = FirebaseAuth.instance.currentUser!.uid;
 
     FirebaseFirestore.instance.collection("users").doc(userId).update({
       "profilePicUrl": profilePicUrl,
@@ -76,11 +78,17 @@ class ProfileUpdateService extends StateNotifier<ProfileUpdateState> {
           .collection("users")
           .doc(userId)
           .get();
+      _user = UserModel.fromJson(userDoc.data()!);
+      print("User model: $_user");
       state = ProfileUpdateStateSuccess(
-          successMessage: "Profile picture updated.",
-          user: UserModel.fromJson(userDoc.data()!));
+          successMessage: "Profile picture updated.", user: _user);
     }).catchError((e) {
       state = ProfileUpdateStateError(e.toString());
     });
+  }
+
+  void notifyProfileUpdateCompleted() {
+    state = ProfileUpdateStateSuccess(
+        successMessage: "Profile picture updated.", user: _user);
   }
 }

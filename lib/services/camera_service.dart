@@ -4,23 +4,27 @@ import 'package:image_picker/image_picker.dart';
 class CameraService extends StateNotifier<XFile?> {
   CameraService() : super(null);
 
-  Future<void> getImageFromCamera() async {
+  Future<XFile?> getImageFromCamera() async {
     final ImagePicker picker = ImagePicker();
+    XFile? image;
     try {
-      XFile? image = await picker.pickImage(source: ImageSource.camera);
+      image = await picker.pickImage(source: ImageSource.camera);
       state = image;
     } catch (e) {
       print("Image picker exception: ${e.toString()}");
     }
+    return image!;
   }
 
-  Future<void> getImageFromGallery() async{
-     final ImagePicker picker = ImagePicker();
+  Future<XFile?> getImageFromGallery() async {
+    final ImagePicker picker = ImagePicker();
+    XFile? image;
     try {
-      XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      image = await picker.pickImage(source: ImageSource.gallery);
       state = image;
     } catch (e) {
       print("Image picker exception: ${e.toString()}");
-    } 
+    }
+    return image!;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:call_away/model/user.dart';
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/profile_update_state_provider.dart';
 import 'package:call_away/services/profile_update_service.dart';
@@ -12,35 +13,31 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
-class EditProfileScreen extends ConsumerWidget {
-  EditProfileScreen({Key? key}) : super(key: key);
+class EditProfileScreen extends ConsumerStatefulWidget {
+  const EditProfileScreen({Key? key, this.curentUser}) : super(key: key);
 
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
+  final UserModel? curentUser;
+
+  @override
+  ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
+  late TextEditingController _nameController;
+  late TextEditingController _emailController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _nameController = TextEditingController(text: widget.curentUser!.username);
+    _emailController = TextEditingController(text: widget.curentUser!.email);
+  }
 
   final _formKey = GlobalKey<FormState>();
 
-  _showModalBottomSheet(BuildContext context) {
-    showModalBottomSheet<void>(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(
-            8.0,
-          ),
-          topRight: Radius.circular(
-            8.0,
-          ),
-        ),
-      ),
-      context: context,
-      builder: (BuildContext context) {
-        return const _MyModalBottomSheet();
-      },
-    );
-  }
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final profileUpdateState = ref.watch(profileUpdateStateProvider);
 
     ref.listen(profileUpdateStateProvider, (previous, next) {
@@ -135,16 +132,12 @@ class EditProfileScreen extends ConsumerWidget {
                                 final username = _nameController.text.trim();
                                 final email = _emailController.text.trim();
 
-                                final profilePic = ref
-                                    .read(cameraImageProvider.notifier)
-                                    .state;
-
                                 await ref
                                     .read(profileUpdateStateProvider.notifier)
                                     .updateUserNameEmail(username, email);
-                                await ref
-                                    .read(profileUpdateStateProvider.notifier)
-                                    .updateProfilePic(profilePic!);
+                                // await ref
+                                //     .read(profileUpdateStateProvider.notifier)
+                                //     .updateProfilePic(profilePic!);
                               }
                             },
                             child: Text(
@@ -164,22 +157,6 @@ class EditProfileScreen extends ConsumerWidget {
                         key: _formKey,
                         child: ListView(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                top: 32.0,
-                              ),
-                              child: UserAvatar(
-                                onPressed: () => _showModalBottomSheet(context),
-                                profilePicUrl: profileUpdateState
-                                        is ProfileUpdateStateSuccess
-                                    ? profileUpdateState.user.profilePicUrl
-                                    : "",
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20.0,
-                            ),
-                            const Divider(),
                             const SizedBox(
                               height: 16.0,
                             ),
@@ -225,7 +202,6 @@ class _MyModalBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     ref.listen<XFile?>(cameraImageProvider, (previous, next) {
       if (next != null) {
         Navigator.pop(context);

@@ -1,4 +1,6 @@
 import 'package:call_away/model/user.dart';
+import 'package:call_away/provider/user_profile_pic_state_provider.dart';
+import 'package:call_away/services/user_pic_update_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -78,6 +80,7 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
   }
 
   Future<void> getCurrentUserModel() async {
+    print("getCurrentUserModel.....");
     state = AuthenticationStateLoading();
 
     final userId = FirebaseAuth.instance.currentUser!.uid;

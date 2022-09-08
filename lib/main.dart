@@ -1,5 +1,4 @@
 import 'package:call_away/model/user.dart';
-import 'package:call_away/provider/login_state_provider.dart';
 import 'package:call_away/ui/screens/add_phone_number_screen.dart';
 import 'package:call_away/ui/screens/home_screen.dart';
 import 'package:call_away/ui/screens/login_screen.dart';

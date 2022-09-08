@@ -1,6 +1,7 @@
 import 'package:call_away/provider/auth_provider.dart';
 import 'package:call_away/provider/camera_image_provider.dart';
-import 'package:call_away/provider/profile_update_state_provider.dart';
+import 'package:call_away/provider/current_user_provider.dart';
+import 'package:call_away/provider/user_profile_pic_state_provider.dart';
 import 'package:call_away/services/auth_service.dart';
 import 'package:call_away/services/profile_update_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
@@ -25,9 +26,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     _getCurrentUser();
   }
 
@@ -39,7 +38,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
 
-    final profileUpdateState = ref.watch(profileUpdateStateProvider);
+    final userProfilePicState = ref.watch(userProfilPicStateProvider);
+
+    final currentUser = ref.watch(currentUserProvider);
+
+
+    print("Authentication state: $authState");
 
     ref.listen(authProvider, (previous, next) {
       if (next is AuthenticationStateSuccess) {
@@ -121,10 +125,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                         pageBuilder: (context, animation,
                                                 secondaryAnimatio) =>
                                             EditProfileScreen(
-                                                curentUser: authState
-                                                        is AuthenticationStateSuccess
-                                                    ? authState.user
-                                                    : null),
+                                          curentUser: authState
+                                                  is AuthenticationStateSuccess
+                                              ? authState.user
+                                              : null,
+                                        ),
                                       ),
                                     );
                                   },
@@ -212,7 +217,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                       context,
                                       PageRouteBuilder(
                                         pageBuilder: (context, animation,
-                                                secondaryAnimatio) =>
+                                                secondaryAnimation) =>
                                             const ChangePasswordScreen(),
                                       ),
                                     ),
@@ -238,7 +243,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           )
                         ],
                       ),
-                    ),
+                    )
             ],
           ),
         ),
@@ -277,9 +282,7 @@ class _ProfileHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileUpdateState = ref.watch(profileUpdateStateProvider);
-
-    ref.listen(profileUpdateStateProvider, (previous, next) {
+    ref.listen(userProfilPicStateProvider, (previous, next) {
       if (next is ProfileUpdateStateLoading) {
         FocusScope.of(context).unfocus();
       } else if (next is ProfileUpdateStateError) {
@@ -297,24 +300,13 @@ class _ProfileHeader extends ConsumerWidget {
       }
     });
 
-    _getUserProfilePicUrl() {
-      if (url.isEmpty) {
-        return false;
-      }
-      return true;
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Stack(
           children: [
             UserAvatar(
-                profilePicUrl: _getUserProfilePicUrl()
-                    ? url
-                    : (profileUpdateState is ProfileUpdateStateSuccess
-                        ? profileUpdateState.user.profilePicUrl
-                        : ""),
+                profilePicUrl: url,
                 onPressed: () {
                   _showModalBottomSheet(context);
                 }),
@@ -464,7 +456,7 @@ class _MyModalBottomSheet extends ConsumerWidget {
                       .read(cameraImageProvider.notifier)
                       .getImageFromCamera();
                   await ref
-                      .read(profileUpdateStateProvider.notifier)
+                      .read(userProfilPicStateProvider.notifier)
                       .updateProfilePic(profileImage);
                 },
                 child: const MyIconButton(
@@ -486,7 +478,7 @@ class _MyModalBottomSheet extends ConsumerWidget {
                       .read(cameraImageProvider.notifier)
                       .getImageFromGallery();
                   await ref
-                      .read(profileUpdateStateProvider.notifier)
+                      .read(userProfilPicStateProvider.notifier)
                       .updateProfilePic(profileImage);
                 },
                 child: const MyIconButton(

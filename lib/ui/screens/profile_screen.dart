@@ -44,7 +44,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       if (next is AuthenticationStateSuccess) {
         if (next.user == null) {
           Navigator.pushNamedAndRemoveUntil(
-              context, "/login", (route) => false);
+              context, "/", (route) => false);
         }
       } else if (next is AuthenticationStateError) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -227,6 +227,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                           ref
                                               .read(authProvider.notifier)
                                               .logoutUser();
+                                          
                                         }),
                                       )
                                     ],

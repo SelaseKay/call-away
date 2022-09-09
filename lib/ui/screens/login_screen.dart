@@ -1,4 +1,5 @@
 import 'package:call_away/provider/auth_provider.dart';
+import 'package:call_away/provider/user_auth_state_provider.dart';
 import 'package:call_away/services/auth_service.dart';
 import 'package:call_away/ui/components/brand_logo.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
@@ -19,6 +20,9 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    final foo = ref.read(userStreamProvider);
+
     final authState = ref.watch(authProvider);
 
     ref.listen(authProvider, (previous, next) {
@@ -95,6 +99,9 @@ class LoginScreen extends ConsumerWidget {
                             text: "Login",
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
+                                ref.read(userStreamProvider.stream).listen((event) { }).cancel();
+                                
+                                
                                 await ref.read(authProvider.notifier).loginUser(
                                     _emailController.text.trim(),
                                     _passwordController.text.trim());

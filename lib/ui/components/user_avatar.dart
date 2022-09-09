@@ -131,9 +131,17 @@ class _ProfileImage extends StatelessWidget {
                 width: 108.0,
                 height: 108.0,
                 child: userProfilePicState is UserProfilePictureStateLoading
-                    ? _ProfilePicturePlaceHolder(
-                        placeholderImage: placeholderImage!,
-                      )
+                    ? (placeholderImage != null
+                        ? _ProfilePicturePlaceHolder(
+                            placeholderImage: placeholderImage!,
+                          )
+                        : const SizedBox(
+                            height: 108,
+                            width: 108.0,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ))
                     : CachedNetworkImage(
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(

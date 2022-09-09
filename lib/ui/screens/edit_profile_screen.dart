@@ -135,9 +135,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                 await ref
                                     .read(profileUpdateStateProvider.notifier)
                                     .updateUserNameEmail(username, email);
-                                // await ref
-                                //     .read(profileUpdateStateProvider.notifier)
-                                //     .updateProfilePic(profilePic!);
                               }
                             },
                             child: Text(

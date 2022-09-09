@@ -124,10 +124,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                             pageBuilder: (context, animation,
                                                     secondaryAnimatio) =>
                                                 EditProfileScreen(
-                                              curentUser: authState
-                                                      is AuthenticationStateSuccess
-                                                  ? authState.user
-                                                  : null,
+                                              curentUser: user,
                                             ),
                                           ),
                                         );

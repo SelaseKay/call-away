@@ -1,3 +1,4 @@
+import 'package:call_away/model/user.dart';
 import 'package:call_away/provider/auth_provider.dart';
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/current_user_provider.dart';
@@ -38,10 +39,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
 
-    final userProfilePicState = ref.watch(userProfilPicStateProvider);
-
-    final currentUser = ref.watch(currentUserProvider);
-
+    final AsyncValue<UserModel> currentUser = ref.watch(currentUserProvider);
 
     print("Authentication state: $authState");
 
@@ -61,6 +59,195 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         );
       }
     });
+
+    return currentUser.when(
+      loading: () => const CircularProgressIndicator(),
+      error: (err, stack) => Text('Error: $err'),
+      data: (user) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            primaryColor: const Color(0xFFA1887F),
+            dividerTheme: const DividerThemeData(
+              thickness: 1.5,
+              color: Color(0xFFDDD3D0),
+            ),
+            outlinedButtonTheme: OutlinedButtonThemeData(
+                style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.only(
+                left: 0.0,
+                top: 4.0,
+                bottom: 4.0,
+                right: 0.0,
+              ),
+              side: const BorderSide(
+                color: Color(0xFFEF5350),
+              ),
+            )),
+            textTheme: const TextTheme(
+              headline6: TextStyle(
+                color: Color(0xFFA1887F),
+              ),
+              subtitle1: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF252525),
+              ),
+              subtitle2: TextStyle(
+                color: Color(0xFF999999),
+              ),
+              bodyText1: TextStyle(
+                color: Color(0xFFD9D9D9),
+              ),
+            ),
+          ),
+          child: Scaffold(
+            body: SafeArea(
+              child: Stack(
+                children: [
+                  authState is AuthenticationStateLoading
+                      ? const LoadingScreen()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                          ),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 8.0,
+                                ),
+                                child: AppBarSection(
+                                    title: "Profile",
+                                    action: MyIconButton(
+                                      icon: Icons.edit,
+                                      iconColor: const Color(0xFFA1887F),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (context, animation,
+                                                    secondaryAnimatio) =>
+                                                EditProfileScreen(
+                                              curentUser: authState
+                                                      is AuthenticationStateSuccess
+                                                  ? authState.user
+                                                  : null,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    )),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 40.0,
+                                  ),
+                                  child: ListView(
+                                    children: [
+                                      _ProfileHeader(
+                                        userName: user.username,
+                                        url: user.profilePicUrl,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(
+                                          top: 40.0,
+                                        ),
+                                        child: Divider(),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 24.0,
+                                        ),
+                                        child: _ProfileItem(
+                                          asset: "assets/images/mail.svg",
+                                          itemText: user.email,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 16.0,
+                                      ),
+                                      _ProfileItem(
+                                        asset: "assets/images/phone.svg",
+                                        itemText: user.phone,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                      const SizedBox(
+                                        height: 20.0,
+                                      ),
+                                      const Divider(),
+                                      const SizedBox(
+                                        height: 16.0,
+                                      ),
+                                      _ProfileItem(
+                                        asset:
+                                            "assets/images/report_history.svg",
+                                        itemText: "My Reports",
+                                        isArrowVisible: true,
+                                        isClickable: true,
+                                        onPressed: () => Navigator.push(
+                                            context,
+                                            PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimatio) =>
+                                                  const MyReportsScreen(),
+                                            )),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                      const SizedBox(
+                                        height: 16.0,
+                                      ),
+                                      _ProfileItem(
+                                        asset:
+                                            "assets/images/change_password.svg",
+                                        itemText: "Change Password",
+                                        isArrowVisible: true,
+                                        isClickable: true,
+                                        onPressed: () => Navigator.push(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (context, animation,
+                                                    secondaryAnimation) =>
+                                                const ChangePasswordScreen(),
+                                          ),
+                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                      const SizedBox(
+                                        height: 8.0,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 20.0,
+                                        ),
+                                        child: _LogoutButton(onPressed: () {
+                                          ref
+                                              .read(authProvider.notifier)
+                                              .logoutUser();
+                                        }),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
 
     return Theme(
       data: Theme.of(context).copyWith(

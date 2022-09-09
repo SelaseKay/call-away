@@ -8,17 +8,14 @@ part 'report.g.dart';
 
 @freezed
 class Report with _$Report {
-  
   const factory Report(
-      {String? reportId,
-      @Default("")
-      String imageUrl,
+      {String? userId,
+      String? reportId,
+      @Default("") String imageUrl,
       required String location,
       required String description,
       required ProblemType problemType,
-      @Default([null, null, null, null])
-      List<ReportStatus?> status}) = _Report;
+      @Default([null, null, null, null]) List<ReportStatus?> status}) = _Report;
 
   factory Report.fromJson(Map<String, Object?> json) => _$ReportFromJson(json);
-
 }

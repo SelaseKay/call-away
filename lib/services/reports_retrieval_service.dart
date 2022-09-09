@@ -1,6 +1,5 @@
 import 'package:call_away/model/report.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class ReportsState {}
@@ -26,14 +25,12 @@ class ReportRetrievalService extends StateNotifier<ReportsState> {
 
   Future<void> getMyReports() async {
     print("getMyReports called.");
-    final user = FirebaseAuth.instance.currentUser;
 
     state = ReportsStateLoading();
 
     FirebaseFirestore.instance
-        .collection("users")
-        .doc(user!.uid)
         .collection("reports")
+        .orderBy("status", descending: true)
         .get()
         .then((value) {
       final jsonReports = value.docs.map((doc) => doc.data()).toList();
@@ -41,7 +38,7 @@ class ReportRetrievalService extends StateNotifier<ReportsState> {
       final reports =
           jsonReports.map((report) => Report.fromJson(report)).toList();
 
-      state = ReportsStateSuccess(reports.reversed.toList());
+      state = ReportsStateSuccess(reports);
     }).catchError((e) {
       state = ReportsStateError(e.toString());
     });

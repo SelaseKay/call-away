@@ -20,6 +20,7 @@ Report _$ReportFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Report {
+  String? get userId => throw _privateConstructorUsedError;
   String? get reportId => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
   String get location => throw _privateConstructorUsedError;
@@ -37,7 +38,8 @@ abstract class $ReportCopyWith<$Res> {
   factory $ReportCopyWith(Report value, $Res Function(Report) then) =
       _$ReportCopyWithImpl<$Res>;
   $Res call(
-      {String? reportId,
+      {String? userId,
+      String? reportId,
       String imageUrl,
       String location,
       String description,
@@ -55,6 +57,7 @@ class _$ReportCopyWithImpl<$Res> implements $ReportCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? userId = freezed,
     Object? reportId = freezed,
     Object? imageUrl = freezed,
     Object? location = freezed,
@@ -63,6 +66,10 @@ class _$ReportCopyWithImpl<$Res> implements $ReportCopyWith<$Res> {
     Object? status = freezed,
   }) {
     return _then(_value.copyWith(
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
       reportId: reportId == freezed
           ? _value.reportId
           : reportId // ignore: cast_nullable_to_non_nullable
@@ -97,7 +104,8 @@ abstract class _$$_ReportCopyWith<$Res> implements $ReportCopyWith<$Res> {
       __$$_ReportCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? reportId,
+      {String? userId,
+      String? reportId,
       String imageUrl,
       String location,
       String description,
@@ -116,6 +124,7 @@ class __$$_ReportCopyWithImpl<$Res> extends _$ReportCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? userId = freezed,
     Object? reportId = freezed,
     Object? imageUrl = freezed,
     Object? location = freezed,
@@ -124,6 +133,10 @@ class __$$_ReportCopyWithImpl<$Res> extends _$ReportCopyWithImpl<$Res>
     Object? status = freezed,
   }) {
     return _then(_$_Report(
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
       reportId: reportId == freezed
           ? _value.reportId
           : reportId // ignore: cast_nullable_to_non_nullable
@@ -156,7 +169,8 @@ class __$$_ReportCopyWithImpl<$Res> extends _$ReportCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Report implements _Report {
   const _$_Report(
-      {this.reportId,
+      {this.userId,
+      this.reportId,
       this.imageUrl = "",
       required this.location,
       required this.description,
@@ -167,6 +181,8 @@ class _$_Report implements _Report {
   factory _$_Report.fromJson(Map<String, dynamic> json) =>
       _$$_ReportFromJson(json);
 
+  @override
+  final String? userId;
   @override
   final String? reportId;
   @override
@@ -188,7 +204,7 @@ class _$_Report implements _Report {
 
   @override
   String toString() {
-    return 'Report(reportId: $reportId, imageUrl: $imageUrl, location: $location, description: $description, problemType: $problemType, status: $status)';
+    return 'Report(userId: $userId, reportId: $reportId, imageUrl: $imageUrl, location: $location, description: $description, problemType: $problemType, status: $status)';
   }
 
   @override
@@ -196,6 +212,7 @@ class _$_Report implements _Report {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Report &&
+            const DeepCollectionEquality().equals(other.userId, userId) &&
             const DeepCollectionEquality().equals(other.reportId, reportId) &&
             const DeepCollectionEquality().equals(other.imageUrl, imageUrl) &&
             const DeepCollectionEquality().equals(other.location, location) &&
@@ -210,6 +227,7 @@ class _$_Report implements _Report {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(userId),
       const DeepCollectionEquality().hash(reportId),
       const DeepCollectionEquality().hash(imageUrl),
       const DeepCollectionEquality().hash(location),
@@ -232,7 +250,8 @@ class _$_Report implements _Report {
 
 abstract class _Report implements Report {
   const factory _Report(
-      {final String? reportId,
+      {final String? userId,
+      final String? reportId,
       final String imageUrl,
       required final String location,
       required final String description,
@@ -241,6 +260,8 @@ abstract class _Report implements Report {
 
   factory _Report.fromJson(Map<String, dynamic> json) = _$_Report.fromJson;
 
+  @override
+  String? get userId;
   @override
   String? get reportId;
   @override

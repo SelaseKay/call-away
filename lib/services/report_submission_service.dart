@@ -41,29 +41,39 @@ class ReportSubmissionService extends StateNotifier<ReportSubmissionState> {
 
     final imageUrl = await _uploadReportImage(reportImage!);
 
-    final reportId = FirebaseFirestore.instance
-        .collection("users")
-        .doc(userId)
-        .collection("reports")
-        .doc()
-        .id;
+    // final reportId = FirebaseFirestore.instance
+    //     .collection("users")
+    //     .doc(userId);
+    final reportId = FirebaseFirestore.instance.collection("reports").doc().id;
 
     FirebaseFirestore.instance
-        .collection("users")
-        .doc(userId)
         .collection("reports")
         .doc(reportId)
         .set(report
-            .copyWith(
-              reportId: reportId,
-              imageUrl: imageUrl,
-            )
+            .copyWith(reportId: reportId, imageUrl: imageUrl, userId: userId)
             .toJson())
         .then((value) {
       state = ReportSubmissionStateSuccess("Report submitted successfully");
     }).catchError((e) {
       state = ReportSubmissionStateError(e.toString());
     });
+
+    // FirebaseFirestore.instance
+    //     .collection("users")
+    //     .doc(userId)
+    //     .collection("reports")
+    //     .doc(reportId)
+    //     .set(report
+    //         .copyWith(
+    //           reportId: reportId,
+    //           imageUrl: imageUrl,
+    //         )
+    //         .toJson())
+    //     .then((value) {
+    //   state = ReportSubmissionStateSuccess("Report submitted successfully");
+    // }).catchError((e) {
+    //   state = ReportSubmissionStateError(e.toString());
+    // });
   }
 
   Future<String> _uploadReportImage(XFile image) async {

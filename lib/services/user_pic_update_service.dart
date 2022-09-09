@@ -57,7 +57,6 @@ class UserPictureUpdateService extends StateNotifier<UserProfilePictureState> {
       print("User model: $user");
       state = UserProfilePictureStateSuccess(
           successMessage: "Profile picture updated.", user: user);
-      await ref.read(authProvider.notifier).getCurrentUserModel();
     }).catchError((e) {
       state = UserProfilePictureStateError(e.toString());
     });

@@ -1,4 +1,5 @@
 import 'package:call_away/provider/user_state_provider.dart';
+import 'package:call_away/ui/components/loading_animator.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
 import 'package:call_away/ui/screens/add_phone_number_screen.dart';
 import 'package:call_away/ui/screens/home_screen.dart';
@@ -35,28 +36,37 @@ class _MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<UserState> user = ref.watch(userStateProvider);
+    return MaterialApp(
+      title: "Flutter Demo",
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          primaryColor: const Color(0xFFCE7A63),
+          textTheme:
+              const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))),
+        home: const LoadingAnimator(),
+    );
+    // final AsyncValue<UserState> user = ref.watch(userStateProvider);
 
-    return user.when(
-        loading: () => const LoadingScreen(),
-        error: (error, stackTrace) => Text("Error: $error"),
-        data: (userState) {
-          return MaterialApp(
-            title: 'Flutter Demo',
-            debugShowCheckedModeBanner: false,
-            initialRoute: userState == UserState.verified ? '/home' : '/',
-            routes: {
-              '/': (context) => LoginScreen(),
-              '/signUp': (context) => SignUpScreen(),
-              '/addPhoneNumber': (context) => AddPhoneNumberScreen(),
-              '/addPhoneNumber/verifyOtp': (context) => OtpVerificationScreen(),
-              '/home': (context) => const HomeScreen(title: "Call Away"),
-            },
-            theme: ThemeData(
-                primaryColor: const Color(0xFFCE7A63),
-                textTheme: const TextTheme(
-                    headline6: TextStyle(color: Color(0xFFA1887F)))),
-          );
-        });
+    // return user.when(
+    //     loading: () => const LoadingScreen(),
+    //     error: (error, stackTrace) => Text("Error: $error"),
+    //     data: (userState) {
+    //       return MaterialApp(
+    //         title: 'Flutter Demo',
+    //         debugShowCheckedModeBanner: false,
+    //         initialRoute: userState == UserState.verified ? '/home' : '/',
+    //         routes: {
+    //           '/': (context) => LoginScreen(),
+    //           '/signUp': (context) => SignUpScreen(),
+    //           '/addPhoneNumber': (context) => AddPhoneNumberScreen(),
+    //           '/addPhoneNumber/verifyOtp': (context) => OtpVerificationScreen(),
+    //           '/home': (context) => const HomeScreen(title: "Call Away"),
+    //         },
+    //         theme: ThemeData(
+    //             primaryColor: const Color(0xFFCE7A63),
+    //             textTheme: const TextTheme(
+    //                 headline6: TextStyle(color: Color(0xFFA1887F)))),
+    //       );
+    //     });
   }
 }

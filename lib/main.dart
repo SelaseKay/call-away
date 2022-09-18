@@ -4,6 +4,7 @@ import 'package:call_away/ui/screens/add_phone_number_screen.dart';
 import 'package:call_away/ui/screens/home_screen.dart';
 import 'package:call_away/ui/screens/login_screen.dart';
 import 'package:call_away/ui/screens/otp_verification-screen.dart';
+import 'package:call_away/ui/screens/profile_screen.dart';
 import 'package:call_away/ui/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -52,6 +53,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               '/addPhoneNumber': (context) => AddPhoneNumberScreen(),
               '/addPhoneNumber/verifyOtp': (context) => OtpVerificationScreen(),
               'home': (context) => const HomeScreen(title: "Call Away"),
+              'home/profile': (context) => const ProfileScreen(),
             },
             theme: ThemeData(
                 primaryColor: const Color(0xFFCE7A63),

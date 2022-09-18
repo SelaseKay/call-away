@@ -25,10 +25,6 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +36,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     print("Authentication state: $authState");
 
+
     ref.listen(authProvider, (previous, next) {
       if (next is AuthenticationStateSuccess) {
         if (next.user == null) {
-          Navigator.pushNamedAndRemoveUntil(
-              context, "/", (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
         }
       } else if (next is AuthenticationStateError) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -59,7 +55,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return currentUser.when(
       loading: () => const LoadingScreen(),
-      error: (err, stack) => Text('Error: $err'),
+      error: (err, stack) {
+        return Text('Error: $err');
+      },
       data: (user) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -209,7 +207,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                           PageRouteBuilder(
                                             pageBuilder: (context, animation,
                                                     secondaryAnimation) =>
-                                                 ChangePasswordScreen(),
+                                                ChangePasswordScreen(),
                                           ),
                                         ),
                                         style: Theme.of(context)
@@ -227,7 +225,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                           ref
                                               .read(authProvider.notifier)
                                               .logoutUser();
-                                          
                                         }),
                                       )
                                     ],

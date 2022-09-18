@@ -128,14 +128,15 @@ class _TopSection extends StatelessWidget {
               _IconButton(
                 assetName: 'assets/images/profile.svg',
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        // transitionDuration:
-                        //     const Duration(milliseconds: 550),
-                        pageBuilder: (context, animation, secondaryAnimatio) =>
-                            const ProfileScreen(),
-                      ));
+                  Navigator.pushNamed(context, "home/profile");
+                  // Navigator.push(
+                  //     context,
+                  //     PageRouteBuilder(
+                  //       // transitionDuration:
+                  //       //     const Duration(milliseconds: 550),
+                  //       pageBuilder: (context, animation, secondaryAnimatio) =>
+                  //           const ProfileScreen(),
+                  //     ));
                 },
               ),
             ],

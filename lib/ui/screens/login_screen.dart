@@ -47,6 +47,8 @@ class LoginScreen extends ConsumerWidget {
         FocusScope.of(context).unfocus();
       }
     });
+
+    
     return Theme(
       data: Theme.of(context).copyWith(
           primaryColor: const Color(0xFFCE7A63),

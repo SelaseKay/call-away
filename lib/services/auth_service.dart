@@ -1,6 +1,4 @@
 import 'package:call_away/model/user.dart';
-import 'package:call_away/provider/user_profile_pic_state_provider.dart';
-import 'package:call_away/services/user_pic_update_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -79,22 +77,52 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
     }
   }
 
-  Future<void> getCurrentUserModel() async {
-    print("getCurrentUserModel.....");
+  // Future<void> getCurrentUserModel() async {
+  //   print("getCurrentUserModel.....");
+  //   state = AuthenticationStateLoading();
+
+  //   final userId = FirebaseAuth.instance.currentUser!.uid;
+
+  //   FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc(userId)
+  //       .get()
+  //       .then((value) {
+  //     final userModel = UserModel.fromJson(value.data()!);
+
+  //     state = AuthenticationStateSuccess(isUserVerified: true, user: userModel);
+  //   }).catchError((e) {
+  //     state = AuthenticationStateError(e.toString());
+  //   });
+  // }
+
+  Future<void> changePassword(
+      String currentPassword, String newPassword) async {
     state = AuthenticationStateLoading();
 
-    final userId = FirebaseAuth.instance.currentUser!.uid;
+    final user = FirebaseAuth.instance.currentUser;
 
-    FirebaseFirestore.instance
+    final userDoc = await FirebaseFirestore.instance
         .collection("users")
-        .doc(userId)
-        .get()
-        .then((value) {
-      final userModel = UserModel.fromJson(value.data()!);
+        .doc(user!.uid)
+        .get();
 
-      state = AuthenticationStateSuccess(isUserVerified: true, user: userModel);
-    }).catchError((e) {
-      state = AuthenticationStateError(e.toString());
+    final userModel = UserModel.fromJson(userDoc.data()!);
+
+    final cred = EmailAuthProvider.credential(
+        email: user.email!, password: currentPassword);
+
+    user.reauthenticateWithCredential(cred).then((value) {
+      user.updatePassword(newPassword).then((_) {
+        //Success, do something
+        state =
+            AuthenticationStateSuccess(isUserVerified: true, user: userModel);
+      }).catchError((error) {
+        //Error, show something
+        state = AuthenticationStateError(error.toString());
+      });
+    }).catchError((error) {
+      state = AuthenticationStateError(error.toString());
     });
   }
 

@@ -209,7 +209,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                           PageRouteBuilder(
                                             pageBuilder: (context, animation,
                                                     secondaryAnimation) =>
-                                                const ChangePasswordScreen(),
+                                                 ChangePasswordScreen(),
                                           ),
                                         ),
                                         style: Theme.of(context)

@@ -152,7 +152,7 @@ class SignUpScreen extends ConsumerWidget {
               ],
             ),
             authState is AuthenticationStateLoading
-                ? const LoadingScreen()
+                ? const LoadingScreen(loadingText: "Signing Up...",)
                 : const SizedBox.shrink()
           ],
         )),

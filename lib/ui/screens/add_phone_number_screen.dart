@@ -3,8 +3,7 @@ import 'package:call_away/services/otp_service.dart';
 import 'package:call_away/ui/components/continue_button.dart';
 import 'package:call_away/ui/components/icon_button.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
-import 'package:call_away/ui/components/loading_screen.dart';
-import 'package:call_away/ui/screens/otp_verification-screen.dart';
+import 'package:call_away/ui/components/overlay_loading_screen.dart';
 import 'package:call_away/utils/user_input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -132,7 +131,7 @@ class AddPhoneNumberScreen extends ConsumerWidget {
               ],
             ),
             otpState is OtpStateLoading
-                ? const LoadingScreen()
+                ? const OverlayLoadingScreen()
                 : const SizedBox.shrink()
           ],
         )),

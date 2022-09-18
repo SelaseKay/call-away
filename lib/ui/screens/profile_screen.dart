@@ -58,7 +58,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     });
 
     return currentUser.when(
-      loading: () => const CircularProgressIndicator(),
+      loading: () => const LoadingScreen(),
       error: (err, stack) => Text('Error: $err'),
       data: (user) {
         return Theme(

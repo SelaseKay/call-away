@@ -5,8 +5,7 @@ import 'package:call_away/services/profile_update_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
 import 'package:call_away/ui/components/icon_button.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
-import 'package:call_away/ui/components/loading_screen.dart';
-import 'package:call_away/ui/components/user_avatar.dart';
+import 'package:call_away/ui/components/overlay_loading_screen.dart';
 import 'package:call_away/utils/user_input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -185,7 +184,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               ),
             ),
             profileUpdateState is ProfileUpdateStateLoading
-                ? const LoadingScreen()
+                ? const OverlayLoadingScreen()
                 : const SizedBox.shrink()
           ],
         ),

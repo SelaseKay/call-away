@@ -119,18 +119,21 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
 
     return Theme(
       data: Theme.of(context).copyWith(
-          dividerTheme: const DividerThemeData(
-            thickness: 1.5,
-            color: Color(0xFFDDD3D0),
+        dividerTheme: const DividerThemeData(
+          thickness: 1.5,
+          color: Color(0xFFDDD3D0),
+        ),
+        primaryColor: const Color(0xFFA1887F),
+        textTheme: const TextTheme(
+          headline6: TextStyle(color: Color(0xFFA1887F)),
+          bodyText1: TextStyle(color: Colors.black, fontSize: 16.0),
+          subtitle1: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.normal,
+            color: Color(0xFF949494),
           ),
-          primaryColor: const Color(0xFFA1887F),
-          textTheme: const TextTheme(
-              headline6: TextStyle(color: Color(0xFFA1887F)),
-              bodyText1: TextStyle(color: Colors.black, fontSize: 16.0),
-              subtitle1: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.normal,
-                  color: Color(0xFF949494),),),),
+        ),
+      ),
       child: Scaffold(
         body: SafeArea(
           child: Stack(
@@ -153,7 +156,9 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
                 ),
               ),
               myReportsState is ReportsStateLoading
-                  ? const LoadingScreen()
+                  ? const LoadingScreen(
+                      loadingText: "Getting reports",
+                    )
                   : const SizedBox.shrink()
             ],
           ),

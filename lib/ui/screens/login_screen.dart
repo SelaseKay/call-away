@@ -4,6 +4,7 @@ import 'package:call_away/services/auth_service.dart';
 import 'package:call_away/ui/components/brand_logo.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
+import 'package:call_away/ui/components/overlay_loading_screen.dart';
 import 'package:call_away/ui/components/signing_button.dart';
 import 'package:call_away/ui/components/text_span.dart';
 import 'package:call_away/utils/user_input_validator.dart';
@@ -124,7 +125,7 @@ class LoginScreen extends ConsumerWidget {
               ],
             ),
             authState is AuthenticationStateLoading
-                ? const LoadingScreen()
+                ? const LoadingScreen(loadingText: "Logging in...",)
                 : const SizedBox.shrink()
           ],
         )),

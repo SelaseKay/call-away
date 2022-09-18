@@ -2,7 +2,7 @@ import 'package:call_away/model/report_label_type.dart';
 import 'package:call_away/provider/report_details_provider.dart';
 import 'package:call_away/services/report_details_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
-import 'package:call_away/ui/components/loading_screen.dart';
+import 'package:call_away/ui/components/overlay_loading_screen.dart';
 import 'package:call_away/ui/components/report_status_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,7 +72,7 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
       child: Scaffold(
         body: SafeArea(
           child: reportDetailsState is ReportDetailsStateLoading
-              ? const LoadingScreen()
+              ? const OverlayLoadingScreen()
               : Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16.0,

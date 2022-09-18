@@ -36,6 +36,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final AsyncValue<UserState> user = ref.watch(userStateProvider);
+  
 
     return user.when(
         loading: () => const LoadingScreen(),
@@ -44,13 +45,13 @@ class _MyAppState extends ConsumerState<MyApp> {
           return MaterialApp(
             title: 'Flutter Demo',
             debugShowCheckedModeBanner: false,
-            initialRoute: userState == UserState.verified ? '/home' : '/',
+            initialRoute: userState == UserState.verified ? 'home' : '/',
             routes: {
               '/': (context) => LoginScreen(),
               '/signUp': (context) => SignUpScreen(),
               '/addPhoneNumber': (context) => AddPhoneNumberScreen(),
               '/addPhoneNumber/verifyOtp': (context) => OtpVerificationScreen(),
-              '/home': (context) => const HomeScreen(title: "Call Away"),
+              'home': (context) => const HomeScreen(title: "Call Away"),
             },
             theme: ThemeData(
                 primaryColor: const Color(0xFFCE7A63),

@@ -4,17 +4,18 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({
     Key? key,
-    this.loadingText = "",
+    required this.loadingText,
   }) : super(key: key);
 
   final String loadingText;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Column(
+
+
+    return  Container(
+        color: Colors.white,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
@@ -32,7 +33,6 @@ class LoadingScreen extends StatelessWidget {
             )
           ],
         ),
-      ),
     );
   }
 }

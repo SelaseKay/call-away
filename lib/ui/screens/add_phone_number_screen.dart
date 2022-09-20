@@ -34,7 +34,7 @@ class AddPhoneNumberScreen extends ConsumerWidget {
         //   ),
         // );
         Navigator.pushNamedAndRemoveUntil(
-            context, '/addPhoneNumber/verifyOtp', (route) => false,
+            context, 'addPhoneNumber/verifyOtp', (route) => false,
             arguments: phoneNumber);
       } else if (next is OtpStateError) {
         ScaffoldMessenger.of(context)

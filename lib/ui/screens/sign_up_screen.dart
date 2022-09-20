@@ -1,7 +1,9 @@
 import 'package:call_away/model/user.dart';
+import 'package:call_away/provider/user_auth_state_provider.dart';
 import 'package:call_away/ui/components/brand_logo.dart';
 import 'package:call_away/ui/components/labeled_textfield.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
+import 'package:call_away/ui/components/overlay_loading_screen.dart';
 import 'package:call_away/ui/components/signing_button.dart';
 import 'package:call_away/ui/components/text_span.dart';
 import 'package:call_away/services/auth_service.dart';
@@ -10,24 +12,37 @@ import 'package:call_away/utils/user_input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignUpScreen extends ConsumerWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   SignUpScreen({Key? key}) : super(key: key);
 
+  @override
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final TextEditingController _userNameController = TextEditingController();
+
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    AuthenticationState authState = ref.watch(authProvider);
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ref.read(userStreamProvider);
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    AuthenticationState authState = ref.watch(authProvider);
 
     ref.listen(authProvider, (previous, next) {
       if (next is AuthenticationStateSuccess) {
         Navigator.pushNamedAndRemoveUntil(
-            context, '/addPhoneNumber', (route) => false);
+            context, 'addPhoneNumber', (route) => false);
       } else if (next is AuthenticationStateError) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(next.errorMessage)));
@@ -152,7 +167,9 @@ class SignUpScreen extends ConsumerWidget {
               ],
             ),
             authState is AuthenticationStateLoading
-                ? const LoadingScreen(loadingText: "Signing Up...",)
+                ? const OverlayLoadingScreen(
+                    loadingText: "Signing up...",
+                  )
                 : const SizedBox.shrink()
           ],
         )),

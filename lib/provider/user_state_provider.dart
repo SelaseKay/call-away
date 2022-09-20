@@ -3,7 +3,6 @@ import 'package:call_away/provider/user_auth_state_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 enum UserState {
   verified,
   notVerified,
@@ -11,7 +10,7 @@ enum UserState {
 }
 
 final userStateProvider = FutureProvider.autoDispose<UserState>((ref) async {
-  final userStream = ref.watch(userStreamProvider); 
+  final userStream = ref.watch(userStreamProvider);
 
   final user = userStream.value;
   UserState userState = UserState.notSignedUp;

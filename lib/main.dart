@@ -9,6 +9,7 @@ import 'package:call_away/ui/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -27,6 +28,7 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
+
   @override
   void initState() {
     super.initState();
@@ -36,30 +38,72 @@ class _MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<UserState> user = ref.watch(userStateProvider);
-  
+    final userState = ref.watch(userStateProvider).value;
 
-    return user.when(
-        loading: () => const LoadingScreen(),
-        error: (error, stackTrace) => Text("Error: $error"),
-        data: (userState) {
-          return MaterialApp(
-            title: 'Flutter Demo',
-            debugShowCheckedModeBanner: false,
-            initialRoute: userState == UserState.verified ? 'home' : '/',
-            routes: {
-              '/': (context) => LoginScreen(),
-              '/signUp': (context) => SignUpScreen(),
-              '/addPhoneNumber': (context) => AddPhoneNumberScreen(),
-              '/addPhoneNumber/verifyOtp': (context) => OtpVerificationScreen(),
-              'home': (context) => const HomeScreen(title: "Call Away"),
-              'home/profile': (context) => const ProfileScreen(),
-            },
-            theme: ThemeData(
-                primaryColor: const Color(0xFFCE7A63),
-                textTheme: const TextTheme(
-                    headline6: TextStyle(color: Color(0xFFA1887F)))),
+    print('Trigger rebuild for userstate: $userState');
+
+    return MaterialApp(
+      title: 'Call Away',
+      debugShowCheckedModeBanner: false,
+      home: userState == null
+          ? LoadingScreen(loadingText: "$userState")
+          : (userState == UserState.verified
+              ? const HomeScreen(title: "CAll away")
+              : LoginScreen()),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/') {
+          return MaterialPageRoute(
+            builder: (_) => LoginScreen(),
           );
-        });
+        } else if (settings.name == 'home') {
+          return MaterialPageRoute(
+            builder: (_) => const HomeScreen(
+              title: "Call Away",
+            ),
+          );
+        } else if (settings.name == '/signup') {
+          return MaterialPageRoute(
+            builder: (_) => SignUpScreen(),
+          );
+        } else if (settings.name == 'addPhoneNumber') {
+          return MaterialPageRoute(
+            builder: (_) => AddPhoneNumberScreen(),
+          );
+        } else if (settings.name == 'addPhoneNumber/verifyOtp') {
+          final phoneNumber = settings.arguments as String;
+          return MaterialPageRoute(
+            builder: (_) => OtpVerificationScreen(phoneNumber: phoneNumber),
+          );
+        } else if (settings.name == 'home/profile') {
+          return MaterialPageRoute(
+            builder: (_) => const ProfileScreen(),
+          );
+        } else if (settings.name == 'loading') {
+          return MaterialPageRoute(
+            builder: (_) => const LoadingScreen(
+              loadingText: "",
+            ),
+          );
+        }
+      },
+      // initialRoute: userState == null
+      //     ? 'loading'
+      //     : (userState == UserState.verified ? 'home' : '/'),
+      // routes: {
+      //   '/': (context) => LoginScreen(),
+      //   '/signUp': (context) => SignUpScreen(),
+      //   'addPhoneNumber': (context) => AddPhoneNumberScreen(),
+      //   'addPhoneNumber/verifyOtp': (context) => OtpVerificationScreen(),
+      //   'home': (context) => const HomeScreen(title: "Call Away"),
+      //   'loading': (context) =>  LoadingScreen(
+      //         loadingText: '$userState',
+      //       ),
+      //   'home/profile': (context) => const ProfileScreen(),
+      // },
+      theme: ThemeData(
+          primaryColor: const Color(0xFFCE7A63),
+          textTheme:
+              const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))),
+    );
   }
 }

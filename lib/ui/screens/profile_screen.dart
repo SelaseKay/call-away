@@ -25,7 +25,6 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
@@ -35,7 +34,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final profileImage = ref.watch(cameraImageProvider);
 
     print("Authentication state: $authState");
-
 
     ref.listen(authProvider, (previous, next) {
       if (next is AuthenticationStateSuccess) {
@@ -54,7 +52,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     });
 
     return currentUser.when(
-      loading: () => const LoadingScreen(),
+      loading: () => const LoadingScreen(
+        loadingText: "",
+      ),
       error: (err, stack) {
         return Text('Error: $err');
       },
@@ -99,7 +99,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               child: Stack(
                 children: [
                   authState is AuthenticationStateLoading
-                      ? const LoadingScreen()
+                      ? const LoadingScreen(
+                          loadingText: "",
+                        )
                       : Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16.0,

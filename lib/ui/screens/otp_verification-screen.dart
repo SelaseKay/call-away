@@ -10,9 +10,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OtpVerificationScreen extends ConsumerWidget {
-  OtpVerificationScreen({Key? key})
-      : super(key: key);
+  OtpVerificationScreen({
+    Key? key,
+    required this.phoneNumber,
+  }) : super(key: key);
 
+  final String phoneNumber;
 
   final _controller1 = TextEditingController();
   final _controller2 = TextEditingController();
@@ -26,14 +29,12 @@ class OtpVerificationScreen extends ConsumerWidget {
     ref.listen(otpProvider, (previous, next) {
       if (next is OtpStateSuccess) {
         print("Otp Verification successful");
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
       } else if (next is OtpStateError) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(next.errorMessage)));
       }
     });
-
-    final phoneNumber = ModalRoute.of(context)!.settings.arguments as String;
 
     return Theme(
       data: Theme.of(context).copyWith(

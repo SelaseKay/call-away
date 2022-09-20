@@ -21,7 +21,6 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final foo = ref.read(userStreamProvider);
 
     final authState = ref.watch(authProvider);
@@ -39,7 +38,7 @@ class LoginScreen extends ConsumerWidget {
         if (next.errorMessage == "User is not verified") {
           Navigator.pushNamedAndRemoveUntil(
             context,
-            "/addPhoneNumber",
+            "addPhoneNumber",
             (route) => false,
           );
         }
@@ -48,7 +47,6 @@ class LoginScreen extends ConsumerWidget {
       }
     });
 
-    
     return Theme(
       data: Theme.of(context).copyWith(
           primaryColor: const Color(0xFFCE7A63),
@@ -102,9 +100,11 @@ class LoginScreen extends ConsumerWidget {
                             text: "Login",
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                ref.read(userStreamProvider.stream).listen((event) { }).cancel();
-                                
-                                
+                                ref
+                                    .read(userStreamProvider.stream)
+                                    .listen((event) {})
+                                    .cancel();
+
                                 await ref.read(authProvider.notifier).loginUser(
                                     _emailController.text.trim(),
                                     _passwordController.text.trim());
@@ -117,7 +117,7 @@ class LoginScreen extends ConsumerWidget {
                           child: CustomTextSpan(
                               onTapText: () {
                                 Navigator.pushNamedAndRemoveUntil(
-                                    context, "/signUp", (route) => false);
+                                    context, "/signup", (route) => false);
                               },
                               unclickableText: "Don't have an account? ",
                               clickableText: "Sign Up")),
@@ -127,7 +127,9 @@ class LoginScreen extends ConsumerWidget {
               ],
             ),
             authState is AuthenticationStateLoading
-                ? const LoadingScreen(loadingText: "Logging in...",)
+                ? const OverlayLoadingScreen(
+                    loadingText: "Logging in...",
+                  )
                 : const SizedBox.shrink()
           ],
         )),

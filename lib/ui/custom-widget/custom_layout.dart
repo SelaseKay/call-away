@@ -128,7 +128,7 @@ class _TopSection extends StatelessWidget {
               _IconButton(
                 assetName: 'assets/images/profile.svg',
                 onPressed: () {
-                  Navigator.pushNamed(context, "home/profile");
+                  Navigator.pushNamed(context, "profile");
                   // Navigator.push(
                   //     context,
                   //     PageRouteBuilder(

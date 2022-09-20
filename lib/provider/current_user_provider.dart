@@ -8,6 +8,8 @@ final currentUserProvider = StreamProvider.autoDispose<UserModel>((ref) async* {
 
   final user = userStream.value;
 
+   print("User is: $user");
+
   if (user != null) {
     final userStream = FirebaseFirestore.instance
         .collection("users")

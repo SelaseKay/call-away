@@ -33,6 +33,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     // _checkUserState();
   }
 
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -42,9 +43,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       title: 'Call Away',
       debugShowCheckedModeBanner: false,
       home: userState == null
-          ? LoadingScreen(loadingText: "$userState")
+          ? const LoadingScreen(loadingText: "")
           : (userState == UserState.verified
-              ? const HomeScreen(title: "CAll away")
+              ? const HomeScreen(title: "Call away")
               : LoginScreen()),
       onGenerateRoute: (settings) => _generateRoute(settings),
       theme: ThemeData(
@@ -57,7 +58,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   _generateRoute(settings) {
     if (settings.name == '/') {
       return MaterialPageRoute(
-        builder: (_) => LoginScreen(),
+        builder: (_) => const LoginScreen(),
       );
     } else if (settings.name == 'home') {
       return MaterialPageRoute(
@@ -78,7 +79,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       return MaterialPageRoute(
         builder: (_) => OtpVerificationScreen(phoneNumber: phoneNumber),
       );
-    } else if (settings.name == 'home/profile') {
+    } else if (settings.name == 'profile') {
       return MaterialPageRoute(
         builder: (_) => const ProfileScreen(),
       );

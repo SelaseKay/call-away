@@ -17,6 +17,7 @@ class AddPhoneNumberScreen extends ConsumerWidget {
 
   final _controller = TextEditingController();
 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final otpState = ref.watch(otpProvider);
@@ -121,6 +122,7 @@ class AddPhoneNumberScreen extends ConsumerWidget {
                   child: ContinueButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
+                        print("phone number: ${_controller.text.trim()}");
                         await ref
                             .read(otpProvider.notifier)
                             .sendOtpCode(_controller.text.trim());

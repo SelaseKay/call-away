@@ -27,8 +27,9 @@ class OtpVerificationScreen extends ConsumerWidget {
     final otpState = ref.watch(otpProvider);
 
     ref.listen(otpProvider, (previous, next) {
-      if (next is OtpStateSuccess) {
-        print("Otp Verification successful");
+      
+      //next.otpCode.isNotEmpty -- means 'resend code' button was pressed
+      if (next is OtpStateSuccess && next.otpCode.isEmpty) {
         Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
       } else if (next is OtpStateError) {
         ScaffoldMessenger.of(context)

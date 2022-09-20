@@ -1,5 +1,6 @@
 import 'package:call_away/model/report.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class ReportsState {}
@@ -28,9 +29,12 @@ class ReportRetrievalService extends StateNotifier<ReportsState> {
 
     state = ReportsStateLoading();
 
+    final user = FirebaseAuth.instance.currentUser;
+
     FirebaseFirestore.instance
         .collection("reports")
         .orderBy("status", descending: true)
+        .where("userId", isEqualTo: user!.uid)
         .get()
         .then((value) {
       final jsonReports = value.docs.map((doc) => doc.data()).toList();
@@ -40,7 +44,9 @@ class ReportRetrievalService extends StateNotifier<ReportsState> {
 
       state = ReportsStateSuccess(reports);
     }).catchError((e) {
+
       state = ReportsStateError(e.toString());
+      print("Error: ${e.toString()}");
     });
   }
 }

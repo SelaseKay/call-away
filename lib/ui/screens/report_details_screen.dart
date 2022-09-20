@@ -1,8 +1,9 @@
 import 'package:call_away/model/report_label_type.dart';
+import 'package:call_away/problem_type.dart';
 import 'package:call_away/provider/report_details_provider.dart';
 import 'package:call_away/services/report_details_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
-import 'package:call_away/ui/components/overlay_loading_screen.dart';
+import 'package:call_away/ui/components/loading_screen.dart';
 import 'package:call_away/ui/components/report_status_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,7 +73,9 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
       child: Scaffold(
         body: SafeArea(
           child: reportDetailsState is ReportDetailsStateLoading
-              ? const OverlayLoadingScreen()
+              ? const LoadingScreen(
+                  loadingText: "Getting report details...",
+                )
               : Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16.0,
@@ -125,10 +128,14 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
                             _ReportItem(
                               title: "Location",
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  const Icon(
-                                    Icons.location_on_outlined,
-                                    color: Color(0xFF818181),
+                                  const Padding(
+                                    padding: EdgeInsets.only(left: 2.0),
+                                    child: Icon(
+                                      Icons.location_on_outlined,
+                                      color: Color(0xFF818181),
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 16.0,
@@ -159,7 +166,8 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
                             _ReportItem(
                               title: "Problem Type",
                               child: Text(
-                                reportDetailsState.report.problemType.name,
+                                _getProblemTypeString(
+                                    reportDetailsState.report),
                                 style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ),
@@ -178,6 +186,15 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
         ),
       ),
     );
+  }
+
+  _getProblemTypeString(Report report) {
+    if (report.problemType == ProblemType.waterProblem) {
+      return "Water Problem";
+    } else if (report.problemType == ProblemType.electricityProblem) {
+      return "Electricity Problem";
+    }
+    return "Others";
   }
 }
 
@@ -198,9 +215,6 @@ class _ReportItem extends StatelessWidget {
           style: GoogleFonts.prompt(
             textStyle: Theme.of(context).textTheme.bodyText2,
           ),
-        ),
-        const SizedBox(
-          height: 8.0,
         ),
         child
       ],

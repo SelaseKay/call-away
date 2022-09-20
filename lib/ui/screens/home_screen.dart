@@ -1,18 +1,27 @@
 import 'package:call_away/problem_type.dart';
+import 'package:call_away/provider/user_auth_state_provider.dart';
 import 'package:call_away/ui/custom-widget/custom_layout.dart';
 import 'package:call_away/ui/screens/report_form_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomLayout(

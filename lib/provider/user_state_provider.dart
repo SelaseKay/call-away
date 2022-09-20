@@ -15,6 +15,8 @@ final userStateProvider = FutureProvider.autoDispose<UserState>((ref) async {
   final user = userStream.value;
   UserState userState = UserState.notSignedUp;
 
+  print("User is: $user");
+
   if (user != null) {
     final usr = await FirebaseFirestore.instance
         .collection("users")

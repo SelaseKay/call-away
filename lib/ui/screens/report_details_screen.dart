@@ -232,7 +232,7 @@ class _ReportStatusTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var statuses = report.status;
+    var statuses = report.statuses;
 
     return Column(
       children: [

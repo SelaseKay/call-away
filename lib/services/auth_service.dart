@@ -1,6 +1,7 @@
 import 'package:call_away/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class AuthenticationState {}
@@ -32,14 +33,20 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
   Future<void> signUpUser(UserModel userModel) async {
     try {
       state = AuthenticationStateLoading();
-      var credentials = await auth.createUserWithEmailAndPassword(
+      final credentials = await auth.createUserWithEmailAndPassword(
           email: userModel.email, password: userModel.password);
+      final deviceToken = await FirebaseMessaging.instance.getToken();
       User user = credentials.user!;
 
       await FirebaseFirestore.instance
           .collection("users")
           .doc(user.uid)
-          .set(userModel.copyWith(userId: user.uid).toJson());
+          .set(userModel
+              .copyWith(
+                userId: user.uid,
+                deviceToken: deviceToken,
+              )
+              .toJson());
       state = AuthenticationStateSuccess();
     } on FirebaseAuthException catch (e) {
       state = AuthenticationStateError(e.message!);
@@ -76,25 +83,6 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
       return Future.error(e.message!);
     }
   }
-
-  // Future<void> getCurrentUserModel() async {
-  //   print("getCurrentUserModel.....");
-  //   state = AuthenticationStateLoading();
-
-  //   final userId = FirebaseAuth.instance.currentUser!.uid;
-
-  //   FirebaseFirestore.instance
-  //       .collection("users")
-  //       .doc(userId)
-  //       .get()
-  //       .then((value) {
-  //     final userModel = UserModel.fromJson(value.data()!);
-
-  //     state = AuthenticationStateSuccess(isUserVerified: true, user: userModel);
-  //   }).catchError((e) {
-  //     state = AuthenticationStateError(e.toString());
-  //   });
-  // }
 
   Future<void> changePassword(
       String currentPassword, String newPassword) async {

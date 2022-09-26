@@ -1,10 +1,11 @@
 import 'package:call_away/problem_type.dart';
-import 'package:call_away/provider/user_auth_state_provider.dart';
 import 'package:call_away/ui/custom-widget/custom_layout.dart';
 import 'package:call_away/ui/screens/report_form_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
@@ -20,6 +21,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      
+      print('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "${message.notification!.body}",
+              style: const TextStyle(
+                fontSize: 14.0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        );
+        print('Message also contained a notification: ${message.notification!.body}');
+      }
+    });
   }
 
   @override

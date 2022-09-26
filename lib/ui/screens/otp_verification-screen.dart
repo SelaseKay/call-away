@@ -28,7 +28,7 @@ class OtpVerificationScreen extends ConsumerWidget {
 
     ref.listen(otpProvider, (previous, next) {
       
-      //next.otpCode.isNotEmpty -- means 'resend code' button was pressed
+      //if next.otpCode.isNotEmpty -- means 'resend code' button was pressed
       if (next is OtpStateSuccess && next.otpCode.isEmpty) {
         Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
       } else if (next is OtpStateError) {

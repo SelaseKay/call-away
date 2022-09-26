@@ -350,7 +350,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                               .text
                                               .trim(),
                                           problemType: widget.problemType,
-                                          status: [
+                                          statuses: [
                                             ReportStatus(
                                               time: Timestamp.now()
                                                   .toDate()
@@ -361,6 +361,12 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                             null,
                                             null
                                           ],
+                                          currentStatus: ReportStatus(
+                                            time: Timestamp.now()
+                                                .toDate()
+                                                .toString(),
+                                            label: ReportLabelType.delivered,
+                                          ),
                                         ),
                                       );
                                 }

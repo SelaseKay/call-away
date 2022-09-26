@@ -33,7 +33,7 @@ class ReportRetrievalService extends StateNotifier<ReportsState> {
 
     FirebaseFirestore.instance
         .collection("reports")
-        .orderBy("status", descending: true)
+        .orderBy("currentStatus", descending: true)
         .where("userId", isEqualTo: user!.uid)
         .get()
         .then((value) {

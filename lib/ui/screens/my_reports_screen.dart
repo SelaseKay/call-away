@@ -55,7 +55,7 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
       }
 
       _getCurrentReportStatus(Report report) {
-        return report.status.reversed
+        return report.statuses.reversed
             .toList()
             .firstWhere((data) => data != null);
       }

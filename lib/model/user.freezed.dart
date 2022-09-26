@@ -27,6 +27,7 @@ mixin _$UserModel {
   String get profilePicUrl => throw _privateConstructorUsedError;
   String get phone => throw _privateConstructorUsedError;
   String get phoneVerifiedAt => throw _privateConstructorUsedError;
+  String? get deviceToken => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +46,8 @@ abstract class $UserModelCopyWith<$Res> {
       String password,
       String profilePicUrl,
       String phone,
-      String phoneVerifiedAt});
+      String phoneVerifiedAt,
+      String? deviceToken});
 }
 
 /// @nodoc
@@ -65,6 +67,7 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
     Object? profilePicUrl = freezed,
     Object? phone = freezed,
     Object? phoneVerifiedAt = freezed,
+    Object? deviceToken = freezed,
   }) {
     return _then(_value.copyWith(
       userId: userId == freezed
@@ -95,6 +98,10 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _value.phoneVerifiedAt
           : phoneVerifiedAt // ignore: cast_nullable_to_non_nullable
               as String,
+      deviceToken: deviceToken == freezed
+          ? _value.deviceToken
+          : deviceToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -112,7 +119,8 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       String password,
       String profilePicUrl,
       String phone,
-      String phoneVerifiedAt});
+      String phoneVerifiedAt,
+      String? deviceToken});
 }
 
 /// @nodoc
@@ -134,6 +142,7 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
     Object? profilePicUrl = freezed,
     Object? phone = freezed,
     Object? phoneVerifiedAt = freezed,
+    Object? deviceToken = freezed,
   }) {
     return _then(_$_UserModel(
       userId: userId == freezed
@@ -164,6 +173,10 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
           ? _value.phoneVerifiedAt
           : phoneVerifiedAt // ignore: cast_nullable_to_non_nullable
               as String,
+      deviceToken: deviceToken == freezed
+          ? _value.deviceToken
+          : deviceToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -178,7 +191,8 @@ class _$_UserModel implements _UserModel {
       required this.password,
       this.profilePicUrl = "",
       this.phone = "",
-      this.phoneVerifiedAt = ""});
+      this.phoneVerifiedAt = "",
+      this.deviceToken});
 
   factory _$_UserModel.fromJson(Map<String, dynamic> json) =>
       _$$_UserModelFromJson(json);
@@ -200,10 +214,12 @@ class _$_UserModel implements _UserModel {
   @override
   @JsonKey()
   final String phoneVerifiedAt;
+  @override
+  final String? deviceToken;
 
   @override
   String toString() {
-    return 'UserModel(userId: $userId, username: $username, email: $email, password: $password, profilePicUrl: $profilePicUrl, phone: $phone, phoneVerifiedAt: $phoneVerifiedAt)';
+    return 'UserModel(userId: $userId, username: $username, email: $email, password: $password, profilePicUrl: $profilePicUrl, phone: $phone, phoneVerifiedAt: $phoneVerifiedAt, deviceToken: $deviceToken)';
   }
 
   @override
@@ -219,7 +235,9 @@ class _$_UserModel implements _UserModel {
                 .equals(other.profilePicUrl, profilePicUrl) &&
             const DeepCollectionEquality().equals(other.phone, phone) &&
             const DeepCollectionEquality()
-                .equals(other.phoneVerifiedAt, phoneVerifiedAt));
+                .equals(other.phoneVerifiedAt, phoneVerifiedAt) &&
+            const DeepCollectionEquality()
+                .equals(other.deviceToken, deviceToken));
   }
 
   @JsonKey(ignore: true)
@@ -232,7 +250,8 @@ class _$_UserModel implements _UserModel {
       const DeepCollectionEquality().hash(password),
       const DeepCollectionEquality().hash(profilePicUrl),
       const DeepCollectionEquality().hash(phone),
-      const DeepCollectionEquality().hash(phoneVerifiedAt));
+      const DeepCollectionEquality().hash(phoneVerifiedAt),
+      const DeepCollectionEquality().hash(deviceToken));
 
   @JsonKey(ignore: true)
   @override
@@ -255,7 +274,8 @@ abstract class _UserModel implements UserModel {
       required final String password,
       final String profilePicUrl,
       final String phone,
-      final String phoneVerifiedAt}) = _$_UserModel;
+      final String phoneVerifiedAt,
+      final String? deviceToken}) = _$_UserModel;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$_UserModel.fromJson;
@@ -274,6 +294,8 @@ abstract class _UserModel implements UserModel {
   String get phone;
   @override
   String get phoneVerifiedAt;
+  @override
+  String? get deviceToken;
   @override
   @JsonKey(ignore: true)
   _$$_UserModelCopyWith<_$_UserModel> get copyWith =>

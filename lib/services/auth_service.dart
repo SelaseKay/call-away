@@ -1,5 +1,4 @@
 import 'package:call_away/model/user.dart';
-import 'package:call_away/provider/current_user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

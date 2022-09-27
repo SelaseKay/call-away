@@ -13,16 +13,11 @@ _$_Report _$$_ReportFromJson(Map<String, dynamic> json) => _$_Report(
       location: json['location'] as String,
       description: json['description'] as String,
       problemType: $enumDecode(_$ProblemTypeEnumMap, json['problemType']),
-      statuses: (json['statuses'] as List<dynamic>?)
-              ?.map((e) => e == null
-                  ? null
-                  : ReportStatus.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [null, null, null, null],
-      currentStatus: json['currentStatus'] == null
-          ? null
-          : ReportStatus.fromJson(
-              json['currentStatus'] as Map<String, dynamic>),
+      statuses: (json['statuses'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
+      currentStatus:
+          $enumDecodeNullable(_$ReportLabelTypeEnumMap, json['currentStatus']),
     );
 
 Map<String, dynamic> _$$_ReportToJson(_$_Report instance) => <String, dynamic>{
@@ -32,12 +27,18 @@ Map<String, dynamic> _$$_ReportToJson(_$_Report instance) => <String, dynamic>{
       'location': instance.location,
       'description': instance.description,
       'problemType': _$ProblemTypeEnumMap[instance.problemType]!,
-      'statuses': instance.statuses.map((e) => e?.toJson()).toList(),
-      'currentStatus': instance.currentStatus?.toJson(),
+      'statuses': instance.statuses,
+      'currentStatus': _$ReportLabelTypeEnumMap[instance.currentStatus],
     };
 
 const _$ProblemTypeEnumMap = {
   ProblemType.waterProblem: 'waterProblem',
   ProblemType.electricityProblem: 'electricityProblem',
   ProblemType.others: 'others',
+};
+
+const _$ReportLabelTypeEnumMap = {
+  ReportLabelType.delivered: 'delivered',
+  ReportLabelType.pending: 'pending',
+  ReportLabelType.resolved: 'resolved',
 };

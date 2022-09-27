@@ -35,6 +35,16 @@ class OtpService extends StateNotifier<OtpState> {
   var _phoneNumber = "";
 
   Future<void> sendOtpCode(String phoneNumber) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection("blocked_contacts")
+        .where("phoneNumber", isEqualTo: phoneNumber)
+        .get();
+
+    if (querySnapshot.size != 0) {
+      state = OtpStateError("This phone number has been blocked.");
+      return;
+    }
+
     _otpCode = _generateOtpCode();
     _phoneNumber = phoneNumber;
     var params = {

@@ -28,6 +28,8 @@ mixin _$UserModel {
   String get phone => throw _privateConstructorUsedError;
   String get phoneVerifiedAt => throw _privateConstructorUsedError;
   String? get deviceToken => throw _privateConstructorUsedError;
+  bool get blocked => throw _privateConstructorUsedError;
+  int get strikeCount => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +49,9 @@ abstract class $UserModelCopyWith<$Res> {
       String profilePicUrl,
       String phone,
       String phoneVerifiedAt,
-      String? deviceToken});
+      String? deviceToken,
+      bool blocked,
+      int strikeCount});
 }
 
 /// @nodoc
@@ -68,6 +72,8 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
     Object? phone = freezed,
     Object? phoneVerifiedAt = freezed,
     Object? deviceToken = freezed,
+    Object? blocked = freezed,
+    Object? strikeCount = freezed,
   }) {
     return _then(_value.copyWith(
       userId: userId == freezed
@@ -102,6 +108,14 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _value.deviceToken
           : deviceToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      blocked: blocked == freezed
+          ? _value.blocked
+          : blocked // ignore: cast_nullable_to_non_nullable
+              as bool,
+      strikeCount: strikeCount == freezed
+          ? _value.strikeCount
+          : strikeCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -120,7 +134,9 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       String profilePicUrl,
       String phone,
       String phoneVerifiedAt,
-      String? deviceToken});
+      String? deviceToken,
+      bool blocked,
+      int strikeCount});
 }
 
 /// @nodoc
@@ -143,6 +159,8 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
     Object? phone = freezed,
     Object? phoneVerifiedAt = freezed,
     Object? deviceToken = freezed,
+    Object? blocked = freezed,
+    Object? strikeCount = freezed,
   }) {
     return _then(_$_UserModel(
       userId: userId == freezed
@@ -177,6 +195,14 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
           ? _value.deviceToken
           : deviceToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      blocked: blocked == freezed
+          ? _value.blocked
+          : blocked // ignore: cast_nullable_to_non_nullable
+              as bool,
+      strikeCount: strikeCount == freezed
+          ? _value.strikeCount
+          : strikeCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -192,7 +218,9 @@ class _$_UserModel implements _UserModel {
       this.profilePicUrl = "",
       this.phone = "",
       this.phoneVerifiedAt = "",
-      this.deviceToken});
+      this.deviceToken,
+      this.blocked = false,
+      this.strikeCount = 0});
 
   factory _$_UserModel.fromJson(Map<String, dynamic> json) =>
       _$$_UserModelFromJson(json);
@@ -216,10 +244,16 @@ class _$_UserModel implements _UserModel {
   final String phoneVerifiedAt;
   @override
   final String? deviceToken;
+  @override
+  @JsonKey()
+  final bool blocked;
+  @override
+  @JsonKey()
+  final int strikeCount;
 
   @override
   String toString() {
-    return 'UserModel(userId: $userId, username: $username, email: $email, password: $password, profilePicUrl: $profilePicUrl, phone: $phone, phoneVerifiedAt: $phoneVerifiedAt, deviceToken: $deviceToken)';
+    return 'UserModel(userId: $userId, username: $username, email: $email, password: $password, profilePicUrl: $profilePicUrl, phone: $phone, phoneVerifiedAt: $phoneVerifiedAt, deviceToken: $deviceToken, blocked: $blocked, strikeCount: $strikeCount)';
   }
 
   @override
@@ -237,7 +271,10 @@ class _$_UserModel implements _UserModel {
             const DeepCollectionEquality()
                 .equals(other.phoneVerifiedAt, phoneVerifiedAt) &&
             const DeepCollectionEquality()
-                .equals(other.deviceToken, deviceToken));
+                .equals(other.deviceToken, deviceToken) &&
+            const DeepCollectionEquality().equals(other.blocked, blocked) &&
+            const DeepCollectionEquality()
+                .equals(other.strikeCount, strikeCount));
   }
 
   @JsonKey(ignore: true)
@@ -251,7 +288,9 @@ class _$_UserModel implements _UserModel {
       const DeepCollectionEquality().hash(profilePicUrl),
       const DeepCollectionEquality().hash(phone),
       const DeepCollectionEquality().hash(phoneVerifiedAt),
-      const DeepCollectionEquality().hash(deviceToken));
+      const DeepCollectionEquality().hash(deviceToken),
+      const DeepCollectionEquality().hash(blocked),
+      const DeepCollectionEquality().hash(strikeCount));
 
   @JsonKey(ignore: true)
   @override
@@ -275,7 +314,9 @@ abstract class _UserModel implements UserModel {
       final String profilePicUrl,
       final String phone,
       final String phoneVerifiedAt,
-      final String? deviceToken}) = _$_UserModel;
+      final String? deviceToken,
+      final bool blocked,
+      final int strikeCount}) = _$_UserModel;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$_UserModel.fromJson;
@@ -296,6 +337,10 @@ abstract class _UserModel implements UserModel {
   String get phoneVerifiedAt;
   @override
   String? get deviceToken;
+  @override
+  bool get blocked;
+  @override
+  int get strikeCount;
   @override
   @JsonKey(ignore: true)
   _$$_UserModelCopyWith<_$_UserModel> get copyWith =>

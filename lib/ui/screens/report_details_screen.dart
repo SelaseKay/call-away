@@ -259,8 +259,7 @@ class _ReportStatusTable extends StatelessWidget {
           height: 8.0,
         ),
         _ReportStatusItem(
-          dateTime:
-              statuses[0] == null ? "N/A" : statuses[0]!.time.substring(0, 16),
+          dateTime: statuses!["Delivered"]!.substring(0, 16),
           child: const ReportStatusTag(
             label: ReportLabelType.delivered,
           ),
@@ -269,18 +268,9 @@ class _ReportStatusTable extends StatelessWidget {
           height: 16.0,
         ),
         _ReportStatusItem(
-          dateTime:
-              statuses[1] == null ? "N/A" : statuses[1]!.time.substring(0, 16),
-          child: const ReportStatusTag(
-            label: ReportLabelType.received,
-          ),
-        ),
-        const SizedBox(
-          height: 16.0,
-        ),
-        _ReportStatusItem(
-          dateTime:
-              statuses[2] == null ? "N/A" : statuses[2]!.time.substring(0, 16),
+          dateTime: statuses["Pending"]! == 'N/A'
+              ? statuses["Pending"]!
+              : statuses["Pending"]!.substring(0, 16),
           child: const ReportStatusTag(
             label: ReportLabelType.pending,
           ),
@@ -289,8 +279,9 @@ class _ReportStatusTable extends StatelessWidget {
           height: 16.0,
         ),
         _ReportStatusItem(
-          dateTime:
-              statuses[3] == null ? "N/A" : statuses[3]!.time.substring(0, 16),
+          dateTime: statuses["Resolved"]! == 'N/A'
+              ? statuses["Resolved"]!
+              : statuses["Resolved"]!.substring(0, 16),
           child: const ReportStatusTag(
             label: ReportLabelType.resolved,
           ),

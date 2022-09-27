@@ -42,7 +42,8 @@ class ReportRetrievalService extends StateNotifier<ReportsState> {
       final reports =
           jsonReports.map((report) => Report.fromJson(report)).toList();
 
-      state = ReportsStateSuccess(reports);
+      //
+      state = ReportsStateSuccess(reports); 
     }).catchError((e) {
 
       state = ReportsStateError(e.toString());

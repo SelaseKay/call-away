@@ -12,8 +12,6 @@ class ReportStatusTag extends StatelessWidget {
     switch (label) {
       case ReportLabelType.delivered:
         return DeliveredReportTagState();
-      case ReportLabelType.received:
-        return ReceivedReportTagState();
       case ReportLabelType.pending:
         return PendingReportTagState();
       case ReportLabelType.resolved:

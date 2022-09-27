@@ -15,6 +15,8 @@ _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
       phone: json['phone'] as String? ?? "",
       phoneVerifiedAt: json['phoneVerifiedAt'] as String? ?? "",
       deviceToken: json['deviceToken'] as String?,
+      blocked: json['blocked'] as bool? ?? false,
+      strikeCount: json['strikeCount'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
@@ -27,4 +29,6 @@ Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
       'phone': instance.phone,
       'phoneVerifiedAt': instance.phoneVerifiedAt,
       'deviceToken': instance.deviceToken,
+      'blocked': instance.blocked,
+      'strikeCount': instance.strikeCount,
     };

@@ -350,23 +350,23 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                               .text
                                               .trim(),
                                           problemType: widget.problemType,
-                                          statuses: [
-                                            ReportStatus(
-                                              time: Timestamp.now()
-                                                  .toDate()
-                                                  .toString(),
-                                              label: ReportLabelType.delivered,
-                                            ),
-                                            null,
-                                            null,
-                                            null
-                                          ],
-                                          currentStatus: ReportStatus(
-                                            time: Timestamp.now()
-                                                .toDate()
-                                                .toString(),
-                                            label: ReportLabelType.delivered,
-                                          ),
+                                          statuses: {
+                                            "delivered": Timestamp.now().toDate().toString(),
+                                            "pending": "N/A",
+                                            "Resolved": "N/A",
+                                          },
+                                          // statuses: [
+                                          //   ReportStatus(
+                                          //     time: Timestamp.now()
+                                          //         .toDate()
+                                          //         .toString(),
+                                          //     label: ReportLabelType.delivered,
+                                          //   ),
+                                          //   null,
+                                          //   null,
+                                          //   null
+                                          // ],
+                                          currentStatus: ReportLabelType.delivered,
                                         ),
                                       );
                                 }

@@ -6,7 +6,6 @@ import 'package:call_away/ui/screens/login_screen.dart';
 import 'package:call_away/ui/screens/otp_verification-screen.dart';
 import 'package:call_away/ui/screens/profile_screen.dart';
 import 'package:call_away/ui/screens/sign_up_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -77,6 +76,8 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userStateProvider).value;
+
+    
 
     return MaterialApp(
       title: 'Call Away',

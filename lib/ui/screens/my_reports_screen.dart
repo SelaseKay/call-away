@@ -11,7 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../model/report.dart';
+import 'package:call_away/utils/string_capitalize.dart';
+
 
 class MyReportsScreen extends ConsumerStatefulWidget {
   const MyReportsScreen({Key? key}) : super(key: key);
@@ -25,6 +26,10 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
   void initState() {
     super.initState();
     ref.read(myReportsProvider.notifier).getMyReports();
+  }
+
+  _convertCurrentStatusToString(ReportLabelType labelType){
+    return labelType.name.capitalize();
   }
 
   Widget? _getWidget(ReportsState state) {
@@ -54,11 +59,11 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
         );
       }
 
-      _getCurrentReportStatus(Report report) {
-        return report.statuses.reversed
-            .toList()
-            .firstWhere((data) => data != null);
-      }
+      // _getCurrentReportStatus(Report report) {
+      //   return report.statuses.reversed
+      //       .toList()
+      //       .firstWhere((data) => data != null);
+      // }
 
       return ListView.builder(
         itemCount: state.reports.length,
@@ -81,9 +86,9 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
                   ),
                 );
               },
-              label: _getCurrentReportStatus(report)!.label!,
+              label: report.currentStatus!,
               title: "Report#${report.reportId.toString().substring(0, 8)}",
-              date: _getCurrentReportStatus(report)!.time,
+              date: report.statuses![_convertCurrentStatusToString(report.currentStatus!)]!,
             ),
           );
         },
@@ -173,7 +178,7 @@ class _ReportItem extends StatelessWidget {
     Key? key,
     this.title = "",
     this.date = "",
-    this.label = ReportLabelType.delivered,
+    required this.label,
     required this.onPressed,
   }) : super(key: key);
   final String title;
@@ -247,8 +252,6 @@ class _ReportTag extends StatelessWidget {
     switch (tagStatus) {
       case ReportLabelType.delivered:
         return DeliveredReportTagState();
-      case ReportLabelType.received:
-        return ReceivedReportTagState();
       case ReportLabelType.pending:
         return PendingReportTagState();
       case ReportLabelType.resolved:

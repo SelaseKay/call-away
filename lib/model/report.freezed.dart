@@ -25,9 +25,10 @@ mixin _$Report {
   String get imageUrl => throw _privateConstructorUsedError;
   String get location => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
-  ProblemType get problemType => throw _privateConstructorUsedError;
-  List<ReportStatus?> get statuses => throw _privateConstructorUsedError;
-  ReportStatus? get currentStatus => throw _privateConstructorUsedError;
+  ProblemType get problemType =>
+      throw _privateConstructorUsedError; // @Default([null, null, null, null]) List<ReportStatus?> statuses,
+  Map<String, String>? get statuses => throw _privateConstructorUsedError;
+  ReportLabelType? get currentStatus => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,10 +46,8 @@ abstract class $ReportCopyWith<$Res> {
       String location,
       String description,
       ProblemType problemType,
-      List<ReportStatus?> statuses,
-      ReportStatus? currentStatus});
-
-  $ReportStatusCopyWith<$Res>? get currentStatus;
+      Map<String, String>? statuses,
+      ReportLabelType? currentStatus});
 }
 
 /// @nodoc
@@ -98,23 +97,12 @@ class _$ReportCopyWithImpl<$Res> implements $ReportCopyWith<$Res> {
       statuses: statuses == freezed
           ? _value.statuses
           : statuses // ignore: cast_nullable_to_non_nullable
-              as List<ReportStatus?>,
+              as Map<String, String>?,
       currentStatus: currentStatus == freezed
           ? _value.currentStatus
           : currentStatus // ignore: cast_nullable_to_non_nullable
-              as ReportStatus?,
+              as ReportLabelType?,
     ));
-  }
-
-  @override
-  $ReportStatusCopyWith<$Res>? get currentStatus {
-    if (_value.currentStatus == null) {
-      return null;
-    }
-
-    return $ReportStatusCopyWith<$Res>(_value.currentStatus!, (value) {
-      return _then(_value.copyWith(currentStatus: value));
-    });
   }
 }
 
@@ -130,11 +118,8 @@ abstract class _$$_ReportCopyWith<$Res> implements $ReportCopyWith<$Res> {
       String location,
       String description,
       ProblemType problemType,
-      List<ReportStatus?> statuses,
-      ReportStatus? currentStatus});
-
-  @override
-  $ReportStatusCopyWith<$Res>? get currentStatus;
+      Map<String, String>? statuses,
+      ReportLabelType? currentStatus});
 }
 
 /// @nodoc
@@ -185,11 +170,11 @@ class __$$_ReportCopyWithImpl<$Res> extends _$ReportCopyWithImpl<$Res>
       statuses: statuses == freezed
           ? _value._statuses
           : statuses // ignore: cast_nullable_to_non_nullable
-              as List<ReportStatus?>,
+              as Map<String, String>?,
       currentStatus: currentStatus == freezed
           ? _value.currentStatus
           : currentStatus // ignore: cast_nullable_to_non_nullable
-              as ReportStatus?,
+              as ReportLabelType?,
     ));
   }
 }
@@ -204,7 +189,7 @@ class _$_Report implements _Report {
       required this.location,
       required this.description,
       required this.problemType,
-      final List<ReportStatus?> statuses = const [null, null, null, null],
+      final Map<String, String>? statuses,
       this.currentStatus})
       : _statuses = statuses;
 
@@ -224,16 +209,19 @@ class _$_Report implements _Report {
   final String description;
   @override
   final ProblemType problemType;
-  final List<ReportStatus?> _statuses;
+// @Default([null, null, null, null]) List<ReportStatus?> statuses,
+  final Map<String, String>? _statuses;
+// @Default([null, null, null, null]) List<ReportStatus?> statuses,
   @override
-  @JsonKey()
-  List<ReportStatus?> get statuses {
+  Map<String, String>? get statuses {
+    final value = _statuses;
+    if (value == null) return null;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_statuses);
+    return EqualUnmodifiableMapView(value);
   }
 
   @override
-  final ReportStatus? currentStatus;
+  final ReportLabelType? currentStatus;
 
   @override
   String toString() {
@@ -292,8 +280,8 @@ abstract class _Report implements Report {
       required final String location,
       required final String description,
       required final ProblemType problemType,
-      final List<ReportStatus?> statuses,
-      final ReportStatus? currentStatus}) = _$_Report;
+      final Map<String, String>? statuses,
+      final ReportLabelType? currentStatus}) = _$_Report;
 
   factory _Report.fromJson(Map<String, dynamic> json) = _$_Report.fromJson;
 
@@ -309,10 +297,10 @@ abstract class _Report implements Report {
   String get description;
   @override
   ProblemType get problemType;
+  @override // @Default([null, null, null, null]) List<ReportStatus?> statuses,
+  Map<String, String>? get statuses;
   @override
-  List<ReportStatus?> get statuses;
-  @override
-  ReportStatus? get currentStatus;
+  ReportLabelType? get currentStatus;
   @override
   @JsonKey(ignore: true)
   _$$_ReportCopyWith<_$_Report> get copyWith =>

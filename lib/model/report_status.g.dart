@@ -20,7 +20,6 @@ Map<String, dynamic> _$$_ReportStatusToJson(_$_ReportStatus instance) =>
 
 const _$ReportLabelTypeEnumMap = {
   ReportLabelType.delivered: 'delivered',
-  ReportLabelType.received: 'received',
   ReportLabelType.pending: 'pending',
   ReportLabelType.resolved: 'resolved',
 };

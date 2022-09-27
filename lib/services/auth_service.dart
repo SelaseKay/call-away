@@ -1,4 +1,5 @@
 import 'package:call_away/model/user.dart';
+import 'package:call_away/provider/current_user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,7 +28,7 @@ class AuthenticationStateUserVerified extends AuthenticationState {}
 
 class AuthNotifier extends StateNotifier<AuthenticationState> {
   AuthNotifier(this.auth) : super(AuthenticationStateInitial());
-
+  
   final FirebaseAuth auth;
 
   Future<void> signUpUser(UserModel userModel) async {
@@ -69,7 +70,12 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
 
       final userModel = UserModel.fromJson(userDoc.data()!);
 
-      if (userModel.phoneVerifiedAt.isNotEmpty) {
+      if (userModel.blocked) {
+        await auth.signOut();
+        state = AuthenticationStateError("This account has been blocked.");
+        print('blocked field: ${userModel.blocked}');
+        return Future.error("User has been blocked");
+      } else if (userModel.phoneVerifiedAt.isNotEmpty) {
         state = AuthenticationStateSuccess(isUserVerified: true);
       } else {
         state = AuthenticationStateError("User is not verified");

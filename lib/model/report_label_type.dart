@@ -3,8 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 enum ReportLabelType {
   @JsonValue("delivered")
   delivered,
-  @JsonValue("received")
-  received,
   @JsonValue("pending")
   pending,
   @JsonValue("resolved")

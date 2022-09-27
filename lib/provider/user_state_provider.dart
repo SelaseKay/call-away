@@ -24,7 +24,10 @@ final userStateProvider = FutureProvider.autoDispose<UserState>((ref) async {
         .get();
     final userModel = UserModel.fromJson(usr.data()!);
 
-    if (userModel.phoneVerifiedAt.isNotEmpty) {
+    if(userModel.blocked){
+      userState = UserState.notSignedUp;
+    }
+    else if (userModel.phoneVerifiedAt.isNotEmpty) {
       userState = UserState.verified;
     } else {
       userState = UserState.notVerified;

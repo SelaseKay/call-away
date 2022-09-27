@@ -58,6 +58,7 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
           ),
           bodyText1: TextStyle(
             color: Color(0xFF979797),
+            fontWeight: FontWeight.normal,
             fontSize: 16.0,
           ),
           bodyText2: TextStyle(

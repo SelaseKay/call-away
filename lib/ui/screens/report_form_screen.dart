@@ -351,8 +351,8 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                               .trim(),
                                           problemType: widget.problemType,
                                           statuses: {
-                                            "delivered": Timestamp.now().toDate().toString(),
-                                            "pending": "N/A",
+                                            "Delivered": Timestamp.now().toDate().toString(),
+                                            "Pending": "N/A",
                                             "Resolved": "N/A",
                                           },
                                           // statuses: [

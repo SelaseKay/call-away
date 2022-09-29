@@ -73,15 +73,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     await Workmanager().initialize(
         callbackDispatcher, // The top level function, aka callbackDispatcher
-        isInDebugMode:
-            true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
         );
 
     await Workmanager().registerOneOffTask(
         "periodic-task-identifier", "simplePeriodicTask",
         tag: "notifications_manager",
-        // When no frequency is provided the default 15 minutes is set.
-        // Minimum frequency is 15 min. Android will automatically change your frequency to 15 min if you have configured a lower frequency.
         constraints: Constraints(
           networkType: NetworkType.connected,
         ),

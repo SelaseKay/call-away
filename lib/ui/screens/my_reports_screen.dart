@@ -58,32 +58,38 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
         );
       }
 
-      return ListView.builder(
-        itemCount: state.reports.length,
-        itemBuilder: (context, index) {
-          final report = state.reports[index];
-
-          return Padding(
-            padding:
-                EdgeInsets.only(top: index == 0 ? 32.0 : 0.0, bottom: 16.0),
-            child: _ReportItem(
-              key: Key(
-                index.toString(),
+      return RefreshIndicator(
+        child: ListView.builder(
+          itemCount: state.reports.length,
+          itemBuilder: (context, index) {
+            final report = state.reports[index];
+      
+            return Padding(
+              padding:
+                  EdgeInsets.only(top: index == 0 ? 32.0 : 0.0, bottom: 16.0),
+              child: _ReportItem(
+                key: Key(
+                  index.toString(),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimatio) =>
+                          ReportDetailsScreen(reportId: report.reportId!),
+                    ),
+                  );
+                },
+                label: report.currentStatus!,
+                title: "Report#${report.reportId.toString().substring(0, 8)}",
+                date: report.statuses![_convertCurrentStatusToString(report.currentStatus!)]!,
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimatio) =>
-                        ReportDetailsScreen(reportId: report.reportId!),
-                  ),
-                );
-              },
-              label: report.currentStatus!,
-              title: "Report#${report.reportId.toString().substring(0, 8)}",
-              date: report.statuses![_convertCurrentStatusToString(report.currentStatus!)]!,
-            ),
-          );
+            );
+          },
+          physics: const AlwaysScrollableScrollPhysics(),
+        ),
+        onRefresh: (){
+          return ref.read(myReportsProvider.notifier).getMyReports();
         },
       );
     } else if (state is ReportsStateError) {

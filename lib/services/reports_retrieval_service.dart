@@ -1,4 +1,5 @@
 import 'package:call_away/model/report.dart';
+import 'package:call_away/utils/string_capitalize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,10 +43,16 @@ class ReportRetrievalService extends StateNotifier<ReportsState> {
       final reports =
           jsonReports.map((report) => Report.fromJson(report)).toList();
 
-      //
-      state = ReportsStateSuccess(reports); 
-    }).catchError((e) {
+      //sort reports in ascending order based on current status time.
+      if (reports.length > 1) {
+        reports.sort((a, b) => a
+            .statuses![convertCurrentStatusToString(a.currentStatus!)]!
+            .compareTo(
+                b.statuses![convertCurrentStatusToString(b.currentStatus!)]!));
+      }
 
+      state = ReportsStateSuccess( reports.reversed.toList());
+    }).catchError((e) {
       state = ReportsStateError(e.toString());
       print("Error: ${e.toString()}");
     });

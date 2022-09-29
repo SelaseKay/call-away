@@ -1,3 +1,4 @@
+import 'package:call_away/background_task/callback_dispatcher.dart';
 import 'package:call_away/provider/user_state_provider.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
 import 'package:call_away/ui/screens/add_phone_number_screen.dart';
@@ -17,7 +18,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -38,7 +41,6 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-
   void _handleMessage(RemoteMessage message) {
     // if (message.data['type'] == 'chat') {
     //   Navigator.pushNamed(context, '/chat',
@@ -63,9 +65,6 @@ class _MyAppState extends ConsumerState<MyApp> {
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
   }
 
-  
-
-
   @override
   void initState() {
     super.initState();
@@ -77,8 +76,6 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final userState = ref.watch(userStateProvider).value;
 
-    
-
     return MaterialApp(
       title: 'Call Away',
       debugShowCheckedModeBanner: false,
@@ -89,9 +86,13 @@ class _MyAppState extends ConsumerState<MyApp> {
               : const LoginScreen()),
       onGenerateRoute: (settings) => _generateRoute(settings),
       theme: ThemeData(
-          primaryColor: const Color(0xFFCE7A63),
-          textTheme:
-              const TextTheme(headline6: TextStyle(color: Color(0xFFA1887F)))),
+        primaryColor: const Color(0xFFCE7A63),
+        textTheme: const TextTheme(
+          headline6: TextStyle(
+            color: Color(0xFFA1887F),
+          ),
+        ),
+      ),
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:workmanager/workmanager.dart';
 
 abstract class AuthenticationState {}
 
@@ -124,6 +125,7 @@ class AuthNotifier extends StateNotifier<AuthenticationState> {
       state = AuthenticationStateLoading();
       await auth.signOut();
       state = AuthenticationStateSuccess();
+      Workmanager().cancelByTag("notifications_manager");
     } on FirebaseAuthException catch (e) {
       state = AuthenticationStateError(e.message!);
       print(

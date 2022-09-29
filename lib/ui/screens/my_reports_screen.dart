@@ -2,7 +2,6 @@ import 'package:call_away/model/report_label_type.dart';
 import 'package:call_away/provider/my_reports_provider.dart';
 import 'package:call_away/services/reports_retrieval_service.dart';
 import 'package:call_away/ui/components/app_bar.dart';
-import 'package:call_away/report_tag_state.dart';
 import 'package:call_away/ui/components/loading_screen.dart';
 import 'package:call_away/ui/components/report_status_tag.dart';
 import 'package:call_away/ui/screens/report_details_screen.dart';
@@ -58,12 +57,6 @@ class _MyReportsScreenState extends ConsumerState<MyReportsScreen> {
           ],
         );
       }
-
-      // _getCurrentReportStatus(Report report) {
-      //   return report.statuses.reversed
-      //       .toList()
-      //       .firstWhere((data) => data != null);
-      // }
 
       return ListView.builder(
         itemCount: state.reports.length,
@@ -239,43 +232,5 @@ class _ReportItem extends StatelessWidget {
         )
       ],
     );
-  }
-}
-
-class _ReportTag extends StatelessWidget {
-  const _ReportTag({Key? key, this.tagStatus = ReportLabelType.delivered})
-      : super(key: key);
-
-  final ReportLabelType tagStatus;
-
-  ReportTagState getTagState() {
-    switch (tagStatus) {
-      case ReportLabelType.delivered:
-        return DeliveredReportTagState();
-      case ReportLabelType.pending:
-        return PendingReportTagState();
-      case ReportLabelType.resolved:
-        return ResolvedReportTagState();
-      default:
-        return DeliveredReportTagState();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-            color: getTagState().tagColor,
-            borderRadius: const BorderRadius.all(Radius.circular(32.0))),
-        padding:
-            const EdgeInsets.only(top: 4.0, bottom: 4.0, left: 8.0, right: 8.0),
-        child: Center(
-            child: Text(
-          getTagState().title,
-          style: TextStyle(
-            color: getTagState().textColor,
-            fontSize: 14.0,
-          ),
-        )));
   }
 }

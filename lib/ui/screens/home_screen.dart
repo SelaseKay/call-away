@@ -33,7 +33,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         );
 
     await Workmanager().registerOneOffTask(
-        "periodic-task-identifier", "simplePeriodicTask",
+        "one-off-task", "simpleOneOffTask",
         tag: "notifications_manager",
         constraints: Constraints(
           networkType: NetworkType.connected,

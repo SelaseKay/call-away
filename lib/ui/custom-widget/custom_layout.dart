@@ -1,6 +1,4 @@
 import 'package:call_away/ui/custom-widget/background.dart';
-import 'package:call_away/ui/screens/notifications_screen.dart';
-import 'package:call_away/ui/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -109,22 +107,22 @@ class _TopSection extends StatelessWidget {
           ),
           Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 40.0),
-                child: _IconButton(
-                  assetName: 'assets/images/def_notif.svg',
-                  onPressed: () {
-                     Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        // transitionDuration:
-                        //     const Duration(milliseconds: 550),
-                        pageBuilder: (context, animation, secondaryAnimatio) =>
-                            const NotificationsScreen(),
-                      ));
-                  },
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 40.0),
+              //   child: _IconButton(
+              //     assetName: 'assets/images/def_notif.svg',
+              //     onPressed: () {
+              //        Navigator.push(
+              //         context,
+              //         PageRouteBuilder(
+              //           // transitionDuration:
+              //           //     const Duration(milliseconds: 550),
+              //           pageBuilder: (context, animation, secondaryAnimatio) =>
+              //               const NotificationsScreen(),
+              //         ));
+              //     },
+              //   ),
+              // ),
               _IconButton(
                 assetName: 'assets/images/profile.svg',
                 onPressed: () {

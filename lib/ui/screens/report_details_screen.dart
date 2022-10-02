@@ -152,17 +152,23 @@ class _ReportDetailsScreenState extends ConsumerState<ReportDetailsScreen> {
                             const SizedBox(
                               height: 16.0,
                             ),
-                            _ReportItem(
-                              title: "Description",
-                              child: Text(
-                                reportDetailsState.report.description,
-                                style: GoogleFonts.prompt(
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyText1),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 16.0,
+                            reportDetailsState.report.description.isNotEmpty
+                                ? _ReportItem(
+                                    title: "Description",
+                                    child: Text(
+                                      reportDetailsState.report.description,
+                                      style: GoogleFonts.prompt(
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            SizedBox(
+                              height: reportDetailsState
+                                      .report.description.isNotEmpty
+                                  ? 16.0
+                                  : 0.0,
                             ),
                             _ReportItem(
                               title: "Problem Type",

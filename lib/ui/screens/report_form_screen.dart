@@ -262,31 +262,26 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                       const SizedBox(
                         height: 4.0,
                       ),
-                      Form(
-                        key: _formKey,
-                        child: TextFormField(
-                          maxLines: 4,
-                          controller: _descriptionController,
-                          validator: (value) =>
-                              Validator.valiedateReportDescription(value!),
-                          decoration: InputDecoration(
-                            focusColor: _getTheme().primaryColor,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 1.5,
-                                color: _getTheme().primaryColor,
-                              ),
+                      TextFormField(
+                        maxLines: 4,
+                        controller: _descriptionController,
+                        decoration: InputDecoration(
+                          focusColor: _getTheme().primaryColor,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 1.5,
+                              color: _getTheme().primaryColor,
                             ),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 1.5,
-                                color:
-                                    const Color(0xFF000000).withOpacity(0.32),
-                              ),
-                            ),
-                            hintText:
-                                'Type a brief description of the problem...',
                           ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 1.5,
+                              color:
+                                  const Color(0xFF000000).withOpacity(0.32),
+                            ),
+                          ),
+                          hintText:
+                              'Type a brief description of the problem...',
                         ),
                       )
                     ],
@@ -315,7 +310,6 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                               ),
                             ),
                             onPressed: () {
-                              if (_formKey.currentState!.validate()) {
                                 if (ref
                                         .read(cameraImageProvider.notifier)
                                         .state ==
@@ -355,22 +349,11 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                             "Pending": "N/A",
                                             "Resolved": "N/A",
                                           },
-                                          // statuses: [
-                                          //   ReportStatus(
-                                          //     time: Timestamp.now()
-                                          //         .toDate()
-                                          //         .toString(),
-                                          //     label: ReportLabelType.delivered,
-                                          //   ),
-                                          //   null,
-                                          //   null,
-                                          //   null
-                                          // ],
                                           currentStatus: ReportLabelType.delivered,
                                         ),
                                       );
                                 }
-                              }
+                              
                             },
                             child: Text(
                               "Submit Report",

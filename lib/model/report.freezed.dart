@@ -22,6 +22,7 @@ Report _$ReportFromJson(Map<String, dynamic> json) {
 mixin _$Report {
   String? get userId => throw _privateConstructorUsedError;
   String? get reportId => throw _privateConstructorUsedError;
+  String get audioUrl => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
   String get location => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
@@ -42,6 +43,7 @@ abstract class $ReportCopyWith<$Res> {
   $Res call(
       {String? userId,
       String? reportId,
+      String audioUrl,
       String imageUrl,
       String location,
       String description,
@@ -62,6 +64,7 @@ class _$ReportCopyWithImpl<$Res> implements $ReportCopyWith<$Res> {
   $Res call({
     Object? userId = freezed,
     Object? reportId = freezed,
+    Object? audioUrl = freezed,
     Object? imageUrl = freezed,
     Object? location = freezed,
     Object? description = freezed,
@@ -78,6 +81,10 @@ class _$ReportCopyWithImpl<$Res> implements $ReportCopyWith<$Res> {
           ? _value.reportId
           : reportId // ignore: cast_nullable_to_non_nullable
               as String?,
+      audioUrl: audioUrl == freezed
+          ? _value.audioUrl
+          : audioUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       imageUrl: imageUrl == freezed
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -114,6 +121,7 @@ abstract class _$$_ReportCopyWith<$Res> implements $ReportCopyWith<$Res> {
   $Res call(
       {String? userId,
       String? reportId,
+      String audioUrl,
       String imageUrl,
       String location,
       String description,
@@ -135,6 +143,7 @@ class __$$_ReportCopyWithImpl<$Res> extends _$ReportCopyWithImpl<$Res>
   $Res call({
     Object? userId = freezed,
     Object? reportId = freezed,
+    Object? audioUrl = freezed,
     Object? imageUrl = freezed,
     Object? location = freezed,
     Object? description = freezed,
@@ -151,6 +160,10 @@ class __$$_ReportCopyWithImpl<$Res> extends _$ReportCopyWithImpl<$Res>
           ? _value.reportId
           : reportId // ignore: cast_nullable_to_non_nullable
               as String?,
+      audioUrl: audioUrl == freezed
+          ? _value.audioUrl
+          : audioUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       imageUrl: imageUrl == freezed
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -185,6 +198,7 @@ class _$_Report implements _Report {
   const _$_Report(
       {this.userId,
       this.reportId,
+      this.audioUrl = "",
       this.imageUrl = "",
       required this.location,
       required this.description,
@@ -200,6 +214,9 @@ class _$_Report implements _Report {
   final String? userId;
   @override
   final String? reportId;
+  @override
+  @JsonKey()
+  final String audioUrl;
   @override
   @JsonKey()
   final String imageUrl;
@@ -225,7 +242,7 @@ class _$_Report implements _Report {
 
   @override
   String toString() {
-    return 'Report(userId: $userId, reportId: $reportId, imageUrl: $imageUrl, location: $location, description: $description, problemType: $problemType, statuses: $statuses, currentStatus: $currentStatus)';
+    return 'Report(userId: $userId, reportId: $reportId, audioUrl: $audioUrl, imageUrl: $imageUrl, location: $location, description: $description, problemType: $problemType, statuses: $statuses, currentStatus: $currentStatus)';
   }
 
   @override
@@ -235,6 +252,7 @@ class _$_Report implements _Report {
             other is _$_Report &&
             const DeepCollectionEquality().equals(other.userId, userId) &&
             const DeepCollectionEquality().equals(other.reportId, reportId) &&
+            const DeepCollectionEquality().equals(other.audioUrl, audioUrl) &&
             const DeepCollectionEquality().equals(other.imageUrl, imageUrl) &&
             const DeepCollectionEquality().equals(other.location, location) &&
             const DeepCollectionEquality()
@@ -252,6 +270,7 @@ class _$_Report implements _Report {
       runtimeType,
       const DeepCollectionEquality().hash(userId),
       const DeepCollectionEquality().hash(reportId),
+      const DeepCollectionEquality().hash(audioUrl),
       const DeepCollectionEquality().hash(imageUrl),
       const DeepCollectionEquality().hash(location),
       const DeepCollectionEquality().hash(description),
@@ -276,6 +295,7 @@ abstract class _Report implements Report {
   const factory _Report(
       {final String? userId,
       final String? reportId,
+      final String audioUrl,
       final String imageUrl,
       required final String location,
       required final String description,
@@ -289,6 +309,8 @@ abstract class _Report implements Report {
   String? get userId;
   @override
   String? get reportId;
+  @override
+  String get audioUrl;
   @override
   String get imageUrl;
   @override

@@ -6,6 +6,7 @@ import 'package:call_away/ui/screens/login_screen.dart';
 import 'package:call_away/ui/screens/otp_verification-screen.dart';
 import 'package:call_away/ui/screens/profile_screen.dart';
 import 'package:call_away/ui/screens/sign_up_screen.dart';
+import 'package:call_away/ui/screens/terms_and_conditions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -89,7 +90,12 @@ class _MyAppState extends ConsumerState<MyApp> {
       return MaterialPageRoute(
         builder: (_) => const ProfileScreen(),
       );
-    } else if (settings.name == 'loading') {
+    } else if (settings.name == 'terms_and_conditions') {
+      return MaterialPageRoute(
+        builder: (_) => const TermsAndConditionsScreen(),
+      );
+    }
+    else if (settings.name == 'loading') {
       return MaterialPageRoute(
         builder: (_) => const LoadingScreen(
           loadingText: "",

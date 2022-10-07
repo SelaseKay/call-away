@@ -168,6 +168,13 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                   ),
                 ),
 
+                //voice note section
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: const _AudioButtonAnimator(),
+                ),
+
                 //location section
 
                 Padding(
@@ -276,8 +283,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
                               width: 1.5,
-                              color:
-                                  const Color(0xFF000000).withOpacity(0.32),
+                              color: const Color(0xFF000000).withOpacity(0.32),
                             ),
                           ),
                           hintText:
@@ -310,50 +316,51 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                               ),
                             ),
                             onPressed: () {
-                                if (ref
-                                        .read(cameraImageProvider.notifier)
-                                        .state ==
-                                    null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          "Image field should not be empty"),
-                                    ),
-                                  );
-                                } else if (ref
-                                    .read(locationProvider.notifier)
-                                    .state is! DeviceLocationSuccessState) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          "Location field should not be empty"),
-                                    ),
-                                  );
-                                } else {
-                                  final location = (ref
-                                          .read(locationProvider.notifier)
-                                          .state as DeviceLocationSuccessState)
-                                      .location;
-                                  ref
-                                      .read(reportSubmissionStateProvider
-                                          .notifier)
-                                      .submitReport(
-                                        Report(
-                                          location: location,
-                                          description: _descriptionController
-                                              .text
-                                              .trim(),
-                                          problemType: widget.problemType,
-                                          statuses: {
-                                            "Delivered": Timestamp.now().toDate().toString(),
-                                            "Pending": "N/A",
-                                            "Resolved": "N/A",
-                                          },
-                                          currentStatus: ReportLabelType.delivered,
-                                        ),
-                                      );
-                                }
-                              
+                              if (ref
+                                      .read(cameraImageProvider.notifier)
+                                      .state ==
+                                  null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text("Image field should not be empty"),
+                                  ),
+                                );
+                              } else if (ref
+                                  .read(locationProvider.notifier)
+                                  .state is! DeviceLocationSuccessState) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        "Location field should not be empty"),
+                                  ),
+                                );
+                              } else {
+                                final location = (ref
+                                        .read(locationProvider.notifier)
+                                        .state as DeviceLocationSuccessState)
+                                    .location;
+                                ref
+                                    .read(
+                                        reportSubmissionStateProvider.notifier)
+                                    .submitReport(
+                                      Report(
+                                        location: location,
+                                        description:
+                                            _descriptionController.text.trim(),
+                                        problemType: widget.problemType,
+                                        statuses: {
+                                          "Delivered": Timestamp.now()
+                                              .toDate()
+                                              .toString(),
+                                          "Pending": "N/A",
+                                          "Resolved": "N/A",
+                                        },
+                                        currentStatus:
+                                            ReportLabelType.delivered,
+                                      ),
+                                    );
+                              }
                             },
                             child: Text(
                               "Submit Report",
@@ -418,4 +425,327 @@ class _AddPhotoButton extends StatelessWidget {
       ],
     );
   }
+}
+
+class _AudioButtonAnimator extends StatefulWidget {
+  const _AudioButtonAnimator({Key? key}) : super(key: key);
+
+  @override
+  State<_AudioButtonAnimator> createState() => __AudioButtonAnimatorState();
+}
+
+class __AudioButtonAnimatorState extends State<_AudioButtonAnimator> {
+  Widget? _child;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _child = _AddVNButton(onPressed: onPressed);
+  }
+
+  var _audioStatus = AudioStatus.initial;
+
+  void onCloseIconPressed() {
+    setState(() {
+      _child = _AddVNButton(
+        onPressed: onPressed,
+      );
+      _audioStatus = AudioStatus.initial;
+    });
+  }
+
+  void onPressed() {
+    switch (_audioStatus) {
+      case AudioStatus.recording:
+        setState(() {
+          _child = _PlayRecording(
+            onCloseIconPressed: onCloseIconPressed,
+            onPressed: onPressed,
+          );
+          _audioStatus = AudioStatus.recorded;
+        });
+        break;
+      case AudioStatus.recorded:
+        setState(() {
+          _child = _PauseAudio(
+            onCloseIconPressed: onCloseIconPressed,
+            onPressed: onPressed,
+          );
+          _audioStatus = AudioStatus.playing;
+        });
+        break;
+      case AudioStatus.playing:
+        setState(() {
+          _child = _PlayRecording(
+            onCloseIconPressed: onCloseIconPressed,
+            onPressed: onPressed,
+          );
+          _audioStatus = AudioStatus.pause;
+        });
+        break;
+      case AudioStatus.pause:
+        setState(() {
+          _child = _PauseAudio(
+            onCloseIconPressed: onCloseIconPressed,
+            onPressed: onPressed,
+          );
+          _audioStatus = AudioStatus.playing;
+        });
+        break;
+      default:
+        print("default");
+        setState(() {
+          _child = _RecordingInProgress(
+            onPressed: onPressed,
+          );
+          _audioStatus = AudioStatus.recording;
+        });
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 400),
+      transitionBuilder: (child, animation) => SizeTransition(
+        sizeFactor: animation,
+        axis: Axis.horizontal,
+        axisAlignment: 1.0,
+        child: child,
+      ),
+      child: _child,
+    );
+  }
+}
+
+class _AddVNButton extends StatelessWidget {
+  const _AddVNButton({
+    Key? key,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        OutlinedButton(
+          onPressed: onPressed,
+          style: OutlinedButton.styleFrom(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  24,
+                ),
+              ),
+            ),
+            side: BorderSide(
+              color: const Color(0xFF000000).withOpacity(0.36),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'assets/images/mic_icon.svg',
+                color: const Color(0xFF11A17F),
+              ),
+              const SizedBox(width: 16.0),
+              Text(
+                "Record Voice",
+                style: GoogleFonts.prompt(
+                  textStyle: const TextStyle(
+                    fontSize: 14.0,
+                    color: Color(0xFF11A17F),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _RecordingInProgress extends StatelessWidget {
+  const _RecordingInProgress({Key? key, required this.onPressed})
+      : super(key: key);
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        OutlinedButton(
+          onPressed: onPressed,
+          style: OutlinedButton.styleFrom(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  24,
+                ),
+              ),
+            ),
+            side: BorderSide(
+              color: const Color(0xFF000000).withOpacity(0.36),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'assets/images/stop_icon.svg',
+              ),
+              const SizedBox(width: 16.0),
+              Text(
+                "0:25",
+                style: GoogleFonts.prompt(
+                  textStyle: const TextStyle(
+                    fontSize: 14.0,
+                    color: Color(0xFFBF2626),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PlayRecording extends StatelessWidget {
+  const _PlayRecording(
+      {Key? key, required this.onCloseIconPressed, required this.onPressed})
+      : super(key: key);
+  final VoidCallback onPressed;
+
+  final VoidCallback onCloseIconPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        OutlinedButton(
+          onPressed: onPressed,
+          style: OutlinedButton.styleFrom(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  24,
+                ),
+              ),
+            ),
+            side: BorderSide(
+              color: const Color(0xFF000000).withOpacity(0.36),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'assets/images/play_icon.svg',
+                color: const Color(0xFF11A17F),
+              ),
+              const SizedBox(width: 16.0),
+              Text(
+                "0:25",
+                style: GoogleFonts.prompt(
+                  textStyle: const TextStyle(
+                    fontSize: 14.0,
+                    color: Color(0xFF11A17F),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          width: 8.0,
+        ),
+        InkWell(
+          onTap: onCloseIconPressed,
+          child: SvgPicture.asset("assets/images/close_icon.svg"),
+        ),
+      ],
+    );
+  }
+}
+
+class _PauseAudio extends StatelessWidget {
+  const _PauseAudio(
+      {Key? key, required this.onCloseIconPressed, required this.onPressed})
+      : super(key: key);
+
+  final VoidCallback onPressed;
+
+  final VoidCallback onCloseIconPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        OutlinedButton(
+          onPressed: onPressed,
+          style: OutlinedButton.styleFrom(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  24,
+                ),
+              ),
+            ),
+            side: BorderSide(
+              color: const Color(0xFF000000).withOpacity(0.36),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'assets/images/pause_icon.svg',
+                color: const Color(0xFF11A17F),
+              ),
+              const SizedBox(width: 16.0),
+              Text(
+                "0:25",
+                style: GoogleFonts.prompt(
+                  textStyle: const TextStyle(
+                    fontSize: 14.0,
+                    color: Color(0xFF11A17F),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          width: 8.0,
+        ),
+        InkWell(
+          onTap: onCloseIconPressed,
+          child: SvgPicture.asset("assets/images/close_icon.svg"),
+        ),
+      ],
+    );
+  }
+}
+
+enum AudioStatus {
+  initial,
+  recording,
+  recorded,
+  playing,
+  pause,
 }

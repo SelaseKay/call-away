@@ -126,6 +126,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           child: CustomTextSpan(
                             onTapText: () {
                               //navigate to terms and coditions page
+                              Navigator.pushNamed(
+                                  context, "terms_and_conditions");
                             },
                             unclickableText: "By continuing, you agree to our",
                             clickableText: "\nTerms and Conditions",

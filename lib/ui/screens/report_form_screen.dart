@@ -1,18 +1,21 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:call_away/model/mediaType.dart';
 import 'package:call_away/model/report_label_type.dart';
+
 import 'package:call_away/model/report_status.dart';
 import 'package:call_away/provider/audio_provider.dart';
+
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/location_provider.dart';
 import 'package:call_away/provider/report_submission_state_provider.dart';
+import 'package:call_away/provider/video_provider.dart';
 import 'package:call_away/services/location_service.dart';
 import 'package:call_away/services/report_submission_service.dart';
 import 'package:call_away/ui/components/voice_note_button.dart';
 import 'package:call_away/ui/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
-import 'package:call_away/utils/user_input_validator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,14 +79,41 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
     return "Water Problem";
   }
 
+  Future<MediaType?> _showMediaDialog() async {
+    final res = await showDialog<MediaType?>(
+        context: context,
+        builder: (_) => AlertDialog(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextButton(
+                      onPressed: () => Navigator.pop(context, MediaType.IMAGE),
+                      child: Text(MediaType.IMAGE.name)),
+                  TextButton(
+                      onPressed: () => Navigator.pop(context, MediaType.VIDEO),
+                      child: Text(MediaType.VIDEO.name)),
+                ],
+              ),
+            ));
+    return res;
+  }
+
   @override
   Widget build(BuildContext context) {
     final image = ref.watch(cameraImageProvider);
     final locationState = ref.watch(locationProvider);
     final reportSubState = ref.watch(reportSubmissionStateProvider);
+    final videoRef = ref.watch(videoProvider);
 
+    ref.listen<List<File>?>(videoProvider, (previous, next) {
+      if (next != null) {
+        ref.read(locationProvider.notifier).getDeviceCurrentLocation();
+      }
+    });
     ref.listen<XFile?>(cameraImageProvider, (previous, next) {
-      ref.read(locationProvider.notifier).getDeviceCurrentLocation();
+      if (next != null) {
+        ref.read(locationProvider.notifier).getDeviceCurrentLocation();
+      }
     });
 
     ref.listen<DeviceLocationState>(locationProvider, (previous, next) {
@@ -132,11 +162,23 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                     children: [
                       // add photo section
                       _AddPhotoButton(
-                        image: image,
+                        image: videoRef == null
+                            ? (image != null ? File(image.path) : null)
+                            : videoRef[1],
                         onPressed: () async {
-                          ref
-                              .read(cameraImageProvider.notifier)
-                              .getImageFromCamera();
+                          final res = await _showMediaDialog();
+                          if (res == MediaType.IMAGE) {
+                            ref
+                                .read(cameraImageProvider.notifier)
+                                .getImageFromCamera()
+                                .then((value) {
+                              ref.read(videoProvider.notifier).clear();
+                            });
+                          }
+                          if (res == MediaType.VIDEO) {
+                            // ignore: use_build_context_synchronously
+                            Navigator.pushNamed(context, 'video_screen');
+                          }
                         },
                       ),
                       const SizedBox(
@@ -147,7 +189,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Add Photo",
+                              "Add Photo or video",
                               style: GoogleFonts.prompt(
                                 color: const Color(0xFF010101),
                                 fontWeight: FontWeight.w600,
@@ -160,7 +202,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                             Padding(
                               padding: const EdgeInsets.only(right: 88.0),
                               child: Text(
-                                "Take a clear picture of the problem at hand",
+                                "Take a clear picture or video of the problem at hand",
                                 style: GoogleFonts.prompt(
                                   color:
                                       const Color(0xFF000000).withOpacity(0.55),
@@ -325,14 +367,17 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                               ),
                             ),
                             onPressed: () {
-                              if (ref
-                                      .read(cameraImageProvider.notifier)
-                                      .state ==
-                                  null) {
+                              if (ref.read(videoProvider.notifier).state ==
+                                      null &&
+                                  ref
+                                          .read(cameraImageProvider.notifier)
+                                          .state ==
+                                      null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content:
-                                        Text("Image field should not be empty"),
+                                    content: Text(
+                                        "Image or video field should not be empty"),
+
                                   ),
                                 );
                               } else if (ref
@@ -354,6 +399,11 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                         reportSubmissionStateProvider.notifier)
                                     .submitReport(
                                       Report(
+
+                                        mediaType: videoRef == null
+                                            ? MediaType.IMAGE
+                                            : MediaType.VIDEO,
+
                                         location: location,
                                         description:
                                             _descriptionController.text.trim(),
@@ -410,7 +460,7 @@ class _AddPhotoButton extends StatelessWidget {
 
   final VoidCallback onPressed;
 
-  final XFile? image;
+  final File? image;
 
   @override
   Widget build(BuildContext context) {

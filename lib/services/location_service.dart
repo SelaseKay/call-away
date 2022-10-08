@@ -1,4 +1,5 @@
 import 'package:call_away/provider/camera_image_provider.dart';
+import 'package:call_away/provider/video_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:location/location.dart';
@@ -29,10 +30,11 @@ class LocationService extends StateNotifier<DeviceLocationState> {
 
   Future<void> getDeviceCurrentLocation() async {
     state = DeviceLocationLoadingState();
-    if (ref.read(cameraImageProvider.notifier).state == null) {
-      print("Picture not added(Image is null)");
-      state = DeviceLocationErrorState("Picture not added");
-      return Future.error("Picture not added(Image is null)");
+    if (ref.read(videoProvider.notifier).state == null &&
+        ref.read(cameraImageProvider.notifier).state == null) {
+      print("Image or video not added(Image is null)");
+      state = DeviceLocationErrorState("Image or video not added");
+      return Future.error("Image or video not added(Image is null)");
     }
 
     Location location = Location();

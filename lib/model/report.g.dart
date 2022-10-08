@@ -11,6 +11,7 @@ _$_Report _$$_ReportFromJson(Map<String, dynamic> json) => _$_Report(
       reportId: json['reportId'] as String?,
       imageUrl: json['imageUrl'] as String? ?? "",
       location: json['location'] as String,
+      mediaType: $enumDecode(_$MediaTypeEnumMap, json['mediaType']),
       description: json['description'] as String,
       problemType: $enumDecode(_$ProblemTypeEnumMap, json['problemType']),
       statuses: (json['statuses'] as Map<String, dynamic>?)?.map(
@@ -25,11 +26,17 @@ Map<String, dynamic> _$$_ReportToJson(_$_Report instance) => <String, dynamic>{
       'reportId': instance.reportId,
       'imageUrl': instance.imageUrl,
       'location': instance.location,
+      'mediaType': _$MediaTypeEnumMap[instance.mediaType]!,
       'description': instance.description,
       'problemType': _$ProblemTypeEnumMap[instance.problemType]!,
       'statuses': instance.statuses,
       'currentStatus': _$ReportLabelTypeEnumMap[instance.currentStatus],
     };
+
+const _$MediaTypeEnumMap = {
+  MediaType.VIDEO: 'video',
+  MediaType.IMAGE: 'image',
+};
 
 const _$ProblemTypeEnumMap = {
   ProblemType.waterProblem: 'waterProblem',

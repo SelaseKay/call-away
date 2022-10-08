@@ -13,7 +13,7 @@ class CameraService extends StateNotifier<XFile?> {
     } catch (e) {
       print("Image picker exception: ${e.toString()}");
     }
-    return image!;
+    return image;
   }
 
   Future<XFile?> getImageFromGallery() async {

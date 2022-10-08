@@ -28,7 +28,16 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.9.0"
+
+    version: "2.8.2"
+  audio_session:
+    dependency: "direct main"
+    description:
+      name: audio_session
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.10"
+
   boolean_selector:
     dependency: transitive
     description:
@@ -454,6 +463,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  flutter_sound:
+    dependency: "direct main"
+    description:
+      name: flutter_sound
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.2.13"
+  flutter_sound_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_sound_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.2.13"
+  flutter_sound_web:
+    dependency: transitive
+    description:
+      name: flutter_sound_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.2.13"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -653,6 +683,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
+  logger:
+    dependency: transitive
+    description:
+      name: logger
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   logging:
     dependency: transitive
     description:
@@ -688,6 +725,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   octo_image:
     dependency: transitive
     description:
@@ -849,6 +893,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
+  provider:
+    dependency: transitive
+    description:
+      name: provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.3"
   pub_semver:
     dependency: transitive
     description:
@@ -863,13 +914,14 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
-  quiver:
+
+  recase:
     dependency: transitive
     description:
-      name: quiver
+      name: recase
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "4.1.0"
   riverpod:
     dependency: transitive
     description:

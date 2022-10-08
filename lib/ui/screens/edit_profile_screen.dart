@@ -113,39 +113,40 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       child: AppBarSection(
                         title: "Edit Profile",
                         action: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(
-                                    24,
-                                  ),
+                          style: OutlinedButton.styleFrom(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(
+                                  24,
                                 ),
-                              ),
-                              side: const BorderSide(
-                                color: Color(0xFFDA7B23),
-                                width: 1,
                               ),
                             ),
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                final username = _nameController.text.trim();
-                                final email = _emailController.text.trim();
+                            side: const BorderSide(
+                              color: Color(0xFFDA7B23),
+                              width: 1,
+                            ),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              final username = _nameController.text.trim();
+                              final email = _emailController.text.trim();
 
-                                await ref
-                                    .read(profileUpdateStateProvider.notifier)
-                                    .updateUserNameEmail(username, email);
-                              }
-                            },
-                            child: Text(
-                              "Save",
-                              style: GoogleFonts.prompt(
-                                textStyle: const TextStyle(
-                                  color: Color(0xFFDA7B23),
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                              await ref
+                                  .read(profileUpdateStateProvider.notifier)
+                                  .updateUserNameEmail(username, email);
+                            }
+                          },
+                          child: Text(
+                            "Save",
+                            style: GoogleFonts.prompt(
+                              textStyle: const TextStyle(
+                                color: Color(0xFFDA7B23),
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400,
                               ),
-                            )),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     Expanded(

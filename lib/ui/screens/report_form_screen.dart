@@ -1,13 +1,19 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:call_away/model/mediaType.dart';
 import 'package:call_away/model/report_label_type.dart';
+
+import 'package:call_away/model/report_status.dart';
+import 'package:call_away/provider/audio_provider.dart';
+
 import 'package:call_away/provider/camera_image_provider.dart';
 import 'package:call_away/provider/location_provider.dart';
 import 'package:call_away/provider/report_submission_state_provider.dart';
 import 'package:call_away/provider/video_provider.dart';
 import 'package:call_away/services/location_service.dart';
 import 'package:call_away/services/report_submission_service.dart';
+import 'package:call_away/ui/components/voice_note_button.dart';
 import 'package:call_away/ui/custom-widget/custom_layout.dart';
 import 'package:call_away/problem_type.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,6 +41,12 @@ class ReportFormScreen extends ConsumerStatefulWidget {
 }
 
 class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   final _descriptionController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -207,6 +219,13 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                   ),
                 ),
 
+                //voice note section
+
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: VoiceNoteButton(),
+                ),
+
                 //location section
 
                 Padding(
@@ -358,6 +377,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                   const SnackBar(
                                     content: Text(
                                         "Image or video field should not be empty"),
+
                                   ),
                                 );
                               } else if (ref
@@ -379,9 +399,11 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
                                         reportSubmissionStateProvider.notifier)
                                     .submitReport(
                                       Report(
+
                                         mediaType: videoRef == null
                                             ? MediaType.IMAGE
                                             : MediaType.VIDEO,
+
                                         location: location,
                                         description:
                                             _descriptionController.text.trim(),
@@ -423,6 +445,12 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // ref.read(audioProvider.notifier).dispose();
+    super.dispose();
   }
 }
 

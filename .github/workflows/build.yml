@@ -19,7 +19,7 @@ jobs:
       - name: Build apk release
         run: flutter build apk --release
 
-      - name: 
+      - name: Get build artifacts
         run: ls build/app/outputs/apk/release/
 
   build-ios:

@@ -1,5 +1,8 @@
 name: Build Call Away App
 
+on:
+  workflow_dispatch:
+
 jobs:
   build-android:
     runs-on: ubuntu-latest

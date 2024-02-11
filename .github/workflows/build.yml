@@ -8,9 +8,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4.1.1
 
-      - name: test run
-        run: echo building android apk for call-away
+      - name: Install flutter
+        uses: subosito/flutter-action@v2
+
+      - name: Install dependencies
+        run: flutter pub get
 
   build-ios:
     runs-on: macos-latest

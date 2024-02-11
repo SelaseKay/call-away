@@ -16,6 +16,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Build apk release
+        run: flutter build apk --release
+
+      - name: 
+        run: ls build/app/outputs/apk/release/
+
   build-ios:
     runs-on: macos-latest
 
